@@ -1,3 +1,4 @@
+import 'package:cardbox/src/databse_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_credit_card/credit_card_brand.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
@@ -11,12 +12,7 @@ import '../add_card/add_card_view.dart';
 class CardsListView extends StatelessWidget {
   const CardsListView({
     Key? key,
-    this.items = const [
-      CardItem('52566775445622455', '12/20', 'Sharath Chandra', '234'),
-      CardItem('52566775445622455', '12/20', 'Sharath Chandra', '234'),
-      CardItem('52566775445622455', '12/20', 'Sharath Chandra', '234'),
-      CardItem('52566775445622455', '12/20', 'Sharath Chandra', '234'),
-    ],
+    this.items = const [],
   }) : super(key: key);
 
   static const routeName = '/';
@@ -47,7 +43,50 @@ class CardsListView extends StatelessWidget {
       // In contrast to the default ListView constructor, which requires
       // building all Widgets up front, the ListView.builder constructor lazily
       // builds Widgets as they’re scrolled into view.
-      body: ListView.builder(
+      body: Column(
+        children: [
+          TextButton(
+            onPressed: () async {
+              int recordId = await DatabseService.instance.insert({
+                DatabseService.columnBankName: 'Axis Bank',
+                DatabseService.columnAccountNumber: 0123456789876543,
+                DatabseService.columnIFSCode: 'AX000045',
+                DatabseService.columnCardTypeCodeId: 10001,
+                DatabseService.columnCardNumber: 52566775445622455,
+                DatabseService.columnCardExpiryDate: '12/20',
+                DatabseService.columnCardHolderName: 'Sharath Chandra',
+                DatabseService.columnCardCvvCode: 234,
+                DatabseService.columnCardPin: 1234,
+                DatabseService.columnMobileNumber: 9246100100,
+                DatabseService.columnMobilePin: 1234,
+                DatabseService.columnInternetId: 'sharathaxisbank',
+                DatabseService.columnInternetPassword: 'password@123'
+              });
+              print(recordId);
+            },
+            child: const Text('Insert'),
+          ),
+          TextButton(
+            onPressed: () async {
+              List<Map<String, dynamic>> queryRows =
+                  await DatabseService.instance.queryAll();
+
+              print(queryRows);
+            },
+            child: const Text('Get all'),
+          ),
+          TextButton(
+            onPressed: () async {
+              Map<String, dynamic> queryRow =
+                  await DatabseService.instance.queryOne(1);
+
+              print(queryRow['bankname']);
+            },
+            child: const Text('Get one'),
+          ),
+        ],
+      ),
+      /* ListView.builder(
         // Providing a restorationId allows the ListView to restore the
         // scroll position when a user leaves and returns to the app after it
         // has been killed while running in the background.
@@ -55,7 +94,6 @@ class CardsListView extends StatelessWidget {
         itemCount: items.length,
         itemBuilder: (BuildContext context, int index) {
           final CardItem cardItem = items[index];
-
           return InkWell(
             onTap: () => {
               Navigator.pushNamed(
@@ -78,7 +116,7 @@ class CardsListView extends StatelessWidget {
             ),
           );
         },
-      ),
+      ), */
       floatingActionButton: FloatingActionButton(
         onPressed: () => {
           Navigator.pushNamed(

@@ -1,18 +1,40 @@
 /// A placeholder class that represents an entity or model.
 class CardItem {
-  final String cardNumber;
-  final String expiryDate;
-  final String cardHolderName;
-  final String cvvCode;
+  final int id;
+  final String bankName;
+  int? accountNumber;
+  String? ifsCode;
+  int? cardTypeCodeId;
+  int? cardNumber;
+  String? cardExpiryDate;
+  String? cardHolderName;
+  int? cardCvvCode;
+  int? cardPin;
+  int? mobileNumber;
+  int? mobilePin;
+  String? internetId;
+  String? internetPassword;
+  String? internetProfilePassword;
 
-  const CardItem(
+  CardItem({
+    required this.id,
+    required this.bankName,
+    this.accountNumber,
+    this.ifsCode,
+    this.cardTypeCodeId,
     this.cardNumber,
-    this.expiryDate,
+    this.cardExpiryDate,
     this.cardHolderName,
-    this.cvvCode,
-  );
+    this.cardCvvCode,
+    this.cardPin,
+    this.mobileNumber,
+    this.mobilePin,
+    this.internetId,
+    this.internetPassword,
+    this.internetProfilePassword,
+  });
 
-  CardItem.fromJson(Map<String, dynamic> json)
+  /* CardItem.fromJson(Map<String, dynamic> json)
       : cardNumber = json['cardNumber'],
         expiryDate = json['expiryDate'],
         cardHolderName = json['cardHolderName'],
@@ -23,5 +45,5 @@ class CardItem {
         'expiryDate': expiryDate,
         'cardHolderName': cardHolderName,
         'cvvCode': cvvCode,
-      };
+      }; */
 }

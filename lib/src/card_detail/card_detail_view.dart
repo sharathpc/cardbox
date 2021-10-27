@@ -20,7 +20,10 @@ class CardDetailView extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Card Details'),
       ),
-      body: Center(
+      body: const SizedBox(
+        height: 20,
+      ),
+      /* Center(
         child: CreditCardWidget(
           cardNumber: cardItem.cardNumber,
           expiryDate: cardItem.expiryDate,
@@ -34,7 +37,7 @@ class CardDetailView extends StatelessWidget {
           obscureCardCvv: false,
           onCreditCardWidgetChange: (CreditCardBrand creditCardBrand) {},
         ),
-      ),
+      ), */
     );
   }
 }
