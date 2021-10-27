@@ -1,7 +1,9 @@
+import 'package:cardbox/src/databse_service.dart';
+
 /// A placeholder class that represents an entity or model.
 class CardItem {
-  final int id;
-  final String bankName;
+  int? id;
+  String? bankName;
   int? accountNumber;
   String? ifsCode;
   int? cardTypeCodeId;
@@ -34,16 +36,41 @@ class CardItem {
     this.internetProfilePassword,
   });
 
-  /* CardItem.fromJson(Map<String, dynamic> json)
-      : cardNumber = json['cardNumber'],
-        expiryDate = json['expiryDate'],
-        cardHolderName = json['cardHolderName'],
-        cvvCode = json['cvvCode'];
+  CardItem.fromJson(Map<String, dynamic> json) {
+    id = json[DatabseService.columnId];
+    bankName = json[DatabseService.columnBankName];
+    accountNumber = json[DatabseService.columnAccountNumber];
+    ifsCode = json[DatabseService.columnIFSCode];
+    cardTypeCodeId = json[DatabseService.columnCardTypeCodeId];
+    cardNumber = json[DatabseService.columnCardNumber];
+    cardExpiryDate = json[DatabseService.columnCardExpiryDate];
+    cardHolderName = json[DatabseService.columnCardHolderName];
+    cardCvvCode = json[DatabseService.columnCardCvvCode];
+    mobileNumber = json[DatabseService.columnMobileNumber];
+    mobilePin = json[DatabseService.columnMobilePin];
+    internetId = json[DatabseService.columnInternetId];
+    internetPassword = json[DatabseService.columnInternetPassword];
+    internetProfilePassword =
+        json[DatabseService.columnInternetProfilePassword];
+  }
 
-  Map<String, dynamic> toJson() => {
-        'cardNumber': cardNumber,
-        'expiryDate': expiryDate,
-        'cardHolderName': cardHolderName,
-        'cvvCode': cvvCode,
-      }; */
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data[DatabseService.columnId] = id;
+    data[DatabseService.columnBankName] = bankName;
+    data[DatabseService.columnAccountNumber] = accountNumber;
+    data[DatabseService.columnIFSCode] = ifsCode;
+    data[DatabseService.columnCardTypeCodeId] = cardTypeCodeId;
+    data[DatabseService.columnCardNumber] = cardNumber;
+    data[DatabseService.columnCardExpiryDate] = cardExpiryDate;
+    data[DatabseService.columnCardHolderName] = cardHolderName;
+    data[DatabseService.columnCardCvvCode] = cardCvvCode;
+    data[DatabseService.columnMobileNumber] = mobileNumber;
+    data[DatabseService.columnMobilePin] = mobilePin;
+    data[DatabseService.columnInternetId] = internetId;
+    data[DatabseService.columnInternetPassword] = internetPassword;
+    data[DatabseService.columnInternetProfilePassword] =
+        internetProfilePassword;
+    return data;
+  }
 }
