@@ -142,9 +142,8 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
       isGestureUpdate = false;
     }
 
-    final CardBrand? cardBrand = widget.cardBrand != null
-        ? widget.cardBrand
-        : detectCCType(widget.cardNumber);
+    final CardBrand? cardBrand =
+        widget.cardBrand ?? detectCCType(widget.cardNumber);
     widget.onCreditCardWidgetChange(CreditCardBrand(cardBrand));
 
     return Stack(
@@ -236,7 +235,6 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
                 color: Colors.white,
                 fontFamily: 'halter',
                 fontSize: 16,
-                package: 'flutter_credit_card',
               ),
             );
 
@@ -262,7 +260,6 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
                     padding: const EdgeInsets.only(left: 16),
                     child: Image.asset(
                       'icons/chip.png',
-                      package: 'flutter_credit_card',
                       scale: 1,
                     ),
                   ),
@@ -271,7 +268,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
                   alignment: Alignment.topRight,
                   child: Padding(
                     padding: const EdgeInsets.only(left: 16, right: 16, top: 8),
-                    child: widget.cardType != null
+                    child: widget.cardBrand != null
                         ? getCardBrandImage(widget.cardBrand)
                         : getCardBrandIcon(widget.cardNumber),
                   ),
@@ -347,7 +344,6 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
                 color: Colors.black,
                 fontFamily: 'halter',
                 fontSize: 16,
-                package: 'flutter_credit_card',
               ),
             );
 
@@ -415,7 +411,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
               alignment: Alignment.bottomRight,
               child: Padding(
                 padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
-                child: widget.cardType != null
+                child: widget.cardBrand != null
                     ? getCardBrandImage(widget.cardBrand)
                     : getCardBrandIcon(widget.cardNumber),
               ),
@@ -542,7 +538,6 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
         CardBrandIconAsset[cardBrand]!,
         height: 48,
         width: 48,
-        package: 'flutter_credit_card',
       );
     }
   }
@@ -564,7 +559,6 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
             CardBrandIconAsset[ccType]!,
             height: 48,
             width: 48,
-            package: 'flutter_credit_card',
           );
           isAmex = false;
           break;
@@ -574,7 +568,6 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
             CardBrandIconAsset[ccType]!,
             height: 48,
             width: 48,
-            package: 'flutter_credit_card',
           );
           isAmex = true;
           break;
@@ -584,7 +577,6 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
             CardBrandIconAsset[ccType]!,
             height: 48,
             width: 48,
-            package: 'flutter_credit_card',
           );
           isAmex = false;
           break;
@@ -594,13 +586,12 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
             CardBrandIconAsset[ccType]!,
             height: 48,
             width: 48,
-            package: 'flutter_credit_card',
           );
           isAmex = false;
           break;
 
         default:
-          icon = Container(
+          icon = const SizedBox(
             height: 48,
             width: 48,
           );
