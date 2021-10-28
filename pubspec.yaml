@@ -20,7 +20,7 @@ dependencies:
   local_auth: ^1.1.8
   path_provider: ^2.0.5
   sqflite: ^2.0.0+4
-  flutter_credit_card: ^3.0.1
+  #flutter_credit_card: ^3.0.1
 
   flutter_localizations:
     sdk: flutter
@@ -40,3 +40,8 @@ flutter:
   assets:
     # Add assets from the images directory to the application.
     - assets/images/
+    - icons/
+  fonts:
+    - family: halter
+      fonts:
+        - asset: font/halter.ttf

@@ -6,7 +6,7 @@ class CardItem {
   String? bankName;
   int? accountNumber;
   String? ifsCode;
-  int? cardTypeCodeId;
+  String? cardType;
   int? cardNumber;
   String? cardExpiryDate;
   String? cardHolderName;
@@ -23,7 +23,7 @@ class CardItem {
     required this.bankName,
     this.accountNumber,
     this.ifsCode,
-    this.cardTypeCodeId,
+    this.cardType,
     this.cardNumber,
     this.cardExpiryDate,
     this.cardHolderName,
@@ -41,11 +41,12 @@ class CardItem {
     bankName = json[DatabseService.columnBankName];
     accountNumber = json[DatabseService.columnAccountNumber];
     ifsCode = json[DatabseService.columnIFSCode];
-    cardTypeCodeId = json[DatabseService.columnCardTypeCodeId];
+    cardType = json[DatabseService.columnCardType];
     cardNumber = json[DatabseService.columnCardNumber];
     cardExpiryDate = json[DatabseService.columnCardExpiryDate];
     cardHolderName = json[DatabseService.columnCardHolderName];
     cardCvvCode = json[DatabseService.columnCardCvvCode];
+    cardPin = json[DatabseService.columnCardPin];
     mobileNumber = json[DatabseService.columnMobileNumber];
     mobilePin = json[DatabseService.columnMobilePin];
     internetId = json[DatabseService.columnInternetId];
@@ -60,11 +61,12 @@ class CardItem {
     data[DatabseService.columnBankName] = bankName;
     data[DatabseService.columnAccountNumber] = accountNumber;
     data[DatabseService.columnIFSCode] = ifsCode;
-    data[DatabseService.columnCardTypeCodeId] = cardTypeCodeId;
+    data[DatabseService.columnCardType] = cardType;
     data[DatabseService.columnCardNumber] = cardNumber;
     data[DatabseService.columnCardExpiryDate] = cardExpiryDate;
     data[DatabseService.columnCardHolderName] = cardHolderName;
     data[DatabseService.columnCardCvvCode] = cardCvvCode;
+    data[DatabseService.columnCardPin] = cardPin;
     data[DatabseService.columnMobileNumber] = mobileNumber;
     data[DatabseService.columnMobilePin] = mobilePin;
     data[DatabseService.columnInternetId] = internetId;

@@ -13,7 +13,7 @@ class DatabseService {
   static const columnBankName = 'bankname';
   static const columnAccountNumber = 'accountnumber';
   static const columnIFSCode = 'ifscode';
-  static const columnCardTypeCodeId = 'cardtypecodeid';
+  static const columnCardType = 'cardtype';
   static const columnCardNumber = 'cardnumber';
   static const columnCardExpiryDate = 'cardexpirydate';
   static const columnCardHolderName = 'cardholdername';
@@ -52,7 +52,7 @@ class DatabseService {
           $columnBankName TEXT NOT NULL,
           $columnAccountNumber INTEGER,
           $columnIFSCode TEXT,
-          $columnCardTypeCodeId INTEGER,
+          $columnCardType TEXT,
           $columnCardNumber INTEGER,
           $columnCardExpiryDate TEXT,
           $columnCardHolderName TEXT,

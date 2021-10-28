@@ -1,7 +1,7 @@
 import 'package:cardbox/src/databse_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_credit_card/credit_card_brand.dart';
-import 'package:flutter_credit_card/flutter_credit_card.dart';
+/* import 'package:flutter_credit_card/credit_card_brand.dart';
+import 'package:flutter_credit_card/flutter_credit_card.dart'; */
 
 import '../models/models.dart';
 import '../settings/settings_view.dart';
@@ -51,7 +51,7 @@ class CardsListView extends StatelessWidget {
                 DatabseService.columnBankName: 'Axis Bank',
                 DatabseService.columnAccountNumber: 0123456789876543,
                 DatabseService.columnIFSCode: 'AX000045',
-                DatabseService.columnCardTypeCodeId: 10001,
+                DatabseService.columnCardType: 'Debit',
                 DatabseService.columnCardNumber: 52566775445622455,
                 DatabseService.columnCardExpiryDate: '12/20',
                 DatabseService.columnCardHolderName: 'Sharath Chandra',
