@@ -9,10 +9,10 @@ import 'custom_card_brand_icon.dart';
 import 'glassmorphism_config.dart';
 
 const Map<CardBrand, String> CardBrandIconAsset = <CardBrand, String>{
-  CardBrand.visa: 'icons/visa.png',
-  CardBrand.americanExpress: 'icons/amex.png',
-  CardBrand.mastercard: 'icons/mastercard.png',
-  CardBrand.discover: 'icons/discover.png',
+  CardBrand.visa: 'assets/card_widget/brands/visa.png',
+  CardBrand.americanExpress: 'assets/card_widget/brands/amex.png',
+  CardBrand.mastercard: 'assets/card_widget/brands/mastercard.png',
+  CardBrand.discover: 'assets/card_widget/brands/discover.png',
 };
 
 class CreditCardWidget extends StatefulWidget {
@@ -259,7 +259,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
                   Padding(
                     padding: const EdgeInsets.only(left: 16),
                     child: Image.asset(
-                      'icons/chip.png',
+                      'assets/card_widget/chip.png',
                       scale: 1,
                     ),
                   ),
