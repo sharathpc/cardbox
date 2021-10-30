@@ -20,6 +20,7 @@ class _AddCardViewState extends State<AddCardView> {
   String cardHolderName = '';
   String cvvCode = '';
   String cardPin = '';
+  bool isBackFocused = false;
   OutlineInputBorder? border;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -53,13 +54,27 @@ class _AddCardViewState extends State<AddCardView> {
               cardHolderName: cardHolderName,
               cvvCode: cvvCode,
               cardPin: cardPin,
-              showBackView: false,
+              showBackView: isBackFocused,
               obscureCardNumber: false,
               obscureCardCvv: false,
-              isHolderNameVisible: true,
-              cardBgColor: Colors.red,
               isSwipeGestureEnabled: true,
               onCreditCardWidgetChange: (CreditCardBrand creditCardBrand) {},
+              glassmorphismConfig: Glassmorphism(
+                blurX: 10.0,
+                blurY: 10.0,
+                gradient: const LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Color(0xFF4AA3F2),
+                    Color(0xFFAF92FB),
+                  ],
+                  stops: [
+                    0.3,
+                    0.75,
+                  ],
+                ),
+              ),
             ),
             Expanded(
               child: SingleChildScrollView(
@@ -131,6 +146,7 @@ class _AddCardViewState extends State<AddCardView> {
       cardHolderName = creditCardModel.cardHolderName;
       cvvCode = creditCardModel.cvvCode;
       cardPin = creditCardModel.cardPin;
+      isBackFocused = creditCardModel.isBackFocused;
     });
   }
 }

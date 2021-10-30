@@ -20,11 +20,14 @@ class CreditCardForm extends StatefulWidget {
     required this.themeColor,
     this.textColor = Colors.black,
     this.cursorColor,
+    this.cardTypeDecoration = const InputDecoration(
+      labelText: 'Card Type',
+    ),
     this.cardHolderDecoration = const InputDecoration(
-      labelText: 'Card holder',
+      labelText: 'Card Holder',
     ),
     this.cardNumberDecoration = const InputDecoration(
-      labelText: 'Card number',
+      labelText: 'Card Number',
       hintText: 'XXXX XXXX XXXX XXXX',
     ),
     this.expiryDateDecoration = const InputDecoration(
@@ -35,7 +38,6 @@ class CreditCardForm extends StatefulWidget {
       labelText: 'CVV',
       hintText: 'XXX',
     ),
-    this.cardTypeDecoration = const InputDecoration(labelText: 'Card Type'),
     this.cardPinDecoration = const InputDecoration(
       labelText: 'Card Pin',
       hintText: 'XXXX',
@@ -82,15 +84,15 @@ class _CreditCardFormState extends State<CreditCardForm> {
   late String cardHolderName;
   late String cvvCode;
   late String cardPin;
-  bool isCvvFocused = false;
+  bool isBackFocused = false;
   late Color themeColor;
 
   late void Function(CreditCardModel) onCreditCardModelChange;
   late CreditCardModel creditCardModel;
 
+  final TextEditingController _cardTypeController = TextEditingController();
   final MaskedTextController _cardNumberController =
       MaskedTextController(mask: '0000 0000 0000 0000');
-  final TextEditingController _cardTypeController = TextEditingController();
   final TextEditingController _expiryDateController =
       MaskedTextController(mask: '00/00');
   final TextEditingController _cardHolderNameController =
@@ -107,7 +109,8 @@ class _CreditCardFormState extends State<CreditCardForm> {
   FocusNode cardPinNode = FocusNode();
 
   void textFieldFocusDidChange() {
-    creditCardModel.isCvvFocused = cvvFocusNode.hasFocus;
+    creditCardModel.isBackFocused =
+        cvvFocusNode.hasFocus || cardPinNode.hasFocus;
     onCreditCardModelChange(creditCardModel);
   }
 
@@ -126,7 +129,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
       cardHolderName,
       cvvCode,
       cardPin,
-      isCvvFocused,
+      isBackFocused,
     );
   }
 
@@ -139,6 +142,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
     onCreditCardModelChange = widget.onCreditCardModelChange;
 
     cvvFocusNode.addListener(textFieldFocusDidChange);
+    cardPinNode.addListener(textFieldFocusDidChange);
 
     _cardTypeController.addListener(() {
       setState(() {
@@ -381,14 +385,14 @@ class _CreditCardFormState extends State<CreditCardForm> {
                       decoration: widget.cardPinDecoration,
                       keyboardType: TextInputType.number,
                       textInputAction: TextInputAction.done,
-                      /* onChanged: (String text) {
+                      onChanged: (String value) {
                         setState(() {
-                          cvvCode = text;
+                          cardPin = value;
                         });
-                      }, */
+                      },
                       validator: (String? value) {
                         if (value!.isEmpty || value.length < 4) {
-                          return widget.cvvValidationMessage;
+                          return widget.numberValidationMessage;
                         }
                         return null;
                       },

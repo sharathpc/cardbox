@@ -6,7 +6,7 @@ class CreditCardModel {
     this.cardHolderName,
     this.cvvCode,
     this.cardPin,
-    this.isCvvFocused,
+    this.isBackFocused,
   );
 
   String cardType = '';
@@ -15,5 +15,5 @@ class CreditCardModel {
   String cardHolderName = '';
   String cvvCode = '';
   String cardPin = '';
-  bool isCvvFocused = false;
+  bool isBackFocused = false;
 }

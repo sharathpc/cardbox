@@ -8,11 +8,13 @@ import 'credit_card_brand.dart';
 import 'custom_card_brand_icon.dart';
 import 'glassmorphism_config.dart';
 
+// ignore: constant_identifier_names
 const Map<CardBrand, String> CardBrandIconAsset = <CardBrand, String>{
   CardBrand.visa: 'assets/card_widget/brands/visa.png',
-  CardBrand.americanExpress: 'assets/card_widget/brands/amex.png',
-  CardBrand.mastercard: 'assets/card_widget/brands/mastercard.png',
-  CardBrand.discover: 'assets/card_widget/brands/discover.png',
+  CardBrand.master: 'assets/card_widget/brands/master.png',
+  CardBrand.mastro: 'assets/card_widget/brands/mastro.png',
+  CardBrand.rupay: 'assets/card_widget/brands/rupay.png',
+  CardBrand.other: 'assets/card_widget/brands/other.png',
 };
 
 class CreditCardWidget extends StatefulWidget {
@@ -36,7 +38,6 @@ class CreditCardWidget extends StatefulWidget {
       this.labelCardHolder = 'CARD HOLDER',
       this.labelExpiredDate = 'MM/YY',
       this.cardBrand,
-      this.isHolderNameVisible = false,
       this.backgroundImage,
       this.glassmorphismConfig,
       this.isChipVisible = true,
@@ -61,7 +62,6 @@ class CreditCardWidget extends StatefulWidget {
   final bool obscureCardCvv;
   final bool obscureCardPin;
   final void Function(CreditCardBrand) onCreditCardWidgetChange;
-  final bool isHolderNameVisible;
   final String? backgroundImage;
   final bool isChipVisible;
   final Glassmorphism? glassmorphismConfig;
@@ -247,51 +247,80 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
       glassmorphismConfig: widget.glassmorphismConfig,
       height: widget.height,
       width: widget.width,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Expanded(
-            flex: widget.isChipVisible ? 2 : 0,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: <Widget>[
-                if (widget.isChipVisible)
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16),
-                    child: Image.asset(
-                      'assets/card_widget/chip.png',
-                      scale: 1,
+      child: Container(
+        margin: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Expanded(
+              flex: 2,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Expanded(
+                    flex: 8,
+                    child: Text(
+                      'AXIS BANK',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: widget.textStyle ??
+                          defaultTextStyle.copyWith(fontSize: 13),
                     ),
                   ),
-                const Spacer(),
-                Align(
-                  alignment: Alignment.topRight,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 16, right: 16, top: 8),
-                    child: widget.cardBrand != null
-                        ? getCardBrandImage(widget.cardBrand)
-                        : getCardBrandIcon(widget.cardNumber),
+                  const Spacer(),
+                  Text(
+                    'DEBIT CARD',
+                    style: widget.textStyle ??
+                        defaultTextStyle.copyWith(
+                          fontSize: 10,
+                          color: const Color(0xFF212121),
+                        ),
+                    textAlign: TextAlign.center,
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 16),
+            const SizedBox(
+              height: 10,
+            ),
+            Expanded(
+              flex: 2,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: <Widget>[
+                  if (widget.isChipVisible)
+                    Image.asset(
+                      'assets/card_widget/chip.png',
+                      width: 35,
+                      height: 35,
+                    ),
+                  const Spacer(),
+                  if (widget.isChipVisible)
+                    const IconTheme(
+                      data: IconThemeData(
+                        color: Color(0xFF212121),
+                        size: 35,
+                      ),
+                      child: Icon(Icons.contactless_outlined),
+                    ),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Expanded(
               child: Text(
                 widget.cardNumber.isEmpty ? 'XXXX XXXX XXXX XXXX' : number,
                 style: widget.textStyle ?? defaultTextStyle,
               ),
             ),
-          ),
-          Expanded(
-            flex: 1,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 16),
+            const SizedBox(
+              height: 10,
+            ),
+            Expanded(
+              flex: 1,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -312,24 +341,35 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
                 ],
               ),
             ),
-          ),
-          Visibility(
-            visible: widget.isHolderNameVisible,
-            child: Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
-                child: Text(
-                  widget.cardHolderName.isEmpty
-                      ? widget.labelCardHolder
-                      : widget.cardHolderName,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: widget.textStyle ?? defaultTextStyle,
-                ),
+            const SizedBox(
+              height: 10,
+            ),
+            Expanded(
+              flex: 2,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Expanded(
+                    flex: 8,
+                    child: Text(
+                      widget.cardHolderName.isEmpty
+                          ? widget.labelCardHolder
+                          : widget.cardHolderName,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: widget.textStyle ??
+                          defaultTextStyle.copyWith(fontSize: 14),
+                    ),
+                  ),
+                  widget.cardBrand != null
+                      ? getCardBrandImage(widget.cardBrand)
+                      : getCardBrandIcon(widget.cardNumber),
+                ],
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -341,7 +381,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
     final TextStyle defaultTextStyle =
         Theme.of(context).textTheme.headline6!.merge(
               const TextStyle(
-                color: Colors.black,
+                color: Color(0xFF212121),
                 fontFamily: 'halter',
                 fontSize: 16,
               ),
@@ -357,29 +397,31 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
       glassmorphismConfig: widget.glassmorphismConfig,
       height: widget.height,
       width: widget.width,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Expanded(
-            flex: 2,
-            child: Container(
-              margin: const EdgeInsets.only(top: 16),
-              height: 48,
-              color: Colors.black,
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 16),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Expanded(
+              flex: 2,
+              child: Container(
+                height: 20,
+                color: Colors.black,
+              ),
             ),
-          ),
-          Expanded(
-            flex: 2,
-            child: Container(
-              margin: const EdgeInsets.only(top: 16),
+            const SizedBox(
+              height: 10,
+            ),
+            Expanded(
+              flex: 2,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Expanded(
                     flex: 9,
                     child: Container(
-                      height: 48,
+                      height: 42,
                       color: Colors.white70,
                     ),
                   ),
@@ -390,11 +432,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
                       child: Padding(
                         padding: const EdgeInsets.all(5),
                         child: Text(
-                          widget.cvvCode.isEmpty
-                              ? isAmex
-                                  ? 'XXXX'
-                                  : 'XXX'
-                              : cvv,
+                          widget.cvvCode.isEmpty ? 'XXX' : cvv,
                           maxLines: 1,
                           style: widget.textStyle ?? defaultTextStyle,
                         ),
@@ -404,20 +442,53 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
                 ],
               ),
             ),
-          ),
-          Expanded(
-            flex: 2,
-            child: Align(
-              alignment: Alignment.bottomRight,
+            const SizedBox(
+              height: 10,
+            ),
+            Expanded(
+              flex: 2,
               child: Padding(
-                padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
-                child: widget.cardBrand != null
-                    ? getCardBrandImage(widget.cardBrand)
-                    : getCardBrandIcon(widget.cardNumber),
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(8.0),
+                      child: Image.asset(
+                        'assets/card_widget/hologram.png',
+                        height: 40,
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          'CARD\nPIN',
+                          style: widget.textStyle ??
+                              defaultTextStyle.copyWith(
+                                color: Colors.white,
+                                fontSize: 8,
+                              ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(width: 5),
+                        Text(
+                          widget.cardPin.isEmpty ? 'XXXX' : widget.cardPin,
+                          style: widget.textStyle ??
+                              defaultTextStyle.copyWith(
+                                color: Colors.white,
+                              ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -458,23 +529,27 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
     CardBrand.visa: <List<String>>{
       <String>['4'],
     },
-    CardBrand.americanExpress: <List<String>>{
-      <String>['34'],
-      <String>['37'],
-    },
-    CardBrand.discover: <List<String>>{
-      <String>['6011'],
-      <String>['622126', '622925'],
-      <String>['644', '649'],
-      <String>['65']
-    },
-    CardBrand.mastercard: <List<String>>{
+    CardBrand.master: <List<String>>{
       <String>['51', '55'],
-      <String>['2221', '2229'],
-      <String>['223', '229'],
-      <String>['23', '26'],
-      <String>['270', '271'],
-      <String>['2720'],
+      <String>['2221', '2720'],
+    },
+    CardBrand.mastro: <List<String>>{
+      <String>['5018'],
+      <String>['5020'],
+      <String>['5038'],
+      <String>['5893'],
+      <String>['6304'],
+      <String>['6759'],
+      <String>['6761'],
+      <String>['6762'],
+      <String>['6763'],
+    },
+    CardBrand.rupay: <List<String>>{
+      <String>['60'],
+      <String>['65'],
+      <String>['81'],
+      <String>['82'],
+      <String>['508'],
     },
   };
 
@@ -482,7 +557,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
   /// and returns it.
   CardBrand detectCCType(String cardNumber) {
     //Default card type is other
-    CardBrand cardBrand = CardBrand.otherBrand;
+    CardBrand cardBrand = CardBrand.other;
 
     if (cardNumber.isEmpty) {
       return cardBrand;
@@ -534,11 +609,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
     if (customCardBrandIcon.isNotEmpty) {
       return customCardBrandIcon.first.cardImage;
     } else {
-      return Image.asset(
-        CardBrandIconAsset[cardBrand]!,
-        height: 48,
-        width: 48,
-      );
+      return Image.asset(CardBrandIconAsset[cardBrand]!, height: 25);
     }
   }
 
@@ -551,51 +622,41 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
         getCustomCardBrandIcon(ccType);
     if (customCardBrandIcon.isNotEmpty) {
       icon = customCardBrandIcon.first.cardImage;
-      isAmex = ccType == CardBrand.americanExpress;
     } else {
       switch (ccType) {
         case CardBrand.visa:
           icon = Image.asset(
             CardBrandIconAsset[ccType]!,
-            height: 48,
-            width: 48,
+            height: 25,
           );
-          isAmex = false;
           break;
 
-        case CardBrand.americanExpress:
+        case CardBrand.master:
           icon = Image.asset(
             CardBrandIconAsset[ccType]!,
-            height: 48,
-            width: 48,
+            height: 25,
           );
-          isAmex = true;
           break;
 
-        case CardBrand.mastercard:
+        case CardBrand.mastro:
           icon = Image.asset(
             CardBrandIconAsset[ccType]!,
-            height: 48,
-            width: 48,
+            height: 25,
           );
-          isAmex = false;
           break;
 
-        case CardBrand.discover:
+        case CardBrand.rupay:
           icon = Image.asset(
             CardBrandIconAsset[ccType]!,
-            height: 48,
-            width: 48,
+            height: 25,
           );
-          isAmex = false;
           break;
 
         default:
-          icon = const SizedBox(
-            height: 48,
-            width: 48,
+          icon = Image.asset(
+            CardBrandIconAsset[CardBrand.other]!,
+            height: 25,
           );
-          isAmex = false;
           break;
       }
     }
@@ -732,9 +793,9 @@ class MaskedTextController extends TextEditingController {
 }
 
 enum CardBrand {
-  otherBrand,
-  mastercard,
   visa,
-  americanExpress,
-  discover,
+  master,
+  mastro,
+  rupay,
+  other,
 }

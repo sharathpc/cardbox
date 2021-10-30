@@ -52,7 +52,7 @@ class CardsListView extends StatelessWidget {
                 DatabseService.columnAccountNumber: 0123456789876543,
                 DatabseService.columnIFSCode: 'AX000045',
                 DatabseService.columnCardType: 'Debit',
-                DatabseService.columnCardNumber: 52566775445622455,
+                DatabseService.columnCardNumber: 2256677544,
                 DatabseService.columnCardExpiryDate: '12/20',
                 DatabseService.columnCardHolderName: 'Sharath Chandra',
                 DatabseService.columnCardCvvCode: 234,

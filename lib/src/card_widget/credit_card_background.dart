@@ -62,19 +62,11 @@ class CardBackground extends StatelessWidget {
               clipBehavior: Clip.hardEdge,
               borderRadius: BorderRadius.circular(8),
               child: Container(
-                child: glassmorphismConfig != null
-                    ? BackdropFilter(
-                        filter: ui.ImageFilter.blur(
-                          sigmaX: glassmorphismConfig?.blurX ?? 0.0,
-                          sigmaY: glassmorphismConfig?.blurY ?? 0.0,
-                        ),
-                        child: child,
-                      )
-                    : child,
+                child: child,
               ),
             ),
           ),
-          if (glassmorphismConfig != null)
+          /* if (glassmorphismConfig != null)
             Padding(
               padding: const EdgeInsets.all(16),
               child: _GlassmorphicBorder(
@@ -84,7 +76,7 @@ class CardBackground extends StatelessWidget {
                         ? ((screenWidth - 32) * 0.5714)
                         : screenHeight / 2),
               ),
-            ),
+            ), */
         ],
       );
     });

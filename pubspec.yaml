@@ -39,6 +39,8 @@ flutter:
 
   assets:
     # Add assets from the images directory to the application.
+    - assets/card_widget/
+    - assets/card_widget/brands/
     - assets/images/
   fonts:
     - family: halter
