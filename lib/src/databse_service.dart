@@ -7,10 +7,16 @@ import 'package:sqflite/sqflite.dart';
 class DatabseService {
   static const _dbName = 'myDatabse.db';
   static const _dbVersion = 1;
-  static const _dbTableName = 'cards';
+  static const _dbGroupTableName = 'groups';
+  static const _dbCardTableName = 'cards';
 
-  static const columnId = 'id';
-  static const columnBankName = 'bankname';
+  static const columnGroupId = 'groupid';
+  static const columnGroupName = 'groupname';
+  static const columnGroupBankCodeId = 'groupbankcodeid';
+
+  static const columnCardId = 'cardid';
+  static const columnCardGroupId = 'cardgroupid';
+  static const columnCardTypeCodeId = 'cardtypecodeid';
   static const columnAccountNumber = 'accountnumber';
   static const columnIFSCode = 'ifscode';
   static const columnCardType = 'cardtype';
@@ -47,9 +53,15 @@ class DatabseService {
   Future _onCreate(Database db, int version) async {
     db.execute(
       '''
-        CREATE TABLE $_dbTableName( 
-          $columnId INTEGER PRIMARY KEY, 
-          $columnBankName TEXT NOT NULL,
+        CREATE TABLE $_dbGroupTableName( 
+          $columnGroupId INTEGER PRIMARY KEY,
+          $columnGroupName TEXT,
+          $columnGroupBankCodeId INTEGER,
+        )
+        CREATE TABLE $_dbCardTableName( 
+          $columnCardId INTEGER PRIMARY KEY,
+          $columnCardGroupId INTEGER,
+          $columnCardTypeCodeId INTEGER,
           $columnAccountNumber INTEGER,
           $columnIFSCode TEXT,
           $columnCardType TEXT,
@@ -68,27 +80,27 @@ class DatabseService {
     );
   }
 
-  Future<int> insert(Map<String, dynamic> row) async {
+  Future<int> insertGroup(Map<String, dynamic> row) async {
     Database db = await instance.database;
-    return await db.insert(_dbTableName, row);
+    return await db.insert(_dbGroupTableName, row);
   }
 
-  Future<List<Map<String, dynamic>>> queryAll() async {
+  Future<List<Map<String, dynamic>>> queryAllGroup() async {
     Database db = await instance.database;
-    return await db.query(_dbTableName);
+    return await db.query(_dbGroupTableName);
   }
 
-  Future<Map<String, dynamic>> queryOne(int id) async {
+  Future<Map<String, dynamic>> queryOneGroup(int groupId) async {
     Database db = await instance.database;
     List<Map<String, dynamic>> queryRows = await db.query(
-      _dbTableName,
-      where: '$columnId = ?',
-      whereArgs: [id],
+      _dbGroupTableName,
+      where: '$columnGroupId = ?',
+      whereArgs: [groupId],
     );
     return queryRows[0];
   }
 
-  Future<int> update(Map<String, dynamic> row) async {
+  /* Future<int> update(Map<String, dynamic> row) async {
     Database db = await instance.database;
     int id = row[columnId];
     return await db.update(
@@ -105,6 +117,41 @@ class DatabseService {
       _dbTableName,
       where: '$columnId = ?',
       whereArgs: [id],
+    );
+  } */
+
+  Future<int> insertCard(Map<String, dynamic> row) async {
+    Database db = await instance.database;
+    return await db.insert(_dbCardTableName, row);
+  }
+
+  Future<Map<String, dynamic>> queryOneCard(int cardId) async {
+    Database db = await instance.database;
+    List<Map<String, dynamic>> queryRows = await db.query(
+      _dbCardTableName,
+      where: '$columnCardId = ?',
+      whereArgs: [cardId],
+    );
+    return queryRows[0];
+  }
+
+  Future<int> updateCard(Map<String, dynamic> row) async {
+    Database db = await instance.database;
+    int cardId = row[columnCardId];
+    return await db.update(
+      _dbCardTableName,
+      row,
+      where: '$columnCardId = ?',
+      whereArgs: [cardId],
+    );
+  }
+
+  Future<int> deleteCard(int cardId) async {
+    Database db = await instance.database;
+    return await db.delete(
+      _dbCardTableName,
+      where: '$columnCardId = ?',
+      whereArgs: [cardId],
     );
   }
 }

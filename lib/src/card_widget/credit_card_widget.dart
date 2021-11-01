@@ -10,11 +10,11 @@ import 'glassmorphism_config.dart';
 
 // ignore: constant_identifier_names
 const Map<CardBrand, String> CardBrandIconAsset = <CardBrand, String>{
-  CardBrand.visa: 'assets/card_widget/brands/visa.png',
-  CardBrand.master: 'assets/card_widget/brands/master.png',
-  CardBrand.mastro: 'assets/card_widget/brands/mastro.png',
-  CardBrand.rupay: 'assets/card_widget/brands/rupay.png',
-  CardBrand.other: 'assets/card_widget/brands/other.png',
+  CardBrand.visa: 'assets/images/brands/visa.png',
+  CardBrand.master: 'assets/images/brands/master.png',
+  CardBrand.mastro: 'assets/images/brands/mastro.png',
+  CardBrand.rupay: 'assets/images/brands/rupay.png',
+  CardBrand.other: 'assets/images/brands/other.png',
 };
 
 class CreditCardWidget extends StatefulWidget {
@@ -291,7 +291,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
                 children: <Widget>[
                   if (widget.isChipVisible)
                     Image.asset(
-                      'assets/card_widget/chip.png',
+                      'assets/images/chip.png',
                       width: 35,
                       height: 35,
                     ),
@@ -456,7 +456,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
                     ClipRRect(
                       borderRadius: BorderRadius.circular(8.0),
                       child: Image.asset(
-                        'assets/card_widget/hologram.png',
+                        'assets/images/hologram.png',
                         height: 40,
                       ),
                     ),

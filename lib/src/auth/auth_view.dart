@@ -1,9 +1,10 @@
 import 'package:cardbox/src/auth/auth_service.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
 
-import '../cards_list/cards_list_view.dart';
+import '../group_list/group_list_view.dart';
 
 /// Displays a list of CardItems.
 class AuthView extends StatefulWidget {
@@ -46,13 +47,27 @@ class _AuthViewState extends State<AuthView> {
     if (AuthService.instance.isAuthenticated) {
       Navigator.pushReplacementNamed(
         context,
-        CardsListView.routeName,
+        GroupListView.routeName,
       );
     } else {}
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return CupertinoPageScaffold(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Align(
+            alignment: Alignment.center,
+            child: Image.asset(
+              'assets/images/logo-android.png',
+              height: 100,
+            ),
+          )
+        ],
+      ),
+    );
   }
 }

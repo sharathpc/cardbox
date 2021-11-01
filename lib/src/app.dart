@@ -1,12 +1,15 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import 'models/models.dart';
 import 'auth/auth_service.dart';
 import 'auth/auth_view.dart';
 import 'settings/settings_view.dart';
-import 'cards_list/cards_list_view.dart';
+import 'group_list/group_list_view.dart';
+import 'add_group/add_group_view.dart';
 import 'card_detail/card_detail_view.dart';
 import 'add_card/add_card_view.dart';
 import 'settings/settings_controller.dart';
@@ -29,7 +32,7 @@ class MyApp extends StatelessWidget {
     return AnimatedBuilder(
       animation: settingsController,
       builder: (BuildContext context, Widget? child) {
-        return MaterialApp(
+        return CupertinoApp(
           // Providing a restorationScopeId allows the Navigator built by the
           // MaterialApp to restore the navigation stack when a user leaves and
           // returns to the app after it has been killed while running in the
@@ -60,14 +63,14 @@ class MyApp extends StatelessWidget {
           // Define a light and dark color theme. Then, read the user's
           // preferred ThemeMode (light, dark, or system default) from the
           // SettingsController to display the correct theme.
-          theme: ThemeData(),
-          darkTheme: ThemeData.dark(),
-          themeMode: settingsController.themeMode,
+          //theme: const CupertinoThemeData(brightness: Brightness.light),
+          /* darkTheme: ThemeData.dark(),
+          themeMode: settingsController.themeMode, */
 
           // Define a function to handle named routes in order to support
           // Flutter web url navigation and deep linking.
           onGenerateRoute: (RouteSettings routeSettings) {
-            return MaterialPageRoute<void>(
+            return MaterialWithModalsPageRoute<void>(
               settings: routeSettings,
               builder: (BuildContext context) {
                 /* if (!AuthService.instance.isAuthenticated) {
@@ -76,14 +79,16 @@ class MyApp extends StatelessWidget {
                 switch (routeSettings.name) {
                   case SettingsView.routeName:
                     return SettingsView(controller: settingsController);
+                  case AddGroupView.routeName:
+                    return const AddGroupView();
+                  case AddCardView.routeName:
+                    return const AddCardView();
                   case CardDetailView.routeName:
                     final args = routeSettings.arguments as CardItem;
                     return CardDetailView(cardItem: args);
-                  case AddCardView.routeName:
-                    return const AddCardView();
-                  case CardsListView.routeName:
+                  case GroupListView.routeName:
                   default:
-                    return const CardsListView();
+                    return const GroupListView();
                 }
               },
             );
