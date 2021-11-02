@@ -51,13 +51,15 @@ class DatabseService {
   }
 
   Future _onCreate(Database db, int version) async {
-    db.execute(
-      '''
+    await db.execute('''
         CREATE TABLE $_dbGroupTableName( 
           $columnGroupId INTEGER PRIMARY KEY,
           $columnGroupName TEXT,
-          $columnGroupBankCodeId INTEGER,
+          $columnGroupBankCodeId INTEGER
         )
+      ''');
+    await db.execute(
+      '''
         CREATE TABLE $_dbCardTableName( 
           $columnCardId INTEGER PRIMARY KEY,
           $columnCardGroupId INTEGER,

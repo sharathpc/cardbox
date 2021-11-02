@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 //import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../models/models.dart';
+import '../databse_service.dart';
 
 /// Displays detailed information about a CardItem.
 class AddGroupView extends StatefulWidget {
@@ -42,7 +43,9 @@ class _AddGroupViewState extends State<AddGroupView> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          onPressed: () {},
+          onPressed: _groupNameController.text.isNotEmpty
+              ? () => saveGroup(context)
+              : null,
         ),
       ),
       child: SafeArea(
@@ -89,17 +92,31 @@ class _AddGroupViewState extends State<AddGroupView> {
                 }).toList(),
               ),
             ),
-            CupertinoTextFormFieldRow(
-              autofocus: true,
-              controller: _groupNameController,
-              placeholder: 'Group Name:',
-              onChanged: (String value) {
-                setState(() => groupName = value);
-              },
+            CupertinoFormSection(
+              children: [
+                CupertinoFormRow(
+                  child: CupertinoTextFormFieldRow(
+                    autofocus: true,
+                    controller: _groupNameController,
+                    placeholder: 'Group Name',
+                    onChanged: (String value) {
+                      setState(() => groupName = value);
+                    },
+                  ),
+                ),
+              ],
             ),
           ],
         ),
       ),
     );
+  }
+
+  saveGroup(BuildContext context) async {
+    await DatabseService.instance.insertGroup({
+      DatabseService.columnGroupName: _groupNameController.text,
+      DatabseService.columnGroupBankCodeId: selectedBank!.bankCodeId,
+    });
+    Navigator.pop(context);
   }
 }
