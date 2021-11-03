@@ -1,6 +1,7 @@
+import 'package:cardbox/src/manage_card/manage_card_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-//import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../models/models.dart';
 import '../databse_service.dart';
@@ -80,22 +81,51 @@ class _ManageGroupViewState extends State<ManageGroupView> {
               children: [
                 CupertinoFormRow(
                   child: CupertinoTextFormFieldRow(
-                      padding: const EdgeInsets.all(0.0),
+                      padding: EdgeInsets.zero,
                       autofocus: true,
                       controller: _groupNameController,
                       placeholder: 'Group Name'),
                 ),
                 CupertinoFormRow(
-                  padding: const EdgeInsets.all(0.0),
+                  padding: EdgeInsets.zero,
                   child: CupertinoTextFormFieldRow(
                     readOnly: true,
                     controller: _bankController,
                     placeholder: 'Bank Name',
                     onTap: () => showBankPicker(context),
                   ),
-                ),
+                )
               ],
             ),
+            const SizedBox(
+              height: 40.0,
+            ),
+            CupertinoFormSection(
+              children: [
+                GestureDetector(
+                  child: CupertinoFormRow(
+                    child: Row(
+                      children: const [
+                        Icon(
+                          CupertinoIcons.add_circled_solid,
+                          color: CupertinoColors.systemGreen,
+                        ),
+                        SizedBox(
+                          width: 16.0,
+                        ),
+                        Text('Add Card'),
+                      ],
+                    ),
+                  ),
+                  onTap: () => showCupertinoModalBottomSheet(
+                    expand: false,
+                    context: context,
+                    backgroundColor: Colors.transparent,
+                    builder: (context) => const ManageCardView(),
+                  ),
+                )
+              ],
+            )
           ],
         ),
       ),

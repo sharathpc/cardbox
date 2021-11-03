@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 
 class AnimationCard extends StatelessWidget {
   const AnimationCard({
+    Key? key,
     required this.child,
     required this.animation,
-  });
+  }) : super(key: key);
 
   final Widget child;
   final Animation<double> animation;

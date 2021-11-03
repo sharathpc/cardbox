@@ -269,7 +269,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
                   ),
                   const Spacer(),
                   Text(
-                    'DEBIT CARD',
+                    widget.cardType.isEmpty ? 'Debit Card' : widget.cardType,
                     style: widget.textStyle ??
                         defaultTextStyle.copyWith(
                           fontSize: 10,
@@ -391,6 +391,10 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
         ? widget.cvvCode.replaceAll(RegExp(r'\d'), '*')
         : widget.cvvCode;
 
+    final String pin = widget.obscureCardPin
+        ? widget.cardPin.replaceAll(RegExp(r'\d'), '*')
+        : widget.cardPin;
+
     return CardBackground(
       backgroundImage: widget.backgroundImage,
       backgroundGradientColor: backgroundGradientColor,
@@ -475,7 +479,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
                         ),
                         const SizedBox(width: 5),
                         Text(
-                          widget.cardPin.isEmpty ? 'XXXX' : widget.cardPin,
+                          widget.cardPin.isEmpty ? 'XXXX' : pin,
                           style: widget.textStyle ??
                               defaultTextStyle.copyWith(
                                 color: Colors.white,

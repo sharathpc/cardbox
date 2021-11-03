@@ -1,19 +1,24 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import 'package:cardbox/src/card_widget/credit_card_brand.dart';
 import 'package:cardbox/src/card_widget/credit_card_form.dart';
 import 'package:cardbox/src/card_widget/flutter_credit_card.dart';
 
-/// Displays detailed information about a CardItem.
-class AddCardView extends StatefulWidget {
-  const AddCardView({Key? key}) : super(key: key);
+class ManageCardView extends StatefulWidget {
+  const ManageCardView({
+    Key? key,
+    this.cardId,
+  }) : super(key: key);
 
   static const routeName = '/add_card';
+  final int? cardId;
 
   @override
-  State<AddCardView> createState() => _AddCardViewState();
+  State<ManageCardView> createState() => _ManageCardViewState();
 }
 
-class _AddCardViewState extends State<AddCardView> {
+class _ManageCardViewState extends State<ManageCardView> {
   String cardType = '';
   String cardNumber = '';
   String expiryDate = '';
@@ -23,6 +28,7 @@ class _AddCardViewState extends State<AddCardView> {
   bool isBackFocused = false;
   OutlineInputBorder? border;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  bool isEdit = false;
 
   @override
   void initState() {
@@ -33,15 +39,38 @@ class _AddCardViewState extends State<AddCardView> {
       ),
     );
     super.initState();
+    isEdit = widget.cardId != null;
+    /* if (isEdit) {
+      getAndPopulateGroup();
+    } */
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Add Card'),
+    return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        leading: TextButton(
+          child: const Text('Cancel'),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        middle: Text('${isEdit ? 'Edit' : 'Add'} Card'),
+        trailing: const TextButton(
+          child: Text(
+            'Done',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          onPressed: /* _groupNameController.text.isNotEmpty
+              ? () => saveGroup(context)
+              :  */
+              null,
+        ),
       ),
-      body: SafeArea(
+      child: SafeArea(
+        bottom: false,
         child: Column(
           children: <Widget>[
             const SizedBox(
@@ -93,40 +122,6 @@ class _AddCardViewState extends State<AddCardView> {
                       expiryDate: expiryDate,
                       themeColor: Colors.blue,
                       textColor: Colors.white,
-                      cardNumberDecoration: InputDecoration(
-                        labelText: 'Number',
-                        hintText: 'XXXX XXXX XXXX XXXX',
-                        focusedBorder: border,
-                        enabledBorder: border,
-                      ),
-                      cardTypeDecoration: InputDecoration(
-                        focusedBorder: border,
-                        enabledBorder: border,
-                        labelText: 'Card Type',
-                      ),
-                      expiryDateDecoration: InputDecoration(
-                        focusedBorder: border,
-                        enabledBorder: border,
-                        labelText: 'Expired Date',
-                        hintText: 'XX/XX',
-                      ),
-                      cardHolderDecoration: InputDecoration(
-                        focusedBorder: border,
-                        enabledBorder: border,
-                        labelText: 'Card Holder',
-                      ),
-                      cvvCodeDecoration: InputDecoration(
-                        focusedBorder: border,
-                        enabledBorder: border,
-                        labelText: 'CVV',
-                        hintText: 'XXX',
-                      ),
-                      cardPinDecoration: InputDecoration(
-                        focusedBorder: border,
-                        enabledBorder: border,
-                        labelText: 'Card Pin',
-                        hintText: 'XXXX',
-                      ),
                       onCreditCardModelChange: onCreditCardModelChange,
                     ),
                   ],
@@ -141,7 +136,8 @@ class _AddCardViewState extends State<AddCardView> {
 
   void onCreditCardModelChange(CreditCardModel? creditCardModel) {
     setState(() {
-      cardNumber = creditCardModel!.cardNumber;
+      cardType = creditCardModel!.cardType;
+      cardNumber = creditCardModel.cardNumber;
       expiryDate = creditCardModel.expiryDate;
       cardHolderName = creditCardModel.cardHolderName;
       cvvCode = creditCardModel.cvvCode;

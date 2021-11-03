@@ -12,7 +12,7 @@ import 'group_list/group_list_view.dart';
 import 'manage_group/manage_group_view.dart';
 import 'group_detail/group_detail_view.dart';
 import 'card_detail/card_detail_view.dart';
-import 'add_card/add_card_view.dart';
+import 'manage_card/manage_card_view.dart';
 import 'settings/settings_controller.dart';
 
 /// The Widget that configures your application.
@@ -86,8 +86,9 @@ class MyApp extends StatelessWidget {
                   case GroupDetailView.routeName:
                     final args = routeSettings.arguments as int;
                     return GroupDetailView(groupId: args);
-                  case AddCardView.routeName:
-                    return const AddCardView();
+                  case ManageCardView.routeName:
+                    final args = routeSettings.arguments as int;
+                    return ManageCardView(cardId: args);
                   case CardDetailView.routeName:
                     final args = routeSettings.arguments as CardItem;
                     return CardDetailView(cardItem: args);
