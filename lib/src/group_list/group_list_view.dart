@@ -1,5 +1,3 @@
-import 'package:cardbox/src/add_group/add_group_view.dart';
-import 'package:cardbox/src/group_detail/group_detail_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -7,7 +5,8 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import '../models/models.dart';
 import '../databse_service.dart';
 //import '../settings/settings_view.dart';
-import '../add_group/add_group_view.dart';
+import '../manage_group/manage_group_view.dart';
+import '../group_detail/group_detail_view.dart';
 
 /// Displays a list of CardItems.
 class GroupListView extends StatefulWidget {
@@ -53,7 +52,7 @@ class _GroupListViewState extends State<GroupListView> {
                   showCupertinoModalBottomSheet(
                     context: context,
                     isDismissible: true,
-                    builder: (context) => const AddGroupView(),
+                    builder: (context) => const ManageGroupView(),
                   );
                 },
               ),
@@ -118,7 +117,9 @@ class GroupSilverList extends StatelessWidget {
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
           if (connectionState != ConnectionState.done) {
-            return const CircularProgressIndicator();
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
           }
           final GroupItem groupItem = groupList[index];
           return GestureDetector(
@@ -134,7 +135,7 @@ class GroupSilverList extends StatelessWidget {
               Navigator.pushNamed(
                 context,
                 GroupDetailView.routeName,
-                arguments: groupItem,
+                arguments: groupItem.groupId,
               ),
             },
           );

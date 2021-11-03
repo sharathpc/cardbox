@@ -92,7 +92,7 @@ class DatabseService {
     return await db.query(_dbGroupTableName);
   }
 
-  Future<Map<String, dynamic>> queryOneGroup(int groupId) async {
+  Future<Map<String, dynamic>> queryOneGroup(int? groupId) async {
     Database db = await instance.database;
     List<Map<String, dynamic>> queryRows = await db.query(
       _dbGroupTableName,
@@ -102,18 +102,18 @@ class DatabseService {
     return queryRows[0];
   }
 
-  /* Future<int> update(Map<String, dynamic> row) async {
+  Future<int> updateGroup(Map<String, dynamic> row) async {
     Database db = await instance.database;
-    int id = row[columnId];
+    int groupId = row[columnGroupId];
     return await db.update(
-      _dbTableName,
+      _dbGroupTableName,
       row,
-      where: '$columnId = ?',
-      whereArgs: [id],
+      where: '$columnGroupId = ?',
+      whereArgs: [groupId],
     );
   }
 
-  Future<int> delete(int id) async {
+  /* Future<int> delete(int id) async {
     Database db = await instance.database;
     return await db.delete(
       _dbTableName,

@@ -9,7 +9,7 @@ import 'auth/auth_service.dart';
 import 'auth/auth_view.dart';
 import 'settings/settings_view.dart';
 import 'group_list/group_list_view.dart';
-import 'add_group/add_group_view.dart';
+import 'manage_group/manage_group_view.dart';
 import 'group_detail/group_detail_view.dart';
 import 'card_detail/card_detail_view.dart';
 import 'add_card/add_card_view.dart';
@@ -80,11 +80,12 @@ class MyApp extends StatelessWidget {
                 switch (routeSettings.name) {
                   case SettingsView.routeName:
                     return SettingsView(controller: settingsController);
-                  case AddGroupView.routeName:
-                    return const AddGroupView();
+                  case ManageGroupView.routeName:
+                    final args = routeSettings.arguments as int;
+                    return ManageGroupView(groupId: args);
                   case GroupDetailView.routeName:
-                    final args = routeSettings.arguments as GroupItem;
-                    return GroupDetailView(groupItem: args);
+                    final args = routeSettings.arguments as int;
+                    return GroupDetailView(groupId: args);
                   case AddCardView.routeName:
                     return const AddCardView();
                   case CardDetailView.routeName:

@@ -1,16 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../models/models.dart';
+import '../manage_group/manage_group_view.dart';
 
 /// Displays detailed information about a CardItem.
 class GroupDetailView extends StatelessWidget {
   const GroupDetailView({
     Key? key,
-    required this.groupItem,
+    this.groupId,
   }) : super(key: key);
 
-  final GroupItem groupItem;
+  final int? groupId;
   static const routeName = '/group_detail';
 
   @override
@@ -25,7 +27,13 @@ class GroupDetailView extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          onPressed: () {},
+          onPressed: () {
+            showCupertinoModalBottomSheet(
+              context: context,
+              isDismissible: true,
+              builder: (context) => ManageGroupView(groupId: groupId),
+            );
+          },
         ),
       ),
       child: SafeArea(
