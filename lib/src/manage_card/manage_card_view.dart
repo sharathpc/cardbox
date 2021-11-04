@@ -24,9 +24,9 @@ class ManageCardView extends StatefulWidget {
 
 class _ManageCardViewState extends State<ManageCardView> {
   late BankItem bank;
-  String cardType = '';
-  late String accountNumber;
-  late String ifsCode;
+  int cardTypeCodeId = 0;
+  String accountNumber = '';
+  String ifsCode = '';
   String cardNumber = '';
   String cardExpiryDate = '';
   String cardHolderName = '';
@@ -79,7 +79,21 @@ class _ManageCardViewState extends State<ManageCardView> {
             ),
             onPressed: () {
               if (formKey.currentState!.validate()) {
-                Navigator.pop(context, {});
+                Navigator.pop(context, {
+                  'cardTypeCodeId': cardTypeCodeId,
+                  'accountNumber': int.tryParse(accountNumber),
+                  'ifsCode': ifsCode,
+                  'cardNumber': int.tryParse(cardNumber.replaceAll(' ', '')),
+                  'cardExpiryDate': cardExpiryDate,
+                  'cardHolderName': cardHolderName,
+                  'cardCvvCode': int.tryParse(cardCvvCode),
+                  'cardPin': int.tryParse(cardPin),
+                  'mobileNumber': int.tryParse(mobileNumber),
+                  'mobilePin': int.tryParse(mobilePin),
+                  'internetId': internetId,
+                  'internetPassword': internetPassword,
+                  'internetProfilePassword': internetProfilePassword,
+                });
               }
             }),
       ),
@@ -92,7 +106,7 @@ class _ManageCardViewState extends State<ManageCardView> {
             ),
             CreditCardWidget(
               bankLogo: bank.bankLogo,
-              cardType: cardType,
+              cardTypeCodeId: cardTypeCodeId,
               cardNumber: cardNumber,
               expiryDate: cardExpiryDate,
               cardHolderName: cardHolderName,
@@ -129,7 +143,7 @@ class _ManageCardViewState extends State<ManageCardView> {
                       obscureCvv: true,
                       obscureNumber: true,
                       obscurePin: true,
-                      cardType: cardType,
+                      cardTypeCodeId: cardTypeCodeId,
                       cardNumber: cardNumber,
                       cvvCode: cardCvvCode,
                       cardPin: cardPin,
@@ -151,7 +165,7 @@ class _ManageCardViewState extends State<ManageCardView> {
 
   void onCreditCardModelChange(CreditCardModel? creditCardModel) {
     setState(() {
-      cardType = creditCardModel!.cardType;
+      cardTypeCodeId = creditCardModel!.cardTypeCodeId;
       cardNumber = creditCardModel.cardNumber;
       cardExpiryDate = creditCardModel.expiryDate;
       cardHolderName = creditCardModel.cardHolderName;

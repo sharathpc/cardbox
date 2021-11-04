@@ -10,7 +10,7 @@ import 'credit_card_model.dart';
 class CreditCardForm extends StatefulWidget {
   const CreditCardForm({
     Key? key,
-    required this.cardType,
+    required this.cardTypeCodeId,
     required this.cardNumber,
     required this.expiryDate,
     required this.cardHolderName,
@@ -29,7 +29,7 @@ class CreditCardForm extends StatefulWidget {
     this.numberValidationMessage = 'Please input a valid number',
   }) : super(key: key);
 
-  final String cardType;
+  final int cardTypeCodeId;
   final String cardNumber;
   final String expiryDate;
   final String cardHolderName;
@@ -52,15 +52,8 @@ class CreditCardForm extends StatefulWidget {
 }
 
 class _CreditCardFormState extends State<CreditCardForm> {
-  final List<String> cardTypesList = [
-    'Bank Card',
-    'Debit Card',
-    'Credit Card',
-    'Mobile Banking Card',
-    'Internet Banking Card',
-  ];
-
-  late String cardType;
+  CardTypeModel? selectedCardType;
+  late int cardTypeCodeId;
   late String cardNumber;
   late String expiryDate;
   late String cardHolderName;
@@ -97,7 +90,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
   }
 
   void createCreditCardModel() {
-    cardType = widget.cardType;
+    cardTypeCodeId = widget.cardTypeCodeId;
     cardNumber = widget.cardNumber;
     expiryDate = widget.expiryDate;
     cardHolderName = widget.cardHolderName;
@@ -105,7 +98,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
     cardPin = widget.cardPin;
 
     creditCardModel = CreditCardModel(
-      cardType,
+      cardTypeCodeId,
       cardNumber,
       expiryDate,
       cardHolderName,
@@ -128,8 +121,8 @@ class _CreditCardFormState extends State<CreditCardForm> {
 
     _cardTypeController.addListener(() {
       setState(() {
-        cardType = _cardTypeController.text;
-        creditCardModel.cardType = cardType;
+        cardTypeCodeId = selectedCardType!.cardTypeCodeId;
+        creditCardModel.cardTypeCodeId = cardTypeCodeId;
         onCreditCardModelChange(creditCardModel);
       });
     });
@@ -392,22 +385,24 @@ class _CreditCardFormState extends State<CreditCardForm> {
             context,
           ),
           scrollController: FixedExtentScrollController(
-            initialItem: -1,
+            initialItem: selectedCardType != null
+                ? CardTypeModel.cardTypesList.indexWhere((item) =>
+                    item.cardTypeCodeId == selectedCardType!.cardTypeCodeId)
+                : -1,
           ),
           onSelectedItemChanged: (index) {
-            /* setState(() {
-              selectedBank = CardType.cardTypesList[index].cardTypeName;
-            }); */
-
-            _cardTypeController.text = cardTypesList[index];
+            setState(() {
+              selectedCardType = CardTypeModel.cardTypesList[index];
+              _cardTypeController.text = selectedCardType!.cardTypeName;
+            });
           },
           itemExtent: 32.0,
-          children: cardTypesList.map((String item) {
+          children: CardTypeModel.cardTypesList.map((CardTypeModel item) {
             return Center(
               heightFactor: double.maxFinite,
               widthFactor: double.infinity,
               child: Text(
-                item,
+                item.cardTypeName,
                 style: const TextStyle(
                   fontSize: 16,
                 ),

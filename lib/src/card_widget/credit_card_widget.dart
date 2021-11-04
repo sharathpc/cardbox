@@ -1,7 +1,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:collection/collection.dart';
 
+import 'credit_card_model.dart';
 import 'credit_card_animation.dart';
 import 'credit_card_background.dart';
 import 'credit_card_brand.dart';
@@ -21,7 +23,7 @@ class CreditCardWidget extends StatefulWidget {
   const CreditCardWidget({
     Key? key,
     required this.bankLogo,
-    required this.cardType,
+    required this.cardTypeCodeId,
     required this.cardNumber,
     required this.expiryDate,
     required this.cardHolderName,
@@ -48,7 +50,7 @@ class CreditCardWidget extends StatefulWidget {
   }) : super(key: key);
 
   final String bankLogo;
-  final String cardType;
+  final int cardTypeCodeId;
   final String cardNumber;
   final String expiryDate;
   final String cardHolderName;
@@ -243,6 +245,10 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
     final String number = widget.obscureCardNumber
         ? widget.cardNumber.replaceAll(RegExp(r'(?<=.{4})\d(?=.{4})'), '*')
         : widget.cardNumber;
+
+    final CardTypeModel? cardType = CardTypeModel.cardTypesList
+        .firstWhereOrNull(
+            (item) => item.cardTypeCodeId == widget.cardTypeCodeId);
     return CardBackground(
       backgroundImage: widget.backgroundImage,
       backgroundGradientColor: backgroundGradientColor,
@@ -269,7 +275,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
                   ),
                   const Spacer(),
                   Text(
-                    widget.cardType.isEmpty ? 'Debit Card' : widget.cardType,
+                    cardType == null ? 'Debit Card' : cardType.cardTypeName,
                     style: widget.textStyle ??
                         defaultTextStyle.copyWith(
                           fontSize: 10,
