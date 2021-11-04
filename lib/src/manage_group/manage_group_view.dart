@@ -26,13 +26,28 @@ class _ManageGroupViewState extends State<ManageGroupView> {
   bool isEdit = false;
   BankItem? selectedBank;
 
+  String bankValidationMessage = 'Please select a bank';
+  String groupNameValidationMessage = 'Please input a valid name';
+
+  FocusNode groupNameNode = FocusNode();
+
   @override
   void initState() {
     super.initState();
     isEdit = widget.groupId != null;
-    if (isEdit) {
-      getAndPopulateGroup();
-    }
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      if (isEdit) {
+        getAndPopulateGroup();
+      } else {
+        showBankPicker(context);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    groupNameNode.dispose();
+    super.dispose();
   }
 
   @override
@@ -80,21 +95,39 @@ class _ManageGroupViewState extends State<ManageGroupView> {
             CupertinoFormSection(
               children: [
                 CupertinoFormRow(
-                  child: CupertinoTextFormFieldRow(
-                      padding: EdgeInsets.zero,
-                      autofocus: true,
-                      controller: _groupNameController,
-                      placeholder: 'Group Name'),
-                ),
-                CupertinoFormRow(
                   padding: EdgeInsets.zero,
                   child: CupertinoTextFormFieldRow(
                     readOnly: true,
+                    autofocus: true,
                     controller: _bankController,
-                    placeholder: 'Bank Name',
+                    onEditingComplete: () {
+                      FocusScope.of(context).requestFocus(groupNameNode);
+                    },
+                    placeholder: 'Bank',
+                    validator: (String? value) {
+                      if (value!.isEmpty) {
+                        return bankValidationMessage;
+                      }
+                      return null;
+                    },
                     onTap: () => showBankPicker(context),
                   ),
-                )
+                ),
+                CupertinoFormRow(
+                  child: CupertinoTextFormFieldRow(
+                    padding: EdgeInsets.zero,
+                    controller: _groupNameController,
+                    focusNode: groupNameNode,
+                    placeholder: 'Group Name',
+                    keyboardType: TextInputType.text,
+                    validator: (String? value) {
+                      if (value!.isEmpty) {
+                        return groupNameValidationMessage;
+                      }
+                      return null;
+                    },
+                  ),
+                ),
               ],
             ),
             const SizedBox(
@@ -104,29 +137,18 @@ class _ManageGroupViewState extends State<ManageGroupView> {
               children: [
                 GestureDetector(
                   child: CupertinoFormRow(
-                    child: Row(
-                      children: const [
-                        Icon(
-                          CupertinoIcons.add_circled_solid,
-                          color: CupertinoColors.systemGreen,
-                        ),
-                        SizedBox(
-                          width: 16.0,
-                        ),
-                        Text('Add Card'),
-                      ],
+                    padding: EdgeInsets.zero,
+                    child: CupertinoTextFormFieldRow(
+                      readOnly: true,
+                      prefix: const Icon(
+                        CupertinoIcons.add_circled_solid,
+                        color: CupertinoColors.systemGreen,
+                      ),
+                      placeholder: 'Add Card',
+                      onTap: () => addCard(),
                     ),
                   ),
-                  onTap: () {
-                    showCupertinoModalBottomSheet(
-                      expand: false,
-                      context: context,
-                      backgroundColor: Colors.transparent,
-                      builder: (context) => ManageCardView(
-                        bankCodeId: selectedBank!.bankCodeId,
-                      ),
-                    ).then((value) => print(value));
-                  },
+                  onTap: () => addCard(),
                 )
               ],
             )
@@ -140,9 +162,12 @@ class _ManageGroupViewState extends State<ManageGroupView> {
     showCupertinoModalPopup(
       context: ctx,
       builder: (_) => SizedBox(
-        height: 400,
+        height: 280,
         child: CupertinoPicker(
-          backgroundColor: Colors.transparent,
+          backgroundColor: CupertinoDynamicColor.resolve(
+            CupertinoColors.systemBackground,
+            context,
+          ),
           scrollController: FixedExtentScrollController(
             initialItem: selectedBank != null
                 ? BankItem.banksList.indexWhere(
@@ -171,6 +196,19 @@ class _ManageGroupViewState extends State<ManageGroupView> {
         ),
       ),
     );
+  }
+
+  addCard() {
+    showCupertinoModalBottomSheet(
+      expand: false,
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (context) => ManageCardView(
+        bankCodeId: selectedBank!.bankCodeId,
+      ),
+    ).then((value) {
+      print(value);
+    });
   }
 
   getAndPopulateGroup() async {
