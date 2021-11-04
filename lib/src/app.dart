@@ -87,8 +87,11 @@ class MyApp extends StatelessWidget {
                     final args = routeSettings.arguments as int;
                     return GroupDetailView(groupId: args);
                   case ManageCardView.routeName:
-                    final args = routeSettings.arguments as int;
-                    return ManageCardView(cardId: args);
+                    final args = routeSettings.arguments as ManageCardModel;
+                    return ManageCardView(
+                      bankCodeId: args.bankCodeId,
+                      cardId: args.cardId,
+                    );
                   case CardDetailView.routeName:
                     final args = routeSettings.arguments as CardItem;
                     return CardDetailView(cardItem: args);

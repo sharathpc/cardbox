@@ -117,12 +117,16 @@ class _ManageGroupViewState extends State<ManageGroupView> {
                       ],
                     ),
                   ),
-                  onTap: () => showCupertinoModalBottomSheet(
-                    expand: false,
-                    context: context,
-                    backgroundColor: Colors.transparent,
-                    builder: (context) => const ManageCardView(),
-                  ),
+                  onTap: () {
+                    showCupertinoModalBottomSheet(
+                      expand: false,
+                      context: context,
+                      backgroundColor: Colors.transparent,
+                      builder: (context) => ManageCardView(
+                        bankCodeId: selectedBank!.bankCodeId,
+                      ),
+                    ).then((value) => print(value));
+                  },
                 )
               ],
             )

@@ -191,175 +191,179 @@ class _CreditCardFormState extends State<CreditCardForm> {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoFormSection(
+    return Form(
       key: widget.formKey,
-      header: const Text('Card Details'),
-      children: [
-        CupertinoFormRow(
-          padding: EdgeInsets.zero,
-          child: CupertinoTextFormFieldRow(
-            autofocus: true,
-            obscureText: widget.obscureNumber,
-            controller: _cardNumberController,
-            onEditingComplete: () {
-              FocusScope.of(context).requestFocus(cardTypeNode);
-            },
-            prefix: const SizedBox(
-              width: 100,
-              child: Text(
-                'Card Number',
-                style: TextStyle(fontSize: 14.0),
+      child: CupertinoFormSection(
+        header: const Text('Card Details'),
+        children: [
+          CupertinoFormRow(
+            padding: EdgeInsets.zero,
+            child: CupertinoTextFormFieldRow(
+              autofocus: true,
+              obscureText: widget.obscureNumber,
+              controller: _cardNumberController,
+              onEditingComplete: () {
+                FocusScope.of(context).requestFocus(cardTypeNode);
+              },
+              prefix: const SizedBox(
+                width: 100,
+                child: Text(
+                  'Card Number',
+                  style: TextStyle(fontSize: 14.0),
+                ),
               ),
+              placeholder: 'XXXX XXXX XXXX XXXX',
+              keyboardType: TextInputType.number,
+              textInputAction: TextInputAction.next,
+              autofillHints: const <String>[AutofillHints.creditCardNumber],
+              validator: (String? value) {
+                // Validate less that 13 digits +3 white spaces
+                if (value!.isEmpty || value.length < 16) {
+                  return widget.numberValidationMessage;
+                }
+                return null;
+              },
             ),
-            placeholder: 'XXXX XXXX XXXX XXXX',
-            keyboardType: TextInputType.number,
-            textInputAction: TextInputAction.next,
-            autofillHints: const <String>[AutofillHints.creditCardNumber],
-            validator: (String? value) {
-              // Validate less that 13 digits +3 white spaces
-              if (value!.isEmpty || value.length < 16) {
-                return widget.numberValidationMessage;
-              }
-              return null;
-            },
           ),
-        ),
-        CupertinoFormRow(
-          padding: EdgeInsets.zero,
-          child: CupertinoTextFormFieldRow(
-            readOnly: true,
-            controller: _cardTypeController,
-            focusNode: cardTypeNode,
-            onEditingComplete: () {
-              FocusScope.of(context).requestFocus(expiryDateNode);
-            },
-            prefix: const SizedBox(
-              width: 100,
-              child: Text(
-                'Card Type',
-                style: TextStyle(fontSize: 14.0),
+          CupertinoFormRow(
+            padding: EdgeInsets.zero,
+            child: CupertinoTextFormFieldRow(
+              readOnly: true,
+              controller: _cardTypeController,
+              focusNode: cardTypeNode,
+              onEditingComplete: () {
+                FocusScope.of(context).requestFocus(expiryDateNode);
+              },
+              prefix: const SizedBox(
+                width: 100,
+                child: Text(
+                  'Card Type',
+                  style: TextStyle(fontSize: 14.0),
+                ),
               ),
+              placeholder: 'Debit Card',
+              onTap: () => showCardTypePicker(context),
             ),
-            placeholder: 'Debit Card',
-            onTap: () => showCardTypePicker(context),
           ),
-        ),
-        CupertinoFormRow(
-          padding: EdgeInsets.zero,
-          child: CupertinoTextFormFieldRow(
-            controller: _expiryDateController,
-            focusNode: expiryDateNode,
-            onEditingComplete: () {
-              FocusScope.of(context).requestFocus(cardHolderNode);
-            },
-            prefix: const SizedBox(
-              width: 100,
-              child: Text(
-                'Expired Date',
-                style: TextStyle(fontSize: 14.0),
+          CupertinoFormRow(
+            padding: EdgeInsets.zero,
+            child: CupertinoTextFormFieldRow(
+              controller: _expiryDateController,
+              focusNode: expiryDateNode,
+              onEditingComplete: () {
+                FocusScope.of(context).requestFocus(cardHolderNode);
+              },
+              prefix: const SizedBox(
+                width: 100,
+                child: Text(
+                  'Expired Date',
+                  style: TextStyle(fontSize: 14.0),
+                ),
               ),
-            ),
-            placeholder: 'XX/XX',
-            keyboardType: TextInputType.number,
-            textInputAction: TextInputAction.next,
-            autofillHints: const <String>[
-              AutofillHints.creditCardExpirationDate
-            ],
-            validator: (String? value) {
-              if (value!.isEmpty) {
-                return widget.dateValidationMessage;
-              }
-              final DateTime now = DateTime.now();
-              final List<String> date = value.split(RegExp(r'/'));
-              final int month = int.parse(date.first);
-              final int year = int.parse('20${date.last}');
-              final DateTime cardDate = DateTime(year, month);
+              placeholder: 'XX/XX',
+              keyboardType: TextInputType.number,
+              textInputAction: TextInputAction.next,
+              autofillHints: const <String>[
+                AutofillHints.creditCardExpirationDate
+              ],
+              validator: (String? value) {
+                if (value!.isEmpty) {
+                  return widget.dateValidationMessage;
+                }
+                final DateTime now = DateTime.now();
+                final List<String> date = value.split(RegExp(r'/'));
+                final int month = int.parse(date.first);
+                final int year = int.parse('20${date.last}');
+                final DateTime cardDate = DateTime(year, month);
 
-              if (cardDate.isBefore(now) || month > 12 || month == 0) {
-                return widget.dateValidationMessage;
-              }
-              return null;
-            },
-          ),
-        ),
-        CupertinoFormRow(
-          padding: EdgeInsets.zero,
-          child: CupertinoTextFormFieldRow(
-            controller: _cardHolderNameController,
-            focusNode: cardHolderNode,
-            onEditingComplete: () {
-              FocusScope.of(context).requestFocus(cvvFocusNode);
-            },
-            prefix: const SizedBox(
-              width: 100,
-              child: Text(
-                'Card Holder',
-                style: TextStyle(fontSize: 14.0),
-              ),
+                if (cardDate.isBefore(now) || month > 12 || month == 0) {
+                  return widget.dateValidationMessage;
+                }
+                return null;
+              },
             ),
-            placeholder: 'John Doe',
-            keyboardType: TextInputType.text,
-            textInputAction: TextInputAction.next,
-            autofillHints: const <String>[AutofillHints.creditCardName],
           ),
-        ),
-        CupertinoFormRow(
-          padding: EdgeInsets.zero,
-          child: CupertinoTextFormFieldRow(
-            obscureText: widget.obscureCvv,
-            controller: _cvvCodeController,
-            focusNode: cvvFocusNode,
-            onEditingComplete: () {
-              FocusScope.of(context).requestFocus(cardPinNode);
-            },
-            prefix: const SizedBox(
-              width: 100,
-              child: Text(
-                'CVV',
-                style: TextStyle(fontSize: 14.0),
+          CupertinoFormRow(
+            padding: EdgeInsets.zero,
+            child: CupertinoTextFormFieldRow(
+              controller: _cardHolderNameController,
+              focusNode: cardHolderNode,
+              onEditingComplete: () {
+                FocusScope.of(context).requestFocus(cvvFocusNode);
+              },
+              prefix: const SizedBox(
+                width: 100,
+                child: Text(
+                  'Card Holder',
+                  style: TextStyle(fontSize: 14.0),
+                ),
               ),
+              placeholder: 'John Doe',
+              keyboardType: TextInputType.text,
+              textInputAction: TextInputAction.next,
+              autofillHints: const <String>[AutofillHints.creditCardName],
             ),
-            placeholder: 'XXX',
-            keyboardType: TextInputType.number,
-            textInputAction: TextInputAction.next,
-            autofillHints: const <String>[AutofillHints.creditCardSecurityCode],
-            validator: (String? value) {
-              if (value!.isEmpty || value.length < 3) {
-                return widget.cvvValidationMessage;
-              }
-              return null;
-            },
           ),
-        ),
-        CupertinoFormRow(
-          padding: EdgeInsets.zero,
-          child: CupertinoTextFormFieldRow(
-            obscureText: widget.obscurePin,
-            controller: _cardPinController,
-            focusNode: cardPinNode,
-            onEditingComplete: () {
-              FocusScope.of(context).unfocus();
-              onCreditCardModelChange(creditCardModel);
-            },
-            prefix: const SizedBox(
-              width: 100,
-              child: Text(
-                'Card Pin',
-                style: TextStyle(fontSize: 14.0),
+          CupertinoFormRow(
+            padding: EdgeInsets.zero,
+            child: CupertinoTextFormFieldRow(
+              obscureText: widget.obscureCvv,
+              controller: _cvvCodeController,
+              focusNode: cvvFocusNode,
+              onEditingComplete: () {
+                FocusScope.of(context).requestFocus(cardPinNode);
+              },
+              prefix: const SizedBox(
+                width: 100,
+                child: Text(
+                  'CVV',
+                  style: TextStyle(fontSize: 14.0),
+                ),
               ),
+              placeholder: 'XXX',
+              keyboardType: TextInputType.number,
+              textInputAction: TextInputAction.next,
+              autofillHints: const <String>[
+                AutofillHints.creditCardSecurityCode
+              ],
+              validator: (String? value) {
+                if (value!.isEmpty || value.length < 3) {
+                  return widget.cvvValidationMessage;
+                }
+                return null;
+              },
             ),
-            placeholder: 'XXXX',
-            keyboardType: TextInputType.number,
-            textInputAction: TextInputAction.done,
-            validator: (String? value) {
-              if (value!.isEmpty || value.length < 4) {
-                return widget.numberValidationMessage;
-              }
-              return null;
-            },
           ),
-        ),
-      ],
+          CupertinoFormRow(
+            padding: EdgeInsets.zero,
+            child: CupertinoTextFormFieldRow(
+              obscureText: widget.obscurePin,
+              controller: _cardPinController,
+              focusNode: cardPinNode,
+              onEditingComplete: () {
+                FocusScope.of(context).unfocus();
+                onCreditCardModelChange(creditCardModel);
+              },
+              prefix: const SizedBox(
+                width: 100,
+                child: Text(
+                  'Card Pin',
+                  style: TextStyle(fontSize: 14.0),
+                ),
+              ),
+              placeholder: 'XXXX',
+              keyboardType: TextInputType.number,
+              textInputAction: TextInputAction.done,
+              validator: (String? value) {
+                if (value!.isEmpty || value.length < 4) {
+                  return widget.numberValidationMessage;
+                }
+                return null;
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 

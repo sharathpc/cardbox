@@ -116,73 +116,90 @@ class BankItem {
 
   static List<BankItem> banksList = [
     BankItem(
-        bankCodeId: 10001,
-        bankName: 'HDFC Bank',
-        bankLogo: 'assets/images/banks/hdfc-10001.png'),
+      bankCodeId: 10001,
+      bankName: 'HDFC Bank',
+      bankLogo: 'assets/images/banks/hdfc-10001.png',
+    ),
     BankItem(
-        bankCodeId: 10002,
-        bankName: 'ICICI Bank',
-        bankLogo: 'assets/images/banks/icici-10002.png'),
+      bankCodeId: 10002,
+      bankName: 'ICICI Bank',
+      bankLogo: 'assets/images/banks/icici-10002.png',
+    ),
     BankItem(
-        bankCodeId: 10003,
-        bankName: 'Axis Bank',
-        bankLogo: 'assets/images/banks/axis-10003.png'),
+      bankCodeId: 10003,
+      bankName: 'Axis Bank',
+      bankLogo: 'assets/images/banks/axis-10003.png',
+    ),
     BankItem(
-        bankCodeId: 10004,
-        bankName: 'Citi Bank',
-        bankLogo: 'assets/images/banks/citi-10004.png'),
+      bankCodeId: 10004,
+      bankName: 'Citi Bank',
+      bankLogo: 'assets/images/banks/citi-10004.png',
+    ),
     BankItem(
-        bankCodeId: 10005,
-        bankName: 'YES Bank',
-        bankLogo: 'assets/images/banks/yes-10005.png'),
+      bankCodeId: 10005,
+      bankName: 'YES Bank',
+      bankLogo: 'assets/images/banks/yes-10005.png',
+    ),
     BankItem(
-        bankCodeId: 10006,
-        bankName: 'State Bank of India',
-        bankLogo: 'assets/images/banks/sbi-10006.png'),
+      bankCodeId: 10006,
+      bankName: 'State Bank of India',
+      bankLogo: 'assets/images/banks/sbi-10006.png',
+    ),
     BankItem(
-        bankCodeId: 10007,
-        bankName: 'Kotak Mahindra Bank',
-        bankLogo: 'assets/images/banks/kotak-10007.png'),
+      bankCodeId: 10007,
+      bankName: 'Kotak Mahindra Bank',
+      bankLogo: 'assets/images/banks/kotak-10007.png',
+    ),
     BankItem(
-        bankCodeId: 10008,
-        bankName: 'Canara Bank',
-        bankLogo: 'assets/images/banks/canara-10008.png'),
+      bankCodeId: 10008,
+      bankName: 'Canara Bank',
+      bankLogo: 'assets/images/banks/canara-10008.png',
+    ),
     BankItem(
-        bankCodeId: 10009,
-        bankName: 'Andhra Bank',
-        bankLogo: 'assets/images/banks/andhra-10009.png'),
+      bankCodeId: 10009,
+      bankName: 'Andhra Bank',
+      bankLogo: 'assets/images/banks/andhra-10009.png',
+    ),
     BankItem(
-        bankCodeId: 10010,
-        bankName: 'Bank of Baroda',
-        bankLogo: 'assets/images/banks/bob-10010.png'),
+      bankCodeId: 10010,
+      bankName: 'Bank of Baroda',
+      bankLogo: 'assets/images/banks/bob-10010.png',
+    ),
     BankItem(
-        bankCodeId: 10011,
-        bankName: 'DBS Bank',
-        bankLogo: 'assets/images/banks/dbs-10011.png'),
+      bankCodeId: 10011,
+      bankName: 'DBS Bank',
+      bankLogo: 'assets/images/banks/dbs-10011.png',
+    ),
     BankItem(
-        bankCodeId: 10012,
-        bankName: 'Punjab National Bank',
-        bankLogo: 'assets/images/banks/pnb-10012.png'),
+      bankCodeId: 10012,
+      bankName: 'Punjab National Bank',
+      bankLogo: 'assets/images/banks/pnb-10012.png',
+    ),
     BankItem(
-        bankCodeId: 10013,
-        bankName: 'Syndicate Bank',
-        bankLogo: 'assets/images/banks/syndicate-10013.png'),
+      bankCodeId: 10013,
+      bankName: 'Syndicate Bank',
+      bankLogo: 'assets/images/banks/syndicate-10013.png',
+    ),
     BankItem(
-        bankCodeId: 10014,
-        bankName: 'IDBI Bank',
-        bankLogo: 'assets/images/banks/idbi-10014.png'),
+      bankCodeId: 10014,
+      bankName: 'IDBI Bank',
+      bankLogo: 'assets/images/banks/idbi-10014.png',
+    ),
     BankItem(
-        bankCodeId: 10015,
-        bankName: 'IDFC Bank',
-        bankLogo: 'assets/images/banks/idfc-10015.png'),
+      bankCodeId: 10015,
+      bankName: 'IDFC Bank',
+      bankLogo: 'assets/images/banks/idfc-10015.png',
+    ),
     BankItem(
-        bankCodeId: 10016,
-        bankName: 'Union Bank of India',
-        bankLogo: 'assets/images/banks/union-10016.png'),
+      bankCodeId: 10016,
+      bankName: 'Union Bank of India',
+      bankLogo: 'assets/images/banks/union-10016.png',
+    ),
     BankItem(
-        bankCodeId: 10017,
-        bankName: 'Corporation Bank',
-        bankLogo: 'assets/images/banks/corporation-10017.png'),
+      bankCodeId: 10017,
+      bankName: 'Corporation Bank',
+      bankLogo: 'assets/images/banks/corporation-10017.png',
+    ),
   ];
 
   /* BankItem.fromJson(Map<String, dynamic> json) {
@@ -198,4 +215,14 @@ class BankItem {
     data[DatabseService.columnGroupBankCodeId] = bankCodeId;
     return data;
   } */
+}
+
+class ManageCardModel {
+  int bankCodeId;
+  int? cardId;
+
+  ManageCardModel({
+    required this.bankCodeId,
+    this.cardId,
+  });
 }

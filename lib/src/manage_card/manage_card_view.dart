@@ -5,13 +5,17 @@ import 'package:cardbox/src/card_widget/credit_card_brand.dart';
 import 'package:cardbox/src/card_widget/credit_card_form.dart';
 import 'package:cardbox/src/card_widget/flutter_credit_card.dart';
 
+import '../models/models.dart';
+
 class ManageCardView extends StatefulWidget {
   const ManageCardView({
     Key? key,
+    required this.bankCodeId,
     this.cardId,
   }) : super(key: key);
 
   static const routeName = '/add_card';
+  final int bankCodeId;
   final int? cardId;
 
   @override
@@ -19,12 +23,20 @@ class ManageCardView extends StatefulWidget {
 }
 
 class _ManageCardViewState extends State<ManageCardView> {
+  late BankItem bank;
   String cardType = '';
+  late String accountNumber;
+  late String ifsCode;
   String cardNumber = '';
-  String expiryDate = '';
+  String cardExpiryDate = '';
   String cardHolderName = '';
-  String cvvCode = '';
+  String cardCvvCode = '';
   String cardPin = '';
+  late String mobileNumber;
+  late String mobilePin;
+  late String internetId;
+  late String internetPassword;
+  late String internetProfilePassword;
   bool isBackFocused = false;
   OutlineInputBorder? border;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -39,6 +51,8 @@ class _ManageCardViewState extends State<ManageCardView> {
       ),
     );
     super.initState();
+    bank = BankItem.banksList
+        .firstWhere((item) => item.bankCodeId == widget.bankCodeId);
     isEdit = widget.cardId != null;
     /* if (isEdit) {
       getAndPopulateGroup();
@@ -56,18 +70,18 @@ class _ManageCardViewState extends State<ManageCardView> {
           },
         ),
         middle: Text('${isEdit ? 'Edit' : 'Add'} Card'),
-        trailing: const TextButton(
-          child: Text(
-            'Done',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
+        trailing: TextButton(
+            child: const Text(
+              'Done',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
-          onPressed: /* _groupNameController.text.isNotEmpty
-              ? () => saveGroup(context)
-              :  */
-              null,
-        ),
+            onPressed: () {
+              if (formKey.currentState!.validate()) {
+                Navigator.pop(context, {});
+              }
+            }),
       ),
       child: SafeArea(
         bottom: false,
@@ -77,11 +91,12 @@ class _ManageCardViewState extends State<ManageCardView> {
               height: 30,
             ),
             CreditCardWidget(
+              bankLogo: bank.bankLogo,
               cardType: cardType,
               cardNumber: cardNumber,
-              expiryDate: expiryDate,
+              expiryDate: cardExpiryDate,
               cardHolderName: cardHolderName,
-              cvvCode: cvvCode,
+              cvvCode: cardCvvCode,
               cardPin: cardPin,
               showBackView: isBackFocused,
               obscureCardNumber: false,
@@ -116,10 +131,10 @@ class _ManageCardViewState extends State<ManageCardView> {
                       obscurePin: true,
                       cardType: cardType,
                       cardNumber: cardNumber,
-                      cvvCode: cvvCode,
+                      cvvCode: cardCvvCode,
                       cardPin: cardPin,
                       cardHolderName: cardHolderName,
-                      expiryDate: expiryDate,
+                      expiryDate: cardExpiryDate,
                       themeColor: Colors.blue,
                       textColor: Colors.white,
                       onCreditCardModelChange: onCreditCardModelChange,
@@ -138,9 +153,9 @@ class _ManageCardViewState extends State<ManageCardView> {
     setState(() {
       cardType = creditCardModel!.cardType;
       cardNumber = creditCardModel.cardNumber;
-      expiryDate = creditCardModel.expiryDate;
+      cardExpiryDate = creditCardModel.expiryDate;
       cardHolderName = creditCardModel.cardHolderName;
-      cvvCode = creditCardModel.cvvCode;
+      cardCvvCode = creditCardModel.cvvCode;
       cardPin = creditCardModel.cardPin;
       isBackFocused = creditCardModel.isBackFocused;
     });

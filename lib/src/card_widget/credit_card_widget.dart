@@ -18,34 +18,36 @@ const Map<CardBrand, String> CardBrandIconAsset = <CardBrand, String>{
 };
 
 class CreditCardWidget extends StatefulWidget {
-  const CreditCardWidget(
-      {Key? key,
-      required this.cardType,
-      required this.cardNumber,
-      required this.expiryDate,
-      required this.cardHolderName,
-      required this.cvvCode,
-      required this.cardPin,
-      required this.showBackView,
-      this.animationDuration = const Duration(milliseconds: 500),
-      this.height,
-      this.width,
-      this.textStyle,
-      this.cardBgColor = const Color(0xff1b447b),
-      this.obscureCardNumber = true,
-      this.obscureCardCvv = true,
-      this.obscureCardPin = true,
-      this.labelCardHolder = 'CARD HOLDER',
-      this.labelExpiredDate = 'MM/YY',
-      this.cardBrand,
-      this.backgroundImage,
-      this.glassmorphismConfig,
-      this.isChipVisible = true,
-      this.isSwipeGestureEnabled = true,
-      this.customCardBrandIcons = const <CustomCardBrandIcon>[],
-      required this.onCreditCardWidgetChange})
-      : super(key: key);
+  const CreditCardWidget({
+    Key? key,
+    required this.bankLogo,
+    required this.cardType,
+    required this.cardNumber,
+    required this.expiryDate,
+    required this.cardHolderName,
+    required this.cvvCode,
+    required this.cardPin,
+    required this.showBackView,
+    this.animationDuration = const Duration(milliseconds: 500),
+    this.height,
+    this.width,
+    this.textStyle,
+    this.cardBgColor = const Color(0xff1b447b),
+    this.obscureCardNumber = true,
+    this.obscureCardCvv = true,
+    this.obscureCardPin = true,
+    this.labelCardHolder = 'CARD HOLDER',
+    this.labelExpiredDate = 'MM/YY',
+    this.cardBrand,
+    this.backgroundImage,
+    this.glassmorphismConfig,
+    this.isChipVisible = true,
+    this.isSwipeGestureEnabled = true,
+    this.customCardBrandIcons = const <CustomCardBrandIcon>[],
+    required this.onCreditCardWidgetChange,
+  }) : super(key: key);
 
+  final String bankLogo;
   final String cardType;
   final String cardNumber;
   final String expiryDate;
@@ -255,16 +257,14 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
             Expanded(
               flex: 2,
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Expanded(
-                    flex: 8,
-                    child: Text(
-                      'AXIS BANK',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: widget.textStyle ??
-                          defaultTextStyle.copyWith(fontSize: 13),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(4.0),
+                    child: Image.asset(
+                      widget.bankLogo,
+                      height: 25,
                     ),
                   ),
                   const Spacer(),
