@@ -39,7 +39,7 @@ class CreditCardWidget extends StatefulWidget {
   final String bankLogo;
   final int cardTypeCodeId;
   final int cardColorCodeId;
-  final double? cardNumber;
+  final int? cardNumber;
   final String? expiryDate;
   final String? cardHolderName;
   final int? cvvCode;

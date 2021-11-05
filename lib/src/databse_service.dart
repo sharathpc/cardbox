@@ -82,9 +82,18 @@ class DatabseService {
     );
   }
 
-  Future<int> insertGroup(Map<String, dynamic> row) async {
+  Future<void> insertGroup(
+    Map<String, dynamic> group,
+    List<Map<String, dynamic>> cards,
+  ) async {
     Database db = await instance.database;
-    return await db.insert(_dbGroupTableName, row);
+    final groupRow = await db.insert(_dbGroupTableName, group);
+    final batch = db.batch();
+    for (final card in cards) {
+      card[columnCardGroupId] = groupRow;
+      batch.insert(_dbCardTableName, card);
+    }
+    await batch.commit();
   }
 
   Future<List<Map<String, dynamic>>> queryAllGroup() async {
@@ -102,15 +111,25 @@ class DatabseService {
     return queryRows[0];
   }
 
-  Future<int> updateGroup(Map<String, dynamic> row) async {
+  Future<void> updateGroup(
+    Map<String, dynamic> group,
+    List<Map<String, dynamic>> cards,
+  ) async {
     Database db = await instance.database;
-    int groupId = row[columnGroupId];
-    return await db.update(
+    int groupId = group[columnGroupId];
+    final batch = db.batch();
+    batch.update(
       _dbGroupTableName,
-      row,
+      group,
       where: '$columnGroupId = ?',
       whereArgs: [groupId],
     );
+    for (final card in cards) {
+      if (card[columnCardId] == null) {
+        batch.insert(_dbCardTableName, card);
+      }
+    }
+    await batch.commit();
   }
 
   Future<int> deleteGroup(int groupId) async {
@@ -125,6 +144,15 @@ class DatabseService {
   Future<int> insertCard(Map<String, dynamic> row) async {
     Database db = await instance.database;
     return await db.insert(_dbCardTableName, row);
+  }
+
+  Future<List<Map<String, dynamic>>> queryAllCards(int? groupId) async {
+    Database db = await instance.database;
+    return await db.query(
+      _dbCardTableName,
+      where: '$columnCardGroupId = ?',
+      whereArgs: [groupId],
+    );
   }
 
   Future<Map<String, dynamic>> queryOneCard(int cardId) async {

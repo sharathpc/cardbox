@@ -5,6 +5,7 @@ import '../card_widget/credit_card_form.dart';
 import '../card_widget/flutter_credit_card.dart';
 
 import '../models/models.dart';
+import '../databse_service.dart';
 
 class ManageCardView extends StatefulWidget {
   const ManageCardView({
@@ -28,14 +29,14 @@ class _ManageCardViewState extends State<ManageCardView> {
   late BankItem bank;
   int cardTypeCodeId = 11001;
   int cardColorCodeId = 12001;
-  double? accountNumber;
+  int? accountNumber;
   String? ifsCode;
-  double? cardNumber;
+  int? cardNumber;
   String? cardExpiryDate;
   String? cardHolderName;
   int? cardCvvCode;
   int? cardPin;
-  double? mobileNumber;
+  int? mobileNumber;
   int? mobilePin;
   String? internetId;
   String? internetPassword;
@@ -79,31 +80,34 @@ class _ManageCardViewState extends State<ManageCardView> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          onPressed: () {
+          onPressed: () async {
             if (formKey.currentState!.validate()) {
-              if (widget.cardId == null) {
-                Navigator.pop(
-                  context,
-                  CardItem(
-                    cardId: widget.cardId ?? 0,
-                    cardGroupId: widget.groupId ?? 0,
-                    cardTypeCodeId: cardTypeCodeId,
-                    cardColorCodeId: cardColorCodeId,
-                    accountNumber: accountNumber,
-                    ifsCode: ifsCode,
-                    cardNumber: cardNumber,
-                    cardExpiryDate: cardExpiryDate,
-                    cardHolderName: cardHolderName,
-                    cardCvvCode: cardCvvCode,
-                    cardPin: cardPin,
-                    mobileNumber: mobileNumber,
-                    mobilePin: mobilePin,
-                    internetId: internetId,
-                    internetPassword: internetPassword,
-                    internetProfilePassword: internetProfilePassword,
-                  ),
-                );
-              } else {}
+              final cardData = {
+                DatabseService.columnCardId: widget.cardId,
+                DatabseService.columnCardGroupId: widget.groupId,
+                DatabseService.columnCardTypeCodeId: cardTypeCodeId,
+                DatabseService.columnCardColorCodeId: cardColorCodeId,
+                DatabseService.columnAccountNumber: accountNumber,
+                DatabseService.columnIFSCode: ifsCode,
+                DatabseService.columnCardNumber: cardNumber,
+                DatabseService.columnCardExpiryDate: cardExpiryDate,
+                DatabseService.columnCardHolderName: cardHolderName,
+                DatabseService.columnCardCvvCode: cardCvvCode,
+                DatabseService.columnCardPin: cardPin,
+                DatabseService.columnMobileNumber: mobileNumber,
+                DatabseService.columnMobilePin: mobilePin,
+                DatabseService.columnInternetId: internetId,
+                DatabseService.columnInternetPassword: internetPassword,
+                DatabseService.columnInternetProfilePassword:
+                    internetProfilePassword,
+              };
+              if (isEdit) {
+                await DatabseService.instance.updateCard(cardData);
+              }
+              Navigator.pop(
+                context,
+                CardItem.fromJson(cardData),
+              );
             }
           },
         ),

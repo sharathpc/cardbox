@@ -14,7 +14,7 @@ class CreditCardModel {
 
   int cardTypeCodeId;
   int cardColorCodeId;
-  double? cardNumber;
+  int? cardNumber;
   String? expiryDate;
   String? cardHolderName;
   int? cvvCode;

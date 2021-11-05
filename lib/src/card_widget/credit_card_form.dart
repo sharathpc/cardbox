@@ -22,7 +22,7 @@ class CreditCardForm extends StatefulWidget {
 
   final int cardTypeCodeId;
   final int cardColorCodeId;
-  final double? cardNumber;
+  final int? cardNumber;
   final String? expiryDate;
   final String? cardHolderName;
   final int? cvvCode;
@@ -39,7 +39,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
   late CardTypeModel selectedCardType;
   late int cardTypeCodeId;
   late int cardColorCodeId;
-  late double? cardNumber;
+  late int? cardNumber;
   late String? expiryDate;
   late String? cardHolderName;
   late int? cvvCode;
@@ -123,7 +123,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
     _cardNumberController.addListener(() {
       setState(() {
         cardNumber =
-            double.tryParse(_cardNumberController.text.replaceAll(' ', ''));
+            int.tryParse(_cardNumberController.text.replaceAll(' ', ''));
         creditCardModel.cardNumber = cardNumber;
         onCreditCardModelChange(creditCardModel);
       });

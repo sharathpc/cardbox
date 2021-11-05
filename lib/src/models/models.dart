@@ -30,27 +30,27 @@ class GroupItem {
 }
 
 class CardItem {
-  late int cardId;
-  late int cardGroupId;
+  int? cardId;
+  int? cardGroupId;
   late int cardTypeCodeId;
   late int cardColorCodeId;
-  double? accountNumber;
+  int? accountNumber;
   String? ifsCode;
   String? cardType;
-  double? cardNumber;
+  int? cardNumber;
   String? cardExpiryDate;
   String? cardHolderName;
   int? cardCvvCode;
   int? cardPin;
-  double? mobileNumber;
+  int? mobileNumber;
   int? mobilePin;
   String? internetId;
   String? internetPassword;
   String? internetProfilePassword;
 
   CardItem({
-    required this.cardId,
-    required this.cardGroupId,
+    this.cardId,
+    this.cardGroupId,
     required this.cardTypeCodeId,
     required this.cardColorCodeId,
     this.accountNumber,
