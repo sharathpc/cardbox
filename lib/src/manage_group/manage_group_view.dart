@@ -153,6 +153,7 @@ class _ManageGroupViewState extends State<ManageGroupView> {
                             return CreditCardWidget(
                               bankLogo: selectedBank.bankLogo,
                               cardTypeCodeId: item.cardTypeCodeId,
+                              cardBgColorCodeId: 12001,
                               cardNumber: item.cardNumber,
                               expiryDate: item.cardExpiryDate,
                               cardHolderName: item.cardHolderName,

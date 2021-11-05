@@ -116,6 +116,7 @@ class _ManageCardViewState extends State<ManageCardView> {
             CreditCardWidget(
               bankLogo: bank.bankLogo,
               cardTypeCodeId: cardTypeCodeId,
+              cardBgColorCodeId: 12001,
               cardNumber: cardNumber,
               expiryDate: cardExpiryDate,
               cardHolderName: cardHolderName,

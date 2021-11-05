@@ -21,6 +21,7 @@ class CreditCardWidget extends StatefulWidget {
     Key? key,
     required this.bankLogo,
     required this.cardTypeCodeId,
+    required this.cardBgColorCodeId,
     this.cardNumber,
     this.expiryDate,
     this.cardHolderName,
@@ -30,7 +31,6 @@ class CreditCardWidget extends StatefulWidget {
     this.animationDuration = const Duration(milliseconds: 500),
     this.height,
     this.width,
-    this.cardBgColor = Colors.grey,
     this.obscureData = true,
     this.isChipVisible = true,
     this.isSwipeGestureEnabled = true,
@@ -38,12 +38,12 @@ class CreditCardWidget extends StatefulWidget {
 
   final String bankLogo;
   final int cardTypeCodeId;
+  final int cardBgColorCodeId;
   final double? cardNumber;
   final String? expiryDate;
   final String? cardHolderName;
   final int? cvvCode;
   final int? cardPin;
-  final Color cardBgColor;
   final bool showBackView;
   final Duration animationDuration;
   final double? height;
@@ -80,17 +80,15 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
   }
 
   void _gradientSetup() {
+    final GradientColorModel cardBgColor = GradientColorModel.gradientsList
+        .firstWhere((item) => item.gradientCodeId == widget.cardBgColorCodeId);
     backgroundGradientColor = LinearGradient(
-      // Where the linear gradient begins and ends
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
-      // Add one stop for each color. Stops should increase from 0 to 1
-      stops: const <double>[0.1, 0.4, 0.7, 0.9],
-      colors: <Color>[
-        widget.cardBgColor.withOpacity(1),
-        widget.cardBgColor.withOpacity(0.97),
-        widget.cardBgColor.withOpacity(0.90),
-        widget.cardBgColor.withOpacity(0.86),
+      colors: cardBgColor.gradientColors,
+      stops: const [
+        0.3,
+        0.75,
       ],
     );
   }

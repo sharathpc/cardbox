@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class CreditCardModel {
   CreditCardModel(
     this.cardTypeCodeId,
@@ -33,5 +35,25 @@ class CardTypeModel {
     CardTypeModel(11003, 'Credit Card'),
     CardTypeModel(11004, 'Mobile Card'),
     CardTypeModel(11005, 'Internet Card'),
+  ];
+}
+
+class GradientColorModel {
+  GradientColorModel(
+    this.gradientCodeId,
+    this.gradientColors,
+  );
+
+  int gradientCodeId;
+  List<Color> gradientColors;
+
+  static List<GradientColorModel> gradientsList = [
+    GradientColorModel(
+      12001,
+      [
+        const Color(0xFF4AA3F2),
+        const Color(0xFFAF92FB),
+      ],
+    ),
   ];
 }
