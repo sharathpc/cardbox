@@ -113,14 +113,14 @@ class DatabseService {
     );
   }
 
-  /* Future<int> delete(int id) async {
+  Future<int> deleteGroup(int groupId) async {
     Database db = await instance.database;
     return await db.delete(
-      _dbTableName,
-      where: '$columnId = ?',
-      whereArgs: [id],
+      _dbGroupTableName,
+      where: '$columnGroupId = ?',
+      whereArgs: [groupId],
     );
-  } */
+  }
 
   Future<int> insertCard(Map<String, dynamic> row) async {
     Database db = await instance.database;

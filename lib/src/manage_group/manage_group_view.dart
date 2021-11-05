@@ -1,3 +1,4 @@
+import 'package:cardbox/src/group_list/group_list_view.dart';
 import 'package:cardbox/src/manage_card/manage_card_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -128,6 +129,7 @@ class _ManageGroupViewState extends State<ManageGroupView> {
                       focusNode: groupNameNode,
                       placeholder: 'Group Name',
                       keyboardType: TextInputType.text,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
                       validator: (String? value) {
                         if (value!.isEmpty) {
                           return groupNameValidationMessage;
@@ -141,7 +143,7 @@ class _ManageGroupViewState extends State<ManageGroupView> {
               const SizedBox(
                 height: 40.0,
               ),
-              Row(
+              /* Row(
                 children: cardsList.map((CardItem item) {
                   return Center(
                     heightFactor: double.maxFinite,
@@ -154,7 +156,7 @@ class _ManageGroupViewState extends State<ManageGroupView> {
                     ),
                   );
                 }).toList(),
-              ),
+              ), */
               CupertinoFormSection(
                 children: [
                   GestureDetector(
@@ -166,14 +168,40 @@ class _ManageGroupViewState extends State<ManageGroupView> {
                           CupertinoIcons.add_circled_solid,
                           color: CupertinoColors.systemGreen,
                         ),
-                        placeholder: 'Add Card',
+                        initialValue: 'Add Card',
+                        //placeholder: 'Add Card',
                         onTap: () => addCard(),
                       ),
                     ),
                     onTap: () => addCard(),
                   )
                 ],
-              )
+              ),
+              Visibility(
+                visible: isEdit,
+                child: Column(
+                  children: [
+                    const SizedBox(
+                      height: 40.0,
+                    ),
+                    CupertinoFormSection(
+                      children: [
+                        CupertinoFormRow(
+                          padding: EdgeInsets.zero,
+                          child: CupertinoTextFormFieldRow(
+                            readOnly: true,
+                            style: const TextStyle(
+                              color: CupertinoColors.systemRed,
+                            ),
+                            initialValue: 'Delete Group',
+                            onTap: () => showDeleteGroupSheet(),
+                          ),
+                        )
+                      ],
+                    )
+                  ],
+                ),
+              ),
             ],
           ),
         ),
@@ -229,9 +257,11 @@ class _ManageGroupViewState extends State<ManageGroupView> {
         groupId: widget.groupId,
       ),
     ).then((card) {
-      setState(() {
-        cardsList.add(card);
-      });
+      if (card != null) {
+        setState(() {
+          cardsList.add(card);
+        });
+      }
     });
   }
 
@@ -261,5 +291,45 @@ class _ManageGroupViewState extends State<ManageGroupView> {
       });
     }
     Navigator.pop(context);
+  }
+
+  deleteGroup() async {
+    await DatabseService.instance.deleteGroup(widget.groupId ?? 0);
+    Navigator.popUntil(
+      context,
+      ModalRoute.withName(GroupListView.routeName),
+    );
+  }
+
+  showDeleteGroupSheet() {
+    return showCupertinoModalPopup(
+      context: context,
+      builder: (BuildContext context) {
+        return CupertinoActionSheet(
+          message: cardsList.isNotEmpty
+              ? Text('Delete Group and ${cardsList.length} Cards')
+              : null,
+          actions: <Widget>[
+            CupertinoActionSheetAction(
+              child: const Text(
+                'Delete Group',
+                style: TextStyle(
+                  color: CupertinoColors.systemRed,
+                ),
+              ),
+              onPressed: () async {
+                Navigator.pop(context);
+                deleteGroup();
+              },
+            ),
+          ],
+          cancelButton: CupertinoActionSheetAction(
+            isDefaultAction: true,
+            child: const Text('Cancel'),
+            onPressed: () => Navigator.pop(context),
+          ),
+        );
+      },
+    );
   }
 }

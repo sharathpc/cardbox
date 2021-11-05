@@ -118,7 +118,7 @@ class GroupSilverList extends StatelessWidget {
         (BuildContext context, int index) {
           if (connectionState != ConnectionState.done) {
             return const Center(
-              child: CircularProgressIndicator(),
+              child: CupertinoActivityIndicator(),
             );
           }
           final GroupItem groupItem = groupList[index];

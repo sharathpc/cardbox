@@ -244,6 +244,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
                   keyboardType: TextInputType.number,
                   textInputAction: TextInputAction.next,
                   autofillHints: const <String>[AutofillHints.creditCardNumber],
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   validator: (String? value) {
                     // Validate less that 13 digits +3 white spaces
                     if (value!.isEmpty || value.length < 16) {
@@ -274,6 +275,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
                   autofillHints: const <String>[
                     AutofillHints.creditCardExpirationDate
                   ],
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   validator: (String? value) {
                     if (value!.isEmpty) {
                       return widget.dateValidationMessage;
@@ -334,6 +336,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
                   autofillHints: const <String>[
                     AutofillHints.creditCardSecurityCode
                   ],
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   validator: (String? value) {
                     if (value!.isEmpty || value.length < 3) {
                       return widget.cvvValidationMessage;
@@ -362,6 +365,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
                   placeholder: 'XXXX',
                   keyboardType: TextInputType.number,
                   textInputAction: TextInputAction.done,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   validator: (String? value) {
                     if (value!.isEmpty || value.length < 4) {
                       return widget.numberValidationMessage;
