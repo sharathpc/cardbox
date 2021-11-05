@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
-import '../card_widget/credit_card_brand.dart';
 import '../card_widget/flutter_credit_card.dart';
 
 import '../models/models.dart';
@@ -142,43 +141,31 @@ class _ManageGroupViewState extends State<ManageGroupView> {
                   ),
                 ],
               ),
-              const SizedBox(
-                height: 40.0,
-              ),
-              Column(
-                children: cardsList.map((CardItem item) {
-                  return CreditCardWidget(
-                    bankLogo: selectedBank.bankLogo,
-                    cardTypeCodeId: item.cardTypeCodeId,
-                    cardNumber: item.cardNumber,
-                    expiryDate: item.cardExpiryDate,
-                    cardHolderName: item.cardHolderName,
-                    cvvCode: item.cardCvvCode,
-                    cardPin: item.cardPin,
-                    showBackView: false,
-                    obscureData: true,
-                    isSwipeGestureEnabled: true,
-                    onCreditCardWidgetChange:
-                        (CreditCardBrand creditCardBrand) {},
-                    glassmorphismConfig: Glassmorphism(
-                      blurX: 10.0,
-                      blurY: 10.0,
-                      gradient: const LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          Color(0xFF4AA3F2),
-                          Color(0xFFAF92FB),
-                        ],
-                        stops: [
-                          0.3,
-                          0.75,
-                        ],
+              cardsList.isEmpty
+                  ? const SizedBox(
+                      height: 40.0,
+                    )
+                  : SizedBox(
+                      height: 250.0,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: cardsList.map((CardItem item) {
+                            return CreditCardWidget(
+                              bankLogo: selectedBank.bankLogo,
+                              cardTypeCodeId: item.cardTypeCodeId,
+                              cardNumber: item.cardNumber,
+                              expiryDate: item.cardExpiryDate,
+                              cardHolderName: item.cardHolderName,
+                              cvvCode: item.cardCvvCode,
+                              cardPin: item.cardPin,
+                              showBackView: false,
+                              obscureData: true,
+                              isSwipeGestureEnabled: true,
+                            );
+                          }).toList(),
+                        ),
                       ),
                     ),
-                  );
-                }).toList(),
-              ),
               CupertinoFormSection(
                 children: [
                   GestureDetector(

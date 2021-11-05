@@ -6,9 +6,6 @@ import 'package:collection/collection.dart';
 import 'credit_card_model.dart';
 import 'credit_card_animation.dart';
 import 'credit_card_background.dart';
-import 'credit_card_brand.dart';
-import 'custom_card_brand_icon.dart';
-import 'glassmorphism_config.dart';
 
 // ignore: constant_identifier_names
 const Map<CardBrand, String> CardBrandIconAsset = <CardBrand, String>{
@@ -33,15 +30,10 @@ class CreditCardWidget extends StatefulWidget {
     this.animationDuration = const Duration(milliseconds: 500),
     this.height,
     this.width,
-    this.textStyle,
-    this.cardBgColor = const Color(0xff1b447b),
+    this.cardBgColor = Colors.grey,
     this.obscureData = true,
-    this.backgroundImage,
-    this.glassmorphismConfig,
     this.isChipVisible = true,
     this.isSwipeGestureEnabled = true,
-    this.customCardBrandIcons = const <CustomCardBrandIcon>[],
-    required this.onCreditCardWidgetChange,
   }) : super(key: key);
 
   final String bankLogo;
@@ -51,20 +43,14 @@ class CreditCardWidget extends StatefulWidget {
   final String? cardHolderName;
   final int? cvvCode;
   final int? cardPin;
-  final TextStyle? textStyle;
   final Color cardBgColor;
   final bool showBackView;
   final Duration animationDuration;
   final double? height;
   final double? width;
   final bool obscureData;
-  final void Function(CreditCardBrand) onCreditCardWidgetChange;
-  final String? backgroundImage;
   final bool isChipVisible;
-  final Glassmorphism? glassmorphismConfig;
   final bool isSwipeGestureEnabled;
-
-  final List<CustomCardBrandIcon> customCardBrandIcons;
 
   @override
   _CreditCardWidgetState createState() => _CreditCardWidgetState();
@@ -78,8 +64,6 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
   late Gradient backgroundGradientColor;
   late bool isFrontVisible = true;
   late bool isGestureUpdate = false;
-
-  bool isAmex = false;
 
   @override
   void initState() {
@@ -98,8 +82,8 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
   void _gradientSetup() {
     backgroundGradientColor = LinearGradient(
       // Where the linear gradient begins and ends
-      begin: Alignment.topRight,
-      end: Alignment.bottomLeft,
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
       // Add one stop for each color. Stops should increase from 0 to 1
       stops: const <double>[0.1, 0.4, 0.7, 0.9],
       colors: <Color>[
@@ -229,7 +213,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
     final TextStyle defaultTextStyle =
         Theme.of(context).textTheme.headline6!.merge(
               const TextStyle(
-                color: Colors.white,
+                color: Colors.white70,
                 fontFamily: 'halter',
                 fontSize: 16,
               ),
@@ -254,9 +238,8 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
         .firstWhereOrNull(
             (item) => item.cardTypeCodeId == widget.cardTypeCodeId);
     return CardBackground(
-      backgroundImage: widget.backgroundImage,
       backgroundGradientColor: backgroundGradientColor,
-      glassmorphismConfig: widget.glassmorphismConfig,
+      //glassmorphismConfig: glassmorphismConfig,
       height: widget.height,
       width: widget.width,
       child: Container(
@@ -279,12 +262,12 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
                   ),
                   const Spacer(),
                   Text(
-                    cardType == null ? 'Debit Card' : cardType.cardTypeName,
-                    style: widget.textStyle ??
-                        defaultTextStyle.copyWith(
-                          fontSize: 10,
-                          color: const Color(0xFF212121),
-                        ),
+                    cardType == null ? 'DEBIT CARD' : cardType.cardTypeName,
+                    style: const TextStyle(
+                      fontSize: 12.0,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white70,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                 ],
@@ -323,7 +306,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
             Expanded(
               child: Text(
                 cardNumber ?? 'XXXX XXXX XXXX XXXX',
-                style: widget.textStyle ?? defaultTextStyle,
+                style: defaultTextStyle,
               ),
             ),
             const SizedBox(
@@ -337,14 +320,13 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
                 children: <Widget>[
                   Text(
                     'VALID\nTHRU',
-                    style: widget.textStyle ??
-                        defaultTextStyle.copyWith(fontSize: 7),
+                    style: defaultTextStyle.copyWith(fontSize: 7),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(width: 5),
                   Text(
                     expiryDate.isEmpty ? 'MM/YY' : expiryDate,
-                    style: widget.textStyle ?? defaultTextStyle,
+                    style: defaultTextStyle,
                   ),
                 ],
               ),
@@ -364,8 +346,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
                       cardHolderName.isEmpty ? 'CARD HOLDER' : cardHolderName,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: widget.textStyle ??
-                          defaultTextStyle.copyWith(fontSize: 14),
+                      style: defaultTextStyle.copyWith(fontSize: 14),
                     ),
                   ),
                   getCardBrandIcon(cardNumber)
@@ -385,7 +366,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
     final TextStyle defaultTextStyle =
         Theme.of(context).textTheme.headline6!.merge(
               const TextStyle(
-                color: Color(0xFF212121),
+                color: Colors.white70,
                 fontFamily: 'halter',
                 fontSize: 16,
               ),
@@ -405,9 +386,8 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
     }
 
     return CardBackground(
-      backgroundImage: widget.backgroundImage,
       backgroundGradientColor: backgroundGradientColor,
-      glassmorphismConfig: widget.glassmorphismConfig,
+      //glassmorphismConfig: glassmorphismConfig,
       height: widget.height,
       width: widget.width,
       child: Container(
@@ -447,7 +427,9 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
                         child: Text(
                           cardCvv ?? 'XXX',
                           maxLines: 1,
-                          style: widget.textStyle ?? defaultTextStyle,
+                          style: defaultTextStyle.copyWith(
+                            color: Colors.black87,
+                          ),
                         ),
                       ),
                     ),
@@ -479,20 +461,15 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
                       children: <Widget>[
                         Text(
                           'CARD\nPIN',
-                          style: widget.textStyle ??
-                              defaultTextStyle.copyWith(
-                                color: Colors.white,
-                                fontSize: 8,
-                              ),
+                          style: defaultTextStyle.copyWith(
+                            fontSize: 8,
+                          ),
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(width: 5),
                         Text(
                           cardPin ?? 'XXXX',
-                          style: widget.textStyle ??
-                              defaultTextStyle.copyWith(
-                                color: Colors.white,
-                              ),
+                          style: defaultTextStyle,
                         ),
                       ],
                     ),
@@ -617,13 +594,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
   }
 
   Widget getCardBrandImage(CardBrand? cardBrand) {
-    final List<CustomCardBrandIcon> customCardBrandIcon =
-        getCustomCardBrandIcon(cardBrand!);
-    if (customCardBrandIcon.isNotEmpty) {
-      return customCardBrandIcon.first.cardImage;
-    } else {
-      return Image.asset(CardBrandIconAsset[cardBrand]!, height: 25);
-    }
+    return Image.asset(CardBrandIconAsset[cardBrand]!, height: 25);
   }
 
   // This method returns the icon for the visa card type if found
@@ -631,58 +602,46 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
   Widget getCardBrandIcon(String? cardNumber) {
     Widget icon;
     final CardBrand ccType = detectCCType(cardNumber);
-    final List<CustomCardBrandIcon> customCardBrandIcon =
-        getCustomCardBrandIcon(ccType);
-    if (customCardBrandIcon.isNotEmpty) {
-      icon = customCardBrandIcon.first.cardImage;
-    } else {
-      switch (ccType) {
-        case CardBrand.visa:
-          icon = Image.asset(
-            CardBrandIconAsset[ccType]!,
-            height: 25,
-          );
-          break;
 
-        case CardBrand.master:
-          icon = Image.asset(
-            CardBrandIconAsset[ccType]!,
-            height: 25,
-          );
-          break;
+    switch (ccType) {
+      case CardBrand.visa:
+        icon = Image.asset(
+          CardBrandIconAsset[ccType]!,
+          height: 25,
+        );
+        break;
 
-        case CardBrand.mastro:
-          icon = Image.asset(
-            CardBrandIconAsset[ccType]!,
-            height: 25,
-          );
-          break;
+      case CardBrand.master:
+        icon = Image.asset(
+          CardBrandIconAsset[ccType]!,
+          height: 25,
+        );
+        break;
 
-        case CardBrand.rupay:
-          icon = Image.asset(
-            CardBrandIconAsset[ccType]!,
-            height: 25,
-          );
-          break;
+      case CardBrand.mastro:
+        icon = Image.asset(
+          CardBrandIconAsset[ccType]!,
+          height: 25,
+        );
+        break;
 
-        default:
-          icon = Image.asset(
-            CardBrandIconAsset[CardBrand.other]!,
-            height: 25,
-          );
-          break;
-      }
+      case CardBrand.rupay:
+        icon = Image.asset(
+          CardBrandIconAsset[ccType]!,
+          height: 25,
+        );
+        break;
+
+      default:
+        icon = Image.asset(
+          CardBrandIconAsset[CardBrand.other]!,
+          height: 25,
+        );
+        break;
     }
 
     return icon;
   }
-
-  List<CustomCardBrandIcon> getCustomCardBrandIcon(
-          CardBrand currentCardBrand) =>
-      widget.customCardBrandIcons
-          .where((CustomCardBrandIcon element) =>
-              element.cardBrand == currentCardBrand)
-          .toList();
 }
 
 class MaskedTextController extends TextEditingController {

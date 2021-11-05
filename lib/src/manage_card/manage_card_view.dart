@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../card_widget/credit_card_brand.dart';
 import '../card_widget/credit_card_form.dart';
 import '../card_widget/flutter_credit_card.dart';
 
@@ -125,8 +124,7 @@ class _ManageCardViewState extends State<ManageCardView> {
               showBackView: isBackFocused,
               obscureData: false,
               isSwipeGestureEnabled: true,
-              onCreditCardWidgetChange: (CreditCardBrand creditCardBrand) {},
-              glassmorphismConfig: Glassmorphism(
+              /* glassmorphismConfig: Glassmorphism(
                 blurX: 10.0,
                 blurY: 10.0,
                 gradient: const LinearGradient(
@@ -141,7 +139,7 @@ class _ManageCardViewState extends State<ManageCardView> {
                     0.75,
                   ],
                 ),
-              ),
+              ), */
             ),
             Expanded(
               child: SingleChildScrollView(

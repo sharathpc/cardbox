@@ -1,23 +1,19 @@
 import 'package:flutter/material.dart';
 
 import 'constants.dart';
-import 'glassmorphism_config.dart';
 
 class CardBackground extends StatelessWidget {
   const CardBackground({
     Key? key,
     required this.backgroundGradientColor,
-    required this.backgroundImage,
     required this.child,
     this.width,
     this.height,
-    this.glassmorphismConfig,
+    //this.glassmorphismConfig,
   }) : super(key: key);
 
-  final String? backgroundImage;
   final Widget child;
   final Gradient backgroundGradientColor;
-  final Glassmorphism? glassmorphismConfig;
   final double? width;
   final double? height;
 
@@ -37,17 +33,7 @@ class CardBackground extends StatelessWidget {
             margin: const EdgeInsets.all(AppConstants.creditCardPadding),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
-              gradient: glassmorphismConfig != null
-                  ? glassmorphismConfig!.gradient
-                  : backgroundGradientColor,
-              image: backgroundImage != null
-                  ? DecorationImage(
-                      image: ExactAssetImage(
-                        backgroundImage!,
-                      ),
-                      fit: BoxFit.fill,
-                    )
-                  : null,
+              gradient: backgroundGradientColor,
             ),
             width: width ?? screenWidth,
             height: height ??
