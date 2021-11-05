@@ -24,23 +24,14 @@ class _AuthViewState extends State<AuthView> {
   }
 
   Future<void> _authenticate() async {
-    late bool canCheckBiometrics;
-    try {
-      canCheckBiometrics = await auth.canCheckBiometrics;
-    } on PlatformException catch (e) {
-      canCheckBiometrics = false;
-      print(e);
-    }
-
     try {
       AuthService.instance.setAuthenticated = await auth.authenticate(
         localizedReason: 'Authenticate',
         useErrorDialogs: true,
         stickyAuth: true,
-        biometricOnly: canCheckBiometrics,
+        biometricOnly: true,
       );
-    } on PlatformException catch (e) {
-      print(e);
+    } on PlatformException catch (_) {
       return;
     }
 
@@ -49,7 +40,9 @@ class _AuthViewState extends State<AuthView> {
         context,
         GroupListView.routeName,
       );
-    } else {}
+    } else {
+      displayLockedDialog();
+    }
   }
 
   @override
@@ -65,6 +58,26 @@ class _AuthViewState extends State<AuthView> {
               'assets/images/logo-android.png',
               height: 100,
             ),
+          )
+        ],
+      ),
+    );
+  }
+
+  void displayLockedDialog() {
+    showCupertinoDialog(
+      context: context,
+      builder: (BuildContext context) => CupertinoAlertDialog(
+        title: const Text("Card Box is locked"),
+        content: const Text(
+            "For your security, you can only use Card Box when it's unlocked"),
+        actions: [
+          CupertinoDialogAction(
+            child: const Text("Unlock"),
+            onPressed: () {
+              Navigator.pop(context);
+              _authenticate();
+            },
           )
         ],
       ),
