@@ -21,7 +21,7 @@ class CreditCardWidget extends StatefulWidget {
     Key? key,
     required this.bankLogo,
     required this.cardTypeCodeId,
-    required this.cardBgColorCodeId,
+    required this.cardColorCodeId,
     this.cardNumber,
     this.expiryDate,
     this.cardHolderName,
@@ -38,7 +38,7 @@ class CreditCardWidget extends StatefulWidget {
 
   final String bankLogo;
   final int cardTypeCodeId;
-  final int cardBgColorCodeId;
+  final int cardColorCodeId;
   final double? cardNumber;
   final String? expiryDate;
   final String? cardHolderName;
@@ -74,14 +74,12 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
       duration: widget.animationDuration,
       vsync: this,
     );
-
-    _gradientSetup();
     _updateRotations(false);
   }
 
   void _gradientSetup() {
     final GradientColorModel cardBgColor = GradientColorModel.gradientsList
-        .firstWhere((item) => item.gradientCodeId == widget.cardBgColorCodeId);
+        .firstWhere((item) => item.gradientCodeId == widget.cardColorCodeId);
     backgroundGradientColor = LinearGradient(
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
@@ -117,6 +115,8 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
       isGestureUpdate = false;
     }
 
+    _gradientSetup();
+
     //final CardBrand? cardBrand = detectCCType(widget.cardNumber);
     //widget.onCreditCardWidgetChange(CreditCardBrand(cardBrand));
 
@@ -136,11 +136,6 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
         ),
       ],
     );
-
-    /* return const SizedBox(
-      height: 30,
-      child: Text('Hello'),
-    ); */
   }
 
   void _leftRotation() {

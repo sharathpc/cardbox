@@ -27,6 +27,7 @@ class _ManageCardViewState extends State<ManageCardView> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   late BankItem bank;
   int cardTypeCodeId = 11001;
+  int cardColorCodeId = 12001;
   double? accountNumber;
   String? ifsCode;
   double? cardNumber;
@@ -87,6 +88,7 @@ class _ManageCardViewState extends State<ManageCardView> {
                     cardId: widget.cardId ?? 0,
                     cardGroupId: widget.groupId ?? 0,
                     cardTypeCodeId: cardTypeCodeId,
+                    cardColorCodeId: cardColorCodeId,
                     accountNumber: accountNumber,
                     ifsCode: ifsCode,
                     cardNumber: cardNumber,
@@ -116,7 +118,7 @@ class _ManageCardViewState extends State<ManageCardView> {
             CreditCardWidget(
               bankLogo: bank.bankLogo,
               cardTypeCodeId: cardTypeCodeId,
-              cardBgColorCodeId: 12001,
+              cardColorCodeId: cardColorCodeId,
               cardNumber: cardNumber,
               expiryDate: cardExpiryDate,
               cardHolderName: cardHolderName,
@@ -153,6 +155,7 @@ class _ManageCardViewState extends State<ManageCardView> {
                       formKey: formKey,
                       obscureData: false,
                       cardTypeCodeId: cardTypeCodeId,
+                      cardColorCodeId: cardColorCodeId,
                       cardNumber: cardNumber,
                       cvvCode: cardCvvCode,
                       cardPin: cardPin,
@@ -173,6 +176,7 @@ class _ManageCardViewState extends State<ManageCardView> {
   void onCreditCardModelChange(CreditCardModel? creditCardModel) {
     setState(() {
       cardTypeCodeId = creditCardModel!.cardTypeCodeId;
+      cardColorCodeId = creditCardModel.cardColorCodeId;
       cardNumber = creditCardModel.cardNumber;
       cardExpiryDate = creditCardModel.expiryDate;
       cardHolderName = creditCardModel.cardHolderName;

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class CreditCardModel {
   CreditCardModel(
     this.cardTypeCodeId,
+    this.cardColorCodeId,
     this.cardNumber,
     this.expiryDate,
     this.cardHolderName,
@@ -12,6 +13,7 @@ class CreditCardModel {
   );
 
   int cardTypeCodeId;
+  int cardColorCodeId;
   double? cardNumber;
   String? expiryDate;
   String? cardHolderName;
@@ -53,6 +55,34 @@ class GradientColorModel {
       [
         const Color(0xFF4AA3F2),
         const Color(0xFFAF92FB),
+      ],
+    ),
+    GradientColorModel(
+      12002,
+      [
+        Colors.amber,
+        Colors.redAccent,
+      ],
+    ),
+    GradientColorModel(
+      12003,
+      [
+        Colors.grey,
+        Colors.blueGrey,
+      ],
+    ),
+    GradientColorModel(
+      12004,
+      [
+        Colors.purple,
+        Colors.indigo,
+      ],
+    ),
+    GradientColorModel(
+      12005,
+      [
+        Colors.cyan,
+        Colors.green,
       ],
     ),
   ];

@@ -33,6 +33,7 @@ class CardItem {
   late int cardId;
   late int cardGroupId;
   late int cardTypeCodeId;
+  late int cardColorCodeId;
   double? accountNumber;
   String? ifsCode;
   String? cardType;
@@ -51,6 +52,7 @@ class CardItem {
     required this.cardId,
     required this.cardGroupId,
     required this.cardTypeCodeId,
+    required this.cardColorCodeId,
     this.accountNumber,
     this.ifsCode,
     this.cardType,
@@ -69,9 +71,9 @@ class CardItem {
   CardItem.fromJson(Map<String, dynamic> json) {
     cardId = json[DatabseService.columnCardId];
     cardTypeCodeId = json[DatabseService.columnCardTypeCodeId];
+    cardColorCodeId = json[DatabseService.columnCardColorCodeId];
     accountNumber = json[DatabseService.columnAccountNumber];
     ifsCode = json[DatabseService.columnIFSCode];
-    cardType = json[DatabseService.columnCardType];
     cardNumber = json[DatabseService.columnCardNumber];
     cardExpiryDate = json[DatabseService.columnCardExpiryDate];
     cardHolderName = json[DatabseService.columnCardHolderName];
@@ -89,9 +91,9 @@ class CardItem {
     final Map<String, dynamic> data = <String, dynamic>{};
     data[DatabseService.columnCardId] = cardId;
     data[DatabseService.columnCardTypeCodeId] = cardTypeCodeId;
+    data[DatabseService.columnCardColorCodeId] = cardColorCodeId;
     data[DatabseService.columnAccountNumber] = accountNumber;
     data[DatabseService.columnIFSCode] = ifsCode;
-    data[DatabseService.columnCardType] = cardType;
     data[DatabseService.columnCardNumber] = cardNumber;
     data[DatabseService.columnCardExpiryDate] = cardExpiryDate;
     data[DatabseService.columnCardHolderName] = cardHolderName;

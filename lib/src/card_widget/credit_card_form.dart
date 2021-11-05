@@ -10,6 +10,7 @@ class CreditCardForm extends StatefulWidget {
     Key? key,
     required this.formKey,
     required this.cardTypeCodeId,
+    required this.cardColorCodeId,
     this.cardNumber,
     this.expiryDate,
     this.cardHolderName,
@@ -20,6 +21,7 @@ class CreditCardForm extends StatefulWidget {
   }) : super(key: key);
 
   final int cardTypeCodeId;
+  final int cardColorCodeId;
   final double? cardNumber;
   final String? expiryDate;
   final String? cardHolderName;
@@ -36,6 +38,7 @@ class CreditCardForm extends StatefulWidget {
 class _CreditCardFormState extends State<CreditCardForm> {
   late CardTypeModel selectedCardType;
   late int cardTypeCodeId;
+  late int cardColorCodeId;
   late double? cardNumber;
   late String? expiryDate;
   late String? cardHolderName;
@@ -79,6 +82,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
         .firstWhere((item) => item.cardTypeCodeId == widget.cardTypeCodeId);
     _cardTypeController.text = selectedCardType.cardTypeName;
     cardTypeCodeId = widget.cardTypeCodeId;
+    cardColorCodeId = widget.cardColorCodeId;
     cardNumber = widget.cardNumber;
     expiryDate = widget.expiryDate;
     cardHolderName = widget.cardHolderName;
@@ -87,6 +91,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
 
     creditCardModel = CreditCardModel(
       cardTypeCodeId,
+      cardColorCodeId,
       cardNumber,
       expiryDate,
       cardHolderName,
@@ -173,6 +178,42 @@ class _CreditCardFormState extends State<CreditCardForm> {
       key: widget.formKey,
       child: Column(
         children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: GradientColorModel.gradientsList.map((item) {
+              return GestureDetector(
+                child: Container(
+                  width: 25.0,
+                  height: 25.0,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: item.gradientColors,
+                      stops: const [0.3, 0.75],
+                    ),
+                    borderRadius: BorderRadius.circular(50.0),
+                    border: Border.all(
+                      width: 3.0,
+                      color: item.gradientCodeId == cardColorCodeId
+                          ? Colors.white
+                          : Colors.transparent,
+                    ),
+                  ),
+                ),
+                onTap: () {
+                  setState(() {
+                    cardColorCodeId = item.gradientCodeId;
+                    creditCardModel.cardColorCodeId = cardColorCodeId;
+                    onCreditCardModelChange(creditCardModel);
+                  });
+                },
+              );
+            }).toList(),
+          ),
+          const SizedBox(
+            height: 40.0,
+          ),
           CupertinoFormSection(
             children: [
               CupertinoFormRow(
