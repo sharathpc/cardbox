@@ -52,7 +52,7 @@ class CreditCardForm extends StatefulWidget {
 }
 
 class _CreditCardFormState extends State<CreditCardForm> {
-  CardTypeModel? selectedCardType;
+  late CardTypeModel selectedCardType;
   late int cardTypeCodeId;
   late String cardNumber;
   late String expiryDate;
@@ -90,6 +90,9 @@ class _CreditCardFormState extends State<CreditCardForm> {
   }
 
   void createCreditCardModel() {
+    selectedCardType = CardTypeModel.cardTypesList
+        .firstWhere((item) => item.cardTypeCodeId == widget.cardTypeCodeId);
+    _cardTypeController.text = selectedCardType.cardTypeName;
     cardTypeCodeId = widget.cardTypeCodeId;
     cardNumber = widget.cardNumber;
     expiryDate = widget.expiryDate;
@@ -121,7 +124,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
 
     _cardTypeController.addListener(() {
       setState(() {
-        cardTypeCodeId = selectedCardType!.cardTypeCodeId;
+        cardTypeCodeId = selectedCardType.cardTypeCodeId;
         creditCardModel.cardTypeCodeId = cardTypeCodeId;
         onCreditCardModelChange(creditCardModel);
       });
@@ -385,15 +388,13 @@ class _CreditCardFormState extends State<CreditCardForm> {
             context,
           ),
           scrollController: FixedExtentScrollController(
-            initialItem: selectedCardType != null
-                ? CardTypeModel.cardTypesList.indexWhere((item) =>
-                    item.cardTypeCodeId == selectedCardType!.cardTypeCodeId)
-                : -1,
+            initialItem: CardTypeModel.cardTypesList.indexWhere((item) =>
+                item.cardTypeCodeId == selectedCardType.cardTypeCodeId),
           ),
           onSelectedItemChanged: (index) {
             setState(() {
               selectedCardType = CardTypeModel.cardTypesList[index];
-              _cardTypeController.text = selectedCardType!.cardTypeName;
+              _cardTypeController.text = selectedCardType.cardTypeName;
             });
           },
           itemExtent: 32.0,

@@ -21,26 +21,33 @@ class ManageGroupView extends StatefulWidget {
 }
 
 class _ManageGroupViewState extends State<ManageGroupView> {
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController _groupNameController = TextEditingController();
   final TextEditingController _bankController = TextEditingController();
   bool isEdit = false;
-  BankItem? selectedBank;
+  late BankItem selectedBank;
+  List<CardItem> cardsList = [];
 
-  String bankValidationMessage = 'Please select a bank';
-  String groupNameValidationMessage = 'Please input a valid name';
+  final String bankValidationMessage = 'Please select a bank';
+  final String groupNameValidationMessage = 'Please input a valid name';
 
   FocusNode groupNameNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
+
+    selectedBank =
+        BankItem.banksList.firstWhere((element) => element.bankCodeId == 10001);
+    _bankController.text = selectedBank.bankName;
+
     isEdit = widget.groupId != null;
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       if (isEdit) {
         getAndPopulateGroup();
-      } else {
+      } /* else {
         showBankPicker(context);
-      }
+      } */
     });
   }
 
@@ -68,91 +75,107 @@ class _ManageGroupViewState extends State<ManageGroupView> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          onPressed: _groupNameController.text.isNotEmpty
-              ? () => saveGroup(context)
-              : null,
+          onPressed: () {
+            if (formKey.currentState!.validate()) {
+              saveGroup(context);
+            }
+          },
         ),
       ),
       child: SafeArea(
         bottom: false,
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: Padding(
+        child: Form(
+          key: formKey,
+          child: Column(
+            children: [
+              Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
-                child: SizedBox(
-                  height: 50.0,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8.0),
-                    child: selectedBank != null
-                        ? Image.asset(selectedBank!.bankLogo)
-                        : null,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  child: SizedBox(
+                    height: 50.0,
+                    child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8.0),
+                        child: Image.asset(selectedBank.bankLogo)),
                   ),
                 ),
               ),
-            ),
-            CupertinoFormSection(
-              children: [
-                CupertinoFormRow(
-                  padding: EdgeInsets.zero,
-                  child: CupertinoTextFormFieldRow(
-                    readOnly: true,
-                    autofocus: true,
-                    controller: _bankController,
-                    onEditingComplete: () {
-                      FocusScope.of(context).requestFocus(groupNameNode);
-                    },
-                    placeholder: 'Bank',
-                    validator: (String? value) {
-                      if (value!.isEmpty) {
-                        return bankValidationMessage;
-                      }
-                      return null;
-                    },
-                    onTap: () => showBankPicker(context),
-                  ),
-                ),
-                CupertinoFormRow(
-                  child: CupertinoTextFormFieldRow(
-                    padding: EdgeInsets.zero,
-                    controller: _groupNameController,
-                    focusNode: groupNameNode,
-                    placeholder: 'Group Name',
-                    keyboardType: TextInputType.text,
-                    validator: (String? value) {
-                      if (value!.isEmpty) {
-                        return groupNameValidationMessage;
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 40.0,
-            ),
-            CupertinoFormSection(
-              children: [
-                GestureDetector(
-                  child: CupertinoFormRow(
+              CupertinoFormSection(
+                children: [
+                  CupertinoFormRow(
                     padding: EdgeInsets.zero,
                     child: CupertinoTextFormFieldRow(
                       readOnly: true,
-                      prefix: const Icon(
-                        CupertinoIcons.add_circled_solid,
-                        color: CupertinoColors.systemGreen,
-                      ),
-                      placeholder: 'Add Card',
-                      onTap: () => addCard(),
+                      controller: _bankController,
+                      onEditingComplete: () {
+                        FocusScope.of(context).requestFocus(groupNameNode);
+                      },
+                      placeholder: 'Bank',
+                      validator: (String? value) {
+                        if (value!.isEmpty) {
+                          return bankValidationMessage;
+                        }
+                        return null;
+                      },
+                      onTap: () => showBankPicker(context),
                     ),
                   ),
-                  onTap: () => addCard(),
-                )
-              ],
-            )
-          ],
+                  CupertinoFormRow(
+                    child: CupertinoTextFormFieldRow(
+                      autofocus: true,
+                      padding: EdgeInsets.zero,
+                      controller: _groupNameController,
+                      focusNode: groupNameNode,
+                      placeholder: 'Group Name',
+                      keyboardType: TextInputType.text,
+                      validator: (String? value) {
+                        if (value!.isEmpty) {
+                          return groupNameValidationMessage;
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 40.0,
+              ),
+              Row(
+                children: cardsList.map((CardItem item) {
+                  return Center(
+                    heightFactor: double.maxFinite,
+                    widthFactor: double.infinity,
+                    child: Text(
+                      item.cardHolderName ?? '',
+                      style: const TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+              CupertinoFormSection(
+                children: [
+                  GestureDetector(
+                    child: CupertinoFormRow(
+                      padding: EdgeInsets.zero,
+                      child: CupertinoTextFormFieldRow(
+                        readOnly: true,
+                        prefix: const Icon(
+                          CupertinoIcons.add_circled_solid,
+                          color: CupertinoColors.systemGreen,
+                        ),
+                        placeholder: 'Add Card',
+                        onTap: () => addCard(),
+                      ),
+                    ),
+                    onTap: () => addCard(),
+                  )
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -169,15 +192,13 @@ class _ManageGroupViewState extends State<ManageGroupView> {
             context,
           ),
           scrollController: FixedExtentScrollController(
-            initialItem: selectedBank != null
-                ? BankItem.banksList.indexWhere(
-                    (item) => item.bankCodeId == selectedBank!.bankCodeId)
-                : -1,
+            initialItem: BankItem.banksList.indexWhere(
+                (item) => item.bankCodeId == selectedBank.bankCodeId),
           ),
           onSelectedItemChanged: (index) {
             setState(() {
               selectedBank = BankItem.banksList[index];
-              _bankController.text = selectedBank!.bankName;
+              _bankController.text = selectedBank.bankName;
             });
           },
           itemExtent: 32.0,
@@ -204,10 +225,13 @@ class _ManageGroupViewState extends State<ManageGroupView> {
       context: context,
       backgroundColor: Colors.transparent,
       builder: (context) => ManageCardView(
-        bankCodeId: selectedBank!.bankCodeId,
+        bankCodeId: selectedBank.bankCodeId,
+        groupId: widget.groupId,
       ),
-    ).then((value) {
-      print(value);
+    ).then((card) {
+      setState(() {
+        cardsList.add(card);
+      });
     });
   }
 
@@ -219,8 +243,8 @@ class _ManageGroupViewState extends State<ManageGroupView> {
     setState(() {
       selectedBank = BankItem.banksList
           .firstWhere((element) => element.bankCodeId == groupItem.bankCodeId);
+      _bankController.text = selectedBank.bankName;
     });
-    _bankController.text = selectedBank!.bankName;
   }
 
   saveGroup(BuildContext context) async {
@@ -228,12 +252,12 @@ class _ManageGroupViewState extends State<ManageGroupView> {
       await DatabseService.instance.updateGroup({
         DatabseService.columnGroupId: widget.groupId,
         DatabseService.columnGroupName: _groupNameController.text,
-        DatabseService.columnGroupBankCodeId: selectedBank!.bankCodeId,
+        DatabseService.columnGroupBankCodeId: selectedBank.bankCodeId,
       });
     } else {
       await DatabseService.instance.insertGroup({
         DatabseService.columnGroupName: _groupNameController.text,
-        DatabseService.columnGroupBankCodeId: selectedBank!.bankCodeId,
+        DatabseService.columnGroupBankCodeId: selectedBank.bankCodeId,
       });
     }
     Navigator.pop(context);

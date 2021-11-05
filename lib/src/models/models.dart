@@ -5,11 +5,13 @@ class GroupItem {
   late int groupId;
   late String groupName;
   late int bankCodeId;
+  List<CardItem>? cards;
 
   GroupItem({
     required this.groupId,
     required this.groupName,
     required this.bankCodeId,
+    this.cards,
   });
 
   GroupItem.fromJson(Map<String, dynamic> json) {
@@ -29,6 +31,7 @@ class GroupItem {
 
 class CardItem {
   late int cardId;
+  late int cardGroupId;
   late int cardTypeCodeId;
   int? accountNumber;
   String? ifsCode;
@@ -46,6 +49,7 @@ class CardItem {
 
   CardItem({
     required this.cardId,
+    required this.cardGroupId,
     required this.cardTypeCodeId,
     this.accountNumber,
     this.ifsCode,

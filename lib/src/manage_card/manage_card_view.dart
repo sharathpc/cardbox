@@ -11,11 +11,13 @@ class ManageCardView extends StatefulWidget {
   const ManageCardView({
     Key? key,
     required this.bankCodeId,
+    this.groupId,
     this.cardId,
   }) : super(key: key);
 
   static const routeName = '/add_card';
   final int bankCodeId;
+  final int? groupId;
   final int? cardId;
 
   @override
@@ -23,8 +25,9 @@ class ManageCardView extends StatefulWidget {
 }
 
 class _ManageCardViewState extends State<ManageCardView> {
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   late BankItem bank;
-  int cardTypeCodeId = 0;
+  int cardTypeCodeId = 11001;
   String accountNumber = '';
   String ifsCode = '';
   String cardNumber = '';
@@ -32,14 +35,13 @@ class _ManageCardViewState extends State<ManageCardView> {
   String cardHolderName = '';
   String cardCvvCode = '';
   String cardPin = '';
-  late String mobileNumber;
-  late String mobilePin;
-  late String internetId;
-  late String internetPassword;
-  late String internetProfilePassword;
+  String mobileNumber = '';
+  String mobilePin = '';
+  String internetId = '';
+  String internetPassword = '';
+  String internetProfilePassword = '';
   bool isBackFocused = false;
   OutlineInputBorder? border;
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   bool isEdit = false;
 
   @override
@@ -71,31 +73,39 @@ class _ManageCardViewState extends State<ManageCardView> {
         ),
         middle: Text('${isEdit ? 'Edit' : 'Add'} Card'),
         trailing: TextButton(
-            child: const Text(
-              'Done',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
+          child: const Text(
+            'Done',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
             ),
-            onPressed: () {
-              if (formKey.currentState!.validate()) {
-                Navigator.pop(context, {
-                  'cardTypeCodeId': cardTypeCodeId,
-                  'accountNumber': int.tryParse(accountNumber),
-                  'ifsCode': ifsCode,
-                  'cardNumber': int.tryParse(cardNumber.replaceAll(' ', '')),
-                  'cardExpiryDate': cardExpiryDate,
-                  'cardHolderName': cardHolderName,
-                  'cardCvvCode': int.tryParse(cardCvvCode),
-                  'cardPin': int.tryParse(cardPin),
-                  'mobileNumber': int.tryParse(mobileNumber),
-                  'mobilePin': int.tryParse(mobilePin),
-                  'internetId': internetId,
-                  'internetPassword': internetPassword,
-                  'internetProfilePassword': internetProfilePassword,
-                });
-              }
-            }),
+          ),
+          onPressed: () {
+            if (formKey.currentState!.validate()) {
+              if (widget.cardId == null) {
+                Navigator.pop(
+                  context,
+                  CardItem(
+                    cardId: widget.cardId ?? 0,
+                    cardGroupId: widget.groupId ?? 0,
+                    cardTypeCodeId: cardTypeCodeId,
+                    accountNumber: int.tryParse(accountNumber),
+                    ifsCode: ifsCode,
+                    cardNumber: int.tryParse(cardNumber.replaceAll(' ', '')),
+                    cardExpiryDate: cardExpiryDate,
+                    cardHolderName: cardHolderName,
+                    cardCvvCode: int.tryParse(cardCvvCode),
+                    cardPin: int.tryParse(cardPin),
+                    mobileNumber: int.tryParse(mobileNumber),
+                    mobilePin: int.tryParse(mobilePin),
+                    internetId: internetId,
+                    internetPassword: internetPassword,
+                    internetProfilePassword: internetProfilePassword,
+                  ),
+                );
+              } else {}
+            }
+          },
+        ),
       ),
       child: SafeArea(
         bottom: false,
