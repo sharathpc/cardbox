@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -19,12 +17,6 @@ class CreditCardForm extends StatefulWidget {
     this.cardPin,
     this.obscureData = false,
     required this.onCreditCardModelChange,
-    required this.themeColor,
-    this.textColor = Colors.black,
-    this.cursorColor,
-    this.cvvValidationMessage = 'Please input a valid CVV',
-    this.dateValidationMessage = 'Please input a valid date',
-    this.numberValidationMessage = 'Please input a valid number',
   }) : super(key: key);
 
   final int cardTypeCodeId;
@@ -33,13 +25,7 @@ class CreditCardForm extends StatefulWidget {
   final String? cardHolderName;
   final int? cvvCode;
   final int? cardPin;
-  final String cvvValidationMessage;
-  final String dateValidationMessage;
-  final String numberValidationMessage;
   final void Function(CreditCardModel) onCreditCardModelChange;
-  final Color themeColor;
-  final Color textColor;
-  final Color? cursorColor;
   final bool obscureData;
   final GlobalKey<FormState> formKey;
 
@@ -56,7 +42,10 @@ class _CreditCardFormState extends State<CreditCardForm> {
   late int? cvvCode;
   late int? cardPin;
   bool isBackFocused = false;
-  late Color themeColor;
+
+  final String cvvValidationMessage = 'Please input a valid CVV';
+  final String dateValidationMessage = 'Please input a valid date';
+  final String numberValidationMessage = 'Please input a valid number';
 
   late void Function(CreditCardModel) onCreditCardModelChange;
   late CreditCardModel creditCardModel;
@@ -179,19 +168,12 @@ class _CreditCardFormState extends State<CreditCardForm> {
   }
 
   @override
-  void didChangeDependencies() {
-    themeColor = widget.themeColor;
-    super.didChangeDependencies();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Form(
       key: widget.formKey,
       child: Column(
         children: [
           CupertinoFormSection(
-            header: const Text('Card Type'),
             children: [
               CupertinoFormRow(
                 padding: EdgeInsets.zero,
@@ -218,7 +200,6 @@ class _CreditCardFormState extends State<CreditCardForm> {
             height: 40.0,
           ),
           CupertinoFormSection(
-            header: const Text('Card Details'),
             children: [
               CupertinoFormRow(
                 padding: EdgeInsets.zero,
@@ -244,7 +225,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
                   validator: (String? value) {
                     // Validate less that 13 digits +3 white spaces
                     if (value!.isEmpty || value.length < 16) {
-                      return widget.numberValidationMessage;
+                      return numberValidationMessage;
                     }
                     return null;
                   },
@@ -273,7 +254,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
                   ],
                   validator: (String? value) {
                     if (value!.isEmpty) {
-                      return widget.dateValidationMessage;
+                      return dateValidationMessage;
                     }
                     final DateTime now = DateTime.now();
                     final List<String> date = value.split(RegExp(r'/'));
@@ -282,7 +263,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
                     final DateTime cardDate = DateTime(year, month);
 
                     if (cardDate.isBefore(now) || month > 12 || month == 0) {
-                      return widget.dateValidationMessage;
+                      return dateValidationMessage;
                     }
                     return null;
                   },
@@ -333,7 +314,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
                   ],
                   validator: (String? value) {
                     if (value!.isEmpty || value.length < 3) {
-                      return widget.cvvValidationMessage;
+                      return cvvValidationMessage;
                     }
                     return null;
                   },
@@ -361,7 +342,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
                   textInputAction: TextInputAction.done,
                   validator: (String? value) {
                     if (value!.isEmpty || value.length < 4) {
-                      return widget.numberValidationMessage;
+                      return numberValidationMessage;
                     }
                     return null;
                   },

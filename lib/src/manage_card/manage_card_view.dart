@@ -111,7 +111,7 @@ class _ManageCardViewState extends State<ManageCardView> {
         child: Column(
           children: <Widget>[
             const SizedBox(
-              height: 30,
+              height: 20,
             ),
             CreditCardWidget(
               bankLogo: bank.bankLogo,
@@ -141,6 +141,9 @@ class _ManageCardViewState extends State<ManageCardView> {
                 ),
               ), */
             ),
+            const SizedBox(
+              height: 20,
+            ),
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
@@ -154,8 +157,6 @@ class _ManageCardViewState extends State<ManageCardView> {
                       cardPin: cardPin,
                       cardHolderName: cardHolderName,
                       expiryDate: cardExpiryDate,
-                      themeColor: Colors.blue,
-                      textColor: Colors.white,
                       onCreditCardModelChange: onCreditCardModelChange,
                     ),
                   ],
