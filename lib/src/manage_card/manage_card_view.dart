@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'package:cardbox/src/card_widget/credit_card_brand.dart';
-import 'package:cardbox/src/card_widget/credit_card_form.dart';
-import 'package:cardbox/src/card_widget/flutter_credit_card.dart';
+import '../card_widget/credit_card_brand.dart';
+import '../card_widget/credit_card_form.dart';
+import '../card_widget/flutter_credit_card.dart';
 
 import '../models/models.dart';
 
@@ -28,18 +28,18 @@ class _ManageCardViewState extends State<ManageCardView> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   late BankItem bank;
   int cardTypeCodeId = 11001;
-  String accountNumber = '';
-  String ifsCode = '';
-  String cardNumber = '';
-  String cardExpiryDate = '';
-  String cardHolderName = '';
-  String cardCvvCode = '';
-  String cardPin = '';
-  String mobileNumber = '';
-  String mobilePin = '';
-  String internetId = '';
-  String internetPassword = '';
-  String internetProfilePassword = '';
+  double? accountNumber;
+  String? ifsCode;
+  double? cardNumber;
+  String? cardExpiryDate;
+  String? cardHolderName;
+  int? cardCvvCode;
+  int? cardPin;
+  double? mobileNumber;
+  int? mobilePin;
+  String? internetId;
+  String? internetPassword;
+  String? internetProfilePassword;
   bool isBackFocused = false;
   OutlineInputBorder? border;
   bool isEdit = false;
@@ -88,15 +88,15 @@ class _ManageCardViewState extends State<ManageCardView> {
                     cardId: widget.cardId ?? 0,
                     cardGroupId: widget.groupId ?? 0,
                     cardTypeCodeId: cardTypeCodeId,
-                    accountNumber: int.tryParse(accountNumber),
+                    accountNumber: accountNumber,
                     ifsCode: ifsCode,
-                    cardNumber: int.tryParse(cardNumber.replaceAll(' ', '')),
+                    cardNumber: cardNumber,
                     cardExpiryDate: cardExpiryDate,
                     cardHolderName: cardHolderName,
-                    cardCvvCode: int.tryParse(cardCvvCode),
-                    cardPin: int.tryParse(cardPin),
-                    mobileNumber: int.tryParse(mobileNumber),
-                    mobilePin: int.tryParse(mobilePin),
+                    cardCvvCode: cardCvvCode,
+                    cardPin: cardPin,
+                    mobileNumber: mobileNumber,
+                    mobilePin: mobilePin,
                     internetId: internetId,
                     internetPassword: internetPassword,
                     internetProfilePassword: internetProfilePassword,
@@ -123,8 +123,7 @@ class _ManageCardViewState extends State<ManageCardView> {
               cvvCode: cardCvvCode,
               cardPin: cardPin,
               showBackView: isBackFocused,
-              obscureCardNumber: false,
-              obscureCardCvv: false,
+              obscureData: false,
               isSwipeGestureEnabled: true,
               onCreditCardWidgetChange: (CreditCardBrand creditCardBrand) {},
               glassmorphismConfig: Glassmorphism(
@@ -150,9 +149,7 @@ class _ManageCardViewState extends State<ManageCardView> {
                   children: <Widget>[
                     CreditCardForm(
                       formKey: formKey,
-                      obscureCvv: true,
-                      obscureNumber: true,
-                      obscurePin: true,
+                      obscureData: false,
                       cardTypeCodeId: cardTypeCodeId,
                       cardNumber: cardNumber,
                       cvvCode: cardCvvCode,

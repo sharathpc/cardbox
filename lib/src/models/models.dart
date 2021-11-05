@@ -33,15 +33,15 @@ class CardItem {
   late int cardId;
   late int cardGroupId;
   late int cardTypeCodeId;
-  int? accountNumber;
+  double? accountNumber;
   String? ifsCode;
   String? cardType;
-  int? cardNumber;
+  double? cardNumber;
   String? cardExpiryDate;
   String? cardHolderName;
   int? cardCvvCode;
   int? cardPin;
-  int? mobileNumber;
+  double? mobileNumber;
   int? mobilePin;
   String? internetId;
   String? internetPassword;

@@ -10,11 +10,11 @@ class CreditCardModel {
   );
 
   int cardTypeCodeId;
-  String cardNumber = '';
-  String expiryDate = '';
-  String cardHolderName = '';
-  String cvvCode = '';
-  String cardPin = '';
+  double? cardNumber;
+  String? expiryDate;
+  String? cardHolderName;
+  int? cvvCode;
+  int? cardPin;
   bool isBackFocused = false;
 }
 

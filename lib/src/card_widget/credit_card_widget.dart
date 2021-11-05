@@ -24,23 +24,18 @@ class CreditCardWidget extends StatefulWidget {
     Key? key,
     required this.bankLogo,
     required this.cardTypeCodeId,
-    required this.cardNumber,
-    required this.expiryDate,
-    required this.cardHolderName,
-    required this.cvvCode,
-    required this.cardPin,
+    this.cardNumber,
+    this.expiryDate,
+    this.cardHolderName,
+    this.cvvCode,
+    this.cardPin,
     required this.showBackView,
     this.animationDuration = const Duration(milliseconds: 500),
     this.height,
     this.width,
     this.textStyle,
     this.cardBgColor = const Color(0xff1b447b),
-    this.obscureCardNumber = true,
-    this.obscureCardCvv = true,
-    this.obscureCardPin = true,
-    this.labelCardHolder = 'CARD HOLDER',
-    this.labelExpiredDate = 'MM/YY',
-    this.cardBrand,
+    this.obscureData = true,
     this.backgroundImage,
     this.glassmorphismConfig,
     this.isChipVisible = true,
@@ -51,30 +46,24 @@ class CreditCardWidget extends StatefulWidget {
 
   final String bankLogo;
   final int cardTypeCodeId;
-  final String cardNumber;
-  final String expiryDate;
-  final String cardHolderName;
-  final String cvvCode;
-  final String cardPin;
+  final double? cardNumber;
+  final String? expiryDate;
+  final String? cardHolderName;
+  final int? cvvCode;
+  final int? cardPin;
   final TextStyle? textStyle;
   final Color cardBgColor;
   final bool showBackView;
   final Duration animationDuration;
   final double? height;
   final double? width;
-  final bool obscureCardNumber;
-  final bool obscureCardCvv;
-  final bool obscureCardPin;
+  final bool obscureData;
   final void Function(CreditCardBrand) onCreditCardWidgetChange;
   final String? backgroundImage;
   final bool isChipVisible;
   final Glassmorphism? glassmorphismConfig;
   final bool isSwipeGestureEnabled;
 
-  final String labelCardHolder;
-  final String labelExpiredDate;
-
-  final CardBrand? cardBrand;
   final List<CustomCardBrandIcon> customCardBrandIcons;
 
   @override
@@ -146,9 +135,8 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
       isGestureUpdate = false;
     }
 
-    final CardBrand? cardBrand =
-        widget.cardBrand ?? detectCCType(widget.cardNumber);
-    widget.onCreditCardWidgetChange(CreditCardBrand(cardBrand));
+    //final CardBrand? cardBrand = detectCCType(widget.cardNumber);
+    //widget.onCreditCardWidgetChange(CreditCardBrand(cardBrand));
 
     return Stack(
       children: <Widget>[
@@ -166,6 +154,11 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
         ),
       ],
     );
+
+    /* return const SizedBox(
+      height: 30,
+      child: Text('Hello'),
+    ); */
   }
 
   void _leftRotation() {
@@ -242,9 +235,20 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
               ),
             );
 
-    final String number = widget.obscureCardNumber
-        ? widget.cardNumber.replaceAll(RegExp(r'(?<=.{4})\d(?=.{4})'), '*')
-        : widget.cardNumber;
+    String? cardNumber;
+    if (widget.cardNumber != null) {
+      final String cardStringNumber = MaskedTextController(
+        mask: '0000 0000 0000 0000',
+        text: widget.cardNumber.toString(),
+      ).text;
+
+      cardNumber = widget.obscureData
+          ? cardStringNumber.replaceAll(RegExp(r'(?<=.{4})\d(?=.{4})'), '*')
+          : cardStringNumber;
+    }
+
+    final String expiryDate = widget.expiryDate ?? '';
+    final String cardHolderName = widget.cardHolderName ?? '';
 
     final CardTypeModel? cardType = CardTypeModel.cardTypesList
         .firstWhereOrNull(
@@ -318,7 +322,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
             ),
             Expanded(
               child: Text(
-                widget.cardNumber.isEmpty ? 'XXXX XXXX XXXX XXXX' : number,
+                cardNumber ?? 'XXXX XXXX XXXX XXXX',
                 style: widget.textStyle ?? defaultTextStyle,
               ),
             ),
@@ -339,9 +343,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
                   ),
                   const SizedBox(width: 5),
                   Text(
-                    widget.expiryDate.isEmpty
-                        ? widget.labelExpiredDate
-                        : widget.expiryDate,
+                    expiryDate.isEmpty ? 'MM/YY' : expiryDate,
                     style: widget.textStyle ?? defaultTextStyle,
                   ),
                 ],
@@ -359,18 +361,14 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
                   Expanded(
                     flex: 8,
                     child: Text(
-                      widget.cardHolderName.isEmpty
-                          ? widget.labelCardHolder
-                          : widget.cardHolderName,
+                      cardHolderName.isEmpty ? 'CARD HOLDER' : cardHolderName,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: widget.textStyle ??
                           defaultTextStyle.copyWith(fontSize: 14),
                     ),
                   ),
-                  widget.cardBrand != null
-                      ? getCardBrandImage(widget.cardBrand)
-                      : getCardBrandIcon(widget.cardNumber),
+                  getCardBrandIcon(cardNumber)
                 ],
               ),
             ),
@@ -393,13 +391,18 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
               ),
             );
 
-    final String cvv = widget.obscureCardCvv
-        ? widget.cvvCode.replaceAll(RegExp(r'\d'), '*')
-        : widget.cvvCode;
-
-    final String pin = widget.obscureCardPin
-        ? widget.cardPin.replaceAll(RegExp(r'\d'), '*')
-        : widget.cardPin;
+    String? cardCvv;
+    if (widget.cvvCode != null) {
+      cardCvv = widget.obscureData
+          ? widget.cvvCode.toString().replaceAll(RegExp(r'\d'), '*')
+          : widget.cvvCode.toString();
+    }
+    String? cardPin;
+    if (widget.cardPin != null) {
+      cardPin = widget.obscureData
+          ? widget.cardPin.toString().replaceAll(RegExp(r'\d'), '*')
+          : widget.cardPin.toString();
+    }
 
     return CardBackground(
       backgroundImage: widget.backgroundImage,
@@ -442,7 +445,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
                       child: Padding(
                         padding: const EdgeInsets.all(5),
                         child: Text(
-                          widget.cvvCode.isEmpty ? 'XXX' : cvv,
+                          cardCvv ?? 'XXX',
                           maxLines: 1,
                           style: widget.textStyle ?? defaultTextStyle,
                         ),
@@ -485,7 +488,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
                         ),
                         const SizedBox(width: 5),
                         Text(
-                          widget.cardPin.isEmpty ? 'XXXX' : pin,
+                          cardPin ?? 'XXXX',
                           style: widget.textStyle ??
                               defaultTextStyle.copyWith(
                                 color: Colors.white,
@@ -565,11 +568,11 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
 
   /// This function determines the Credit Card type based on the cardPatterns
   /// and returns it.
-  CardBrand detectCCType(String cardNumber) {
+  CardBrand detectCCType(String? cardNumber) {
     //Default card type is other
     CardBrand cardBrand = CardBrand.other;
 
-    if (cardNumber.isEmpty) {
+    if (cardNumber == null) {
       return cardBrand;
     }
 
@@ -625,7 +628,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
 
   // This method returns the icon for the visa card type if found
   // else will return the empty container
-  Widget getCardBrandIcon(String cardNumber) {
+  Widget getCardBrandIcon(String? cardNumber) {
     Widget icon;
     final CardBrand ccType = detectCCType(cardNumber);
     final List<CustomCardBrandIcon> customCardBrandIcon =
@@ -684,7 +687,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
 
 class MaskedTextController extends TextEditingController {
   MaskedTextController(
-      {String? text, required this.mask, Map<String, RegExp>? translator})
+      {text, required this.mask, Map<String, RegExp>? translator})
       : super(text: text) {
     this.translator = translator ?? MaskedTextController.getDefaultTranslator();
 
