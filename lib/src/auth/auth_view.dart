@@ -48,18 +48,35 @@ class _AuthViewState extends State<AuthView> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Align(
-            alignment: Alignment.center,
-            child: Image.asset(
-              'assets/images/logo-android.png',
-              height: 100,
-            ),
-          )
-        ],
+      child: SafeArea(
+        child: Align(
+          alignment: Alignment.center,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                child: SizedBox(
+                  width: 100.0,
+                  height: 100.0,
+                  child: Image.asset(
+                    'assets/images/logo-android.png',
+                  ),
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 16.0),
+                child: Text(
+                  'Card Box',
+                  style: TextStyle(
+                    fontSize: 34.0,
+                    color: Colors.grey,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
       ),
     );
   }

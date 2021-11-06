@@ -131,22 +131,6 @@ class _ManageCardViewState extends State<ManageCardView> {
               showBackView: isBackFocused,
               obscureData: false,
               isSwipeGestureEnabled: true,
-              /* glassmorphismConfig: Glassmorphism(
-                blurX: 10.0,
-                blurY: 10.0,
-                gradient: const LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    Color(0xFF4AA3F2),
-                    Color(0xFFAF92FB),
-                  ],
-                  stops: [
-                    0.3,
-                    0.75,
-                  ],
-                ),
-              ), */
             ),
             const SizedBox(
               height: 20,
