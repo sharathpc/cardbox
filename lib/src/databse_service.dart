@@ -146,7 +146,7 @@ class DatabseService {
     return await db.insert(_dbCardTableName, row);
   }
 
-  Future<List<Map<String, dynamic>>> queryAllCards(int? groupId) async {
+  Future<List<Map<String, dynamic>>> queryAllCardsInGroup(int? groupId) async {
     Database db = await instance.database;
     return await db.query(
       _dbCardTableName,
@@ -155,7 +155,7 @@ class DatabseService {
     );
   }
 
-  Future<Map<String, dynamic>> queryOneCard(int cardId) async {
+  Future<Map<String, dynamic>> queryOneCard(int? cardId) async {
     Database db = await instance.database;
     List<Map<String, dynamic>> queryRows = await db.query(
       _dbCardTableName,

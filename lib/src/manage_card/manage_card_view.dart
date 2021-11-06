@@ -26,6 +26,7 @@ class ManageCardView extends StatefulWidget {
 
 class _ManageCardViewState extends State<ManageCardView> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  late Future getCardFuture;
   late BankItem bank;
   int cardTypeCodeId = 11001;
   int cardColorCodeId = 12001;
@@ -42,24 +43,15 @@ class _ManageCardViewState extends State<ManageCardView> {
   String? internetPassword;
   String? internetProfilePassword;
   bool isBackFocused = false;
-  OutlineInputBorder? border;
   bool isEdit = false;
 
   @override
   void initState() {
-    border = OutlineInputBorder(
-      borderSide: BorderSide(
-        color: Colors.grey.withOpacity(0.7),
-        width: 2.0,
-      ),
-    );
     super.initState();
     bank = BankItem.banksList
         .firstWhere((item) => item.bankCodeId == widget.bankCodeId);
     isEdit = widget.cardId != null;
-    /* if (isEdit) {
-      getAndPopulateGroup();
-    } */
+    getCardFuture = getAndPopulateCard();
   }
 
   @override
@@ -114,48 +106,59 @@ class _ManageCardViewState extends State<ManageCardView> {
       ),
       child: SafeArea(
         bottom: false,
-        child: Column(
-          children: <Widget>[
-            const SizedBox(
-              height: 20,
-            ),
-            CreditCardWidget(
-              bankLogo: bank.bankLogo,
-              cardTypeCodeId: cardTypeCodeId,
-              cardColorCodeId: cardColorCodeId,
-              cardNumber: cardNumber,
-              expiryDate: cardExpiryDate,
-              cardHolderName: cardHolderName,
-              cvvCode: cardCvvCode,
-              cardPin: cardPin,
-              showBackView: isBackFocused,
-              obscureData: false,
-              isSwipeGestureEnabled: true,
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: <Widget>[
-                    CreditCardForm(
-                      formKey: formKey,
-                      obscureData: false,
-                      cardTypeCodeId: cardTypeCodeId,
-                      cardColorCodeId: cardColorCodeId,
-                      cardNumber: cardNumber,
-                      cvvCode: cardCvvCode,
-                      cardPin: cardPin,
-                      cardHolderName: cardHolderName,
-                      expiryDate: cardExpiryDate,
-                      onCreditCardModelChange: onCreditCardModelChange,
-                    ),
-                  ],
+        child: FutureBuilder(
+          future: getCardFuture,
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            if (snapshot.connectionState != ConnectionState.done) {
+              return const Center(
+                child: CupertinoActivityIndicator(),
+              );
+            }
+
+            return Column(
+              children: <Widget>[
+                const SizedBox(
+                  height: 20,
                 ),
-              ),
-            ),
-          ],
+                CreditCardWidget(
+                  bankLogo: bank.bankLogo,
+                  cardTypeCodeId: cardTypeCodeId,
+                  cardColorCodeId: cardColorCodeId,
+                  cardNumber: cardNumber,
+                  expiryDate: cardExpiryDate,
+                  cardHolderName: cardHolderName,
+                  cvvCode: cardCvvCode,
+                  cardPin: cardPin,
+                  showBackView: isBackFocused,
+                  obscureData: false,
+                  isSwipeGestureEnabled: true,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: <Widget>[
+                        CreditCardForm(
+                          formKey: formKey,
+                          obscureData: false,
+                          cardTypeCodeId: cardTypeCodeId,
+                          cardColorCodeId: cardColorCodeId,
+                          cardNumber: cardNumber,
+                          cvvCode: cardCvvCode,
+                          cardPin: cardPin,
+                          cardHolderName: cardHolderName,
+                          expiryDate: cardExpiryDate,
+                          onCreditCardModelChange: onCreditCardModelChange,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
         ),
       ),
     );
@@ -172,5 +175,28 @@ class _ManageCardViewState extends State<ManageCardView> {
       cardPin = creditCardModel.cardPin;
       isBackFocused = creditCardModel.isBackFocused;
     });
+  }
+
+  Future<void> getAndPopulateCard() async {
+    if (isEdit) {
+      final Map<String, dynamic> cardRow =
+          await DatabseService.instance.queryOneCard(widget.cardId);
+      final CardItem cardItem = CardItem.fromJson(cardRow);
+      cardTypeCodeId = cardItem.cardTypeCodeId;
+      cardColorCodeId = cardItem.cardColorCodeId;
+      accountNumber = cardItem.accountNumber;
+      ifsCode = cardItem.ifsCode;
+      cardNumber = cardItem.cardNumber;
+      cardExpiryDate = cardItem.cardExpiryDate;
+      cardHolderName = cardItem.cardHolderName;
+      cardCvvCode = cardItem.cardCvvCode;
+      cardPin = cardItem.cardPin;
+      mobileNumber = cardItem.mobileNumber;
+      mobilePin = cardItem.mobilePin;
+      internetId = cardItem.internetId;
+      internetPassword = cardItem.internetPassword;
+      internetProfilePassword = cardItem.internetProfilePassword;
+    }
+    return;
   }
 }

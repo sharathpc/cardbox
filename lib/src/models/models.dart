@@ -70,6 +70,7 @@ class CardItem {
 
   CardItem.fromJson(Map<String, dynamic> json) {
     cardId = json[DatabseService.columnCardId];
+    cardGroupId = json[DatabseService.columnCardGroupId];
     cardTypeCodeId = json[DatabseService.columnCardTypeCodeId];
     cardColorCodeId = json[DatabseService.columnCardColorCodeId];
     accountNumber = json[DatabseService.columnAccountNumber];
@@ -90,6 +91,7 @@ class CardItem {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data[DatabseService.columnCardId] = cardId;
+    data[DatabseService.columnCardGroupId] = cardGroupId;
     data[DatabseService.columnCardTypeCodeId] = cardTypeCodeId;
     data[DatabseService.columnCardColorCodeId] = cardColorCodeId;
     data[DatabseService.columnAccountNumber] = accountNumber;

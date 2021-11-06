@@ -288,7 +288,7 @@ class _ManageGroupViewState extends State<ManageGroupView> {
     final Map<String, dynamic> groupRow =
         await DatabseService.instance.queryOneGroup(widget.groupId);
     final List<Map<String, dynamic>> cardRows =
-        await DatabseService.instance.queryAllCards(widget.groupId);
+        await DatabseService.instance.queryAllCardsInGroup(widget.groupId);
     final GroupItem groupItem = GroupItem.fromJson(groupRow);
     setState(() {
       selectedBank = BankItem.banksList

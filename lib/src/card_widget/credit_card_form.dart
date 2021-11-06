@@ -80,7 +80,6 @@ class _CreditCardFormState extends State<CreditCardForm> {
   void createCreditCardModel() {
     selectedCardType = CardTypeModel.cardTypesList
         .firstWhere((item) => item.cardTypeCodeId == widget.cardTypeCodeId);
-    _cardTypeController.text = selectedCardType.cardTypeName;
     cardTypeCodeId = widget.cardTypeCodeId;
     cardColorCodeId = widget.cardColorCodeId;
     cardNumber = widget.cardNumber;
@@ -88,6 +87,13 @@ class _CreditCardFormState extends State<CreditCardForm> {
     cardHolderName = widget.cardHolderName;
     cvvCode = widget.cvvCode;
     cardPin = widget.cardPin;
+
+    _cardTypeController.text = selectedCardType.cardTypeName;
+    _cardNumberController.text = cardNumber.toString();
+    _expiryDateController.text = expiryDate ?? '';
+    _cardHolderNameController.text = cardHolderName ?? '';
+    _cvvCodeController.text = cvvCode.toString();
+    _cardPinController.text = cardPin.toString();
 
     creditCardModel = CreditCardModel(
       cardTypeCodeId,
