@@ -51,33 +51,35 @@ class DatabseService {
   }
 
   Future _onCreate(Database db, int version) async {
-    await db.execute('''
-        CREATE TABLE $_dbGroupTableName( 
-          $columnGroupId INTEGER PRIMARY KEY,
-          $columnGroupName TEXT,
-          $columnGroupBankCodeId INTEGER
-        )
-      ''');
     await db.execute(
       '''
-        CREATE TABLE $_dbCardTableName( 
-          $columnCardId INTEGER PRIMARY KEY,
-          $columnCardGroupId INTEGER,
-          $columnCardTypeCodeId INTEGER,
-          $columnCardColorCodeId INTEGER,
-          $columnAccountNumber INTEGER,
-          $columnIFSCode TEXT,
-          $columnCardNumber INTEGER,
-          $columnCardExpiryDate TEXT,
-          $columnCardHolderName TEXT,
-          $columnCardCvvCode INTEGER,
-          $columnCardPin INTEGER,
-          $columnMobileNumber INTEGER,
-          $columnMobilePin INTEGER,
-          $columnInternetId TEXT,
-          $columnInternetPassword TEXT,
-          $columnInternetProfilePassword TEXT
-        )
+      CREATE TABLE $_dbGroupTableName( 
+        $columnGroupId INTEGER PRIMARY KEY,
+        $columnGroupName TEXT,
+        $columnGroupBankCodeId INTEGER
+      )
+      ''',
+    );
+    await db.execute(
+      '''
+      CREATE TABLE $_dbCardTableName( 
+        $columnCardId INTEGER PRIMARY KEY,
+        $columnCardGroupId INTEGER,
+        $columnCardTypeCodeId INTEGER,
+        $columnCardColorCodeId INTEGER,
+        $columnAccountNumber INTEGER,
+        $columnIFSCode TEXT,
+        $columnCardNumber INTEGER,
+        $columnCardExpiryDate TEXT,
+        $columnCardHolderName TEXT,
+        $columnCardCvvCode INTEGER,
+        $columnCardPin INTEGER,
+        $columnMobileNumber INTEGER,
+        $columnMobilePin INTEGER,
+        $columnInternetId TEXT,
+        $columnInternetPassword TEXT,
+        $columnInternetProfilePassword TEXT
+      )
       ''',
     );
   }
@@ -98,7 +100,36 @@ class DatabseService {
 
   Future<List<Map<String, dynamic>>> queryAllGroup() async {
     Database db = await instance.database;
-    return await db.query(_dbGroupTableName);
+    return await db.rawQuery(
+      '''
+      SELECT gp.groupid, gp.groupname, gp.groupbankcodeid, crd.cardslist
+      FROM groups AS gp
+      LEFT JOIN (
+          SELECT cards.cardgroupid, JSON_GROUP_ARRAY(
+              JSON_OBJECT(
+                  'cardid', cardid,
+                  'cardtypecodeid', cardtypecodeid,
+                  'cardcolorcodeid', cardcolorcodeid,
+                  'accountnumber', accountnumber,
+                  'ifscode', ifscode,
+                  'cardnumber', cardnumber,
+                  'cardexpirydate', cardexpirydate,
+                  'cardholdername', cardholdername,
+                  'cardcvvcode', cardcvvcode,
+                  'cardpin', cardpin,
+                  'mobilenumber', mobilenumber,
+                  'mobilepin', mobilepin,
+                  'internetid', internetid,
+                  'internetpassword', internetpassword,
+                  'internetprofilepassword', internetprofilepassword
+              )
+          ) AS cardslist
+          FROM cards
+          GROUP BY cards.cardgroupid
+      ) AS crd
+      ON gp.groupid=crd.cardgroupid
+      ''',
+    );
   }
 
   Future<Map<String, dynamic>> queryOneGroup(int? groupId) async {

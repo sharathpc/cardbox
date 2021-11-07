@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cardbox/src/databse_service.dart';
 
 /// A placeholder class that represents an entity or model.
@@ -5,19 +7,22 @@ class GroupItem {
   late int groupId;
   late String groupName;
   late int bankCodeId;
-  List<CardItem>? cards;
+  List<CardItem>? cardsList = [];
 
   GroupItem({
     required this.groupId,
     required this.groupName,
     required this.bankCodeId,
-    this.cards,
+    this.cardsList,
   });
 
   GroupItem.fromJson(Map<String, dynamic> json) {
     groupId = json[DatabseService.columnGroupId];
     groupName = json[DatabseService.columnGroupName];
     bankCodeId = json[DatabseService.columnGroupBankCodeId];
+    cardsList = List<CardItem>.from(
+      jsonDecode(json['cardslist']).map((item) => CardItem.fromJson(item)),
+    );
   }
 
   Map<String, dynamic> toJson() {

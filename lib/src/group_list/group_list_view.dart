@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
+import '../card_widget/flutter_credit_card.dart';
+
 import '../models/models.dart';
 import '../databse_service.dart';
 //import '../settings/settings_view.dart';
@@ -20,6 +22,12 @@ class GroupListView extends StatefulWidget {
 
 class _GroupListViewState extends State<GroupListView> {
   final TextEditingController _searchController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    getAllGroups();
+  }
 
   Future<List<GroupItem>> getAllGroups() async {
     final List<Map<String, dynamic>> groupList =
@@ -123,13 +131,34 @@ class GroupSilverList extends StatelessWidget {
           }
           final GroupItem groupItem = groupList[index];
           return GestureDetector(
-            child: Container(
-              alignment: Alignment.center,
-              color: Colors.white,
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Text(groupItem.groupName),
-              ),
+            child: Column(
+              children: [
+                Container(
+                  alignment: Alignment.center,
+                  color: Colors.white,
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Text(groupItem.groupName),
+                  ),
+                ),
+                ...groupItem.cardsList!.map((CardItem item) {
+                  final BankItem bankItem = BankItem.banksList.firstWhere(
+                      (element) => element.bankCodeId == groupItem.bankCodeId);
+                  return CreditCardWidget(
+                    bankLogo: bankItem.bankLogo,
+                    cardTypeCodeId: item.cardTypeCodeId,
+                    cardColorCodeId: item.cardColorCodeId,
+                    cardNumber: item.cardNumber,
+                    expiryDate: item.cardExpiryDate,
+                    cardHolderName: item.cardHolderName,
+                    cvvCode: item.cardCvvCode,
+                    cardPin: item.cardPin,
+                    showBackView: false,
+                    obscureData: true,
+                    isSwipeGestureEnabled: true,
+                  );
+                }).toList(),
+              ],
             ),
             onTap: () => {
               Navigator.pushNamed(
