@@ -28,20 +28,7 @@ class _ManageCardViewState extends State<ManageCardView> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   late Future getCardFuture;
   late BankItem bank;
-  int cardTypeCodeId = 11001;
-  int cardColorCodeId = 12001;
-  int? accountNumber;
-  String? ifsCode;
-  int? cardNumber;
-  String? cardExpiryDate;
-  String? cardHolderName;
-  int? cardCvvCode;
-  int? cardPin;
-  int? mobileNumber;
-  int? mobilePin;
-  String? internetId;
-  String? internetPassword;
-  String? internetProfilePassword;
+  CardItem cardItem = CardItem(cardTypeCodeId: 11001, cardColorCodeId: 12001);
   bool isBackFocused = false;
   bool isEdit = false;
 
@@ -77,21 +64,22 @@ class _ManageCardViewState extends State<ManageCardView> {
               final cardData = {
                 DatabseService.columnCardId: widget.cardId,
                 DatabseService.columnCardGroupId: widget.groupId,
-                DatabseService.columnCardTypeCodeId: cardTypeCodeId,
-                DatabseService.columnCardColorCodeId: cardColorCodeId,
-                DatabseService.columnAccountNumber: accountNumber,
-                DatabseService.columnIFSCode: ifsCode,
-                DatabseService.columnCardNumber: cardNumber,
-                DatabseService.columnCardExpiryDate: cardExpiryDate,
-                DatabseService.columnCardHolderName: cardHolderName,
-                DatabseService.columnCardCvvCode: cardCvvCode,
-                DatabseService.columnCardPin: cardPin,
-                DatabseService.columnMobileNumber: mobileNumber,
-                DatabseService.columnMobilePin: mobilePin,
-                DatabseService.columnInternetId: internetId,
-                DatabseService.columnInternetPassword: internetPassword,
+                DatabseService.columnCardTypeCodeId: cardItem.cardTypeCodeId,
+                DatabseService.columnCardColorCodeId: cardItem.cardColorCodeId,
+                DatabseService.columnAccountNumber: cardItem.accountNumber,
+                DatabseService.columnIFSCode: cardItem.ifsCode,
+                DatabseService.columnCardNumber: cardItem.cardNumber,
+                DatabseService.columnCardExpiryDate: cardItem.cardExpiryDate,
+                DatabseService.columnCardHolderName: cardItem.cardHolderName,
+                DatabseService.columnCardCvvCode: cardItem.cardCvvCode,
+                DatabseService.columnCardPin: cardItem.cardPin,
+                DatabseService.columnMobileNumber: cardItem.mobileNumber,
+                DatabseService.columnMobilePin: cardItem.mobilePin,
+                DatabseService.columnInternetId: cardItem.internetId,
+                DatabseService.columnInternetPassword:
+                    cardItem.internetPassword,
                 DatabseService.columnInternetProfilePassword:
-                    internetProfilePassword,
+                    cardItem.internetProfilePassword,
               };
               if (isEdit) {
                 await DatabseService.instance.updateCard(cardData);
@@ -122,13 +110,13 @@ class _ManageCardViewState extends State<ManageCardView> {
                 ),
                 CreditCardWidget(
                   bankLogo: bank.bankLogo,
-                  cardTypeCodeId: cardTypeCodeId,
-                  cardColorCodeId: cardColorCodeId,
-                  cardNumber: cardNumber,
-                  expiryDate: cardExpiryDate,
-                  cardHolderName: cardHolderName,
-                  cvvCode: cardCvvCode,
-                  cardPin: cardPin,
+                  cardTypeCodeId: cardItem.cardTypeCodeId,
+                  cardColorCodeId: cardItem.cardColorCodeId,
+                  cardNumber: cardItem.cardNumber,
+                  expiryDate: cardItem.cardExpiryDate,
+                  cardHolderName: cardItem.cardHolderName,
+                  cvvCode: cardItem.cardCvvCode,
+                  cardPin: cardItem.cardPin,
                   showBackView: isBackFocused,
                   obscureData: false,
                   isSwipeGestureEnabled: true,
@@ -143,13 +131,13 @@ class _ManageCardViewState extends State<ManageCardView> {
                         CreditCardForm(
                           formKey: formKey,
                           obscureData: false,
-                          cardTypeCodeId: cardTypeCodeId,
-                          cardColorCodeId: cardColorCodeId,
-                          cardNumber: cardNumber,
-                          cvvCode: cardCvvCode,
-                          cardPin: cardPin,
-                          cardHolderName: cardHolderName,
-                          expiryDate: cardExpiryDate,
+                          cardTypeCodeId: cardItem.cardTypeCodeId,
+                          cardColorCodeId: cardItem.cardColorCodeId,
+                          cardNumber: cardItem.cardNumber,
+                          cvvCode: cardItem.cardCvvCode,
+                          cardPin: cardItem.cardPin,
+                          cardHolderName: cardItem.cardHolderName,
+                          expiryDate: cardItem.cardExpiryDate,
                           onCreditCardModelChange: onCreditCardModelChange,
                         ),
                       ],
@@ -166,13 +154,13 @@ class _ManageCardViewState extends State<ManageCardView> {
 
   void onCreditCardModelChange(CreditCardModel? creditCardModel) {
     setState(() {
-      cardTypeCodeId = creditCardModel!.cardTypeCodeId;
-      cardColorCodeId = creditCardModel.cardColorCodeId;
-      cardNumber = creditCardModel.cardNumber;
-      cardExpiryDate = creditCardModel.expiryDate;
-      cardHolderName = creditCardModel.cardHolderName;
-      cardCvvCode = creditCardModel.cvvCode;
-      cardPin = creditCardModel.cardPin;
+      cardItem.cardTypeCodeId = creditCardModel!.cardTypeCodeId;
+      cardItem.cardColorCodeId = creditCardModel.cardColorCodeId;
+      cardItem.cardNumber = creditCardModel.cardNumber;
+      cardItem.cardExpiryDate = creditCardModel.expiryDate;
+      cardItem.cardHolderName = creditCardModel.cardHolderName;
+      cardItem.cardCvvCode = creditCardModel.cvvCode;
+      cardItem.cardPin = creditCardModel.cardPin;
       isBackFocused = creditCardModel.isBackFocused;
     });
   }
@@ -181,21 +169,7 @@ class _ManageCardViewState extends State<ManageCardView> {
     if (isEdit) {
       final Map<String, dynamic> cardRow =
           await DatabseService.instance.queryOneCard(widget.cardId);
-      final CardItem cardItem = CardItem.fromJson(cardRow);
-      cardTypeCodeId = cardItem.cardTypeCodeId;
-      cardColorCodeId = cardItem.cardColorCodeId;
-      accountNumber = cardItem.accountNumber;
-      ifsCode = cardItem.ifsCode;
-      cardNumber = cardItem.cardNumber;
-      cardExpiryDate = cardItem.cardExpiryDate;
-      cardHolderName = cardItem.cardHolderName;
-      cardCvvCode = cardItem.cardCvvCode;
-      cardPin = cardItem.cardPin;
-      mobileNumber = cardItem.mobileNumber;
-      mobilePin = cardItem.mobilePin;
-      internetId = cardItem.internetId;
-      internetPassword = cardItem.internetPassword;
-      internetProfilePassword = cardItem.internetProfilePassword;
+      cardItem = CardItem.fromJson(cardRow);
     }
     return;
   }

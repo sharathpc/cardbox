@@ -25,6 +25,7 @@ class ManageGroupView extends StatefulWidget {
 
 class _ManageGroupViewState extends State<ManageGroupView> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  late Future getGroupFuture;
   final TextEditingController _groupNameController = TextEditingController();
   final TextEditingController _bankController = TextEditingController();
   bool isEdit = false;
@@ -45,13 +46,7 @@ class _ManageGroupViewState extends State<ManageGroupView> {
     _bankController.text = selectedBank.bankName;
 
     isEdit = widget.groupId != null;
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
-      if (isEdit) {
-        getAndPopulateGroup();
-      } /* else {
-        showBankPicker(context);
-      } */
-    });
+    getGroupFuture = getAndPopulateGroup();
   }
 
   @override
@@ -87,135 +82,146 @@ class _ManageGroupViewState extends State<ManageGroupView> {
       ),
       child: SafeArea(
         bottom: false,
-        child: Form(
-          key: formKey,
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: SizedBox(
-                    height: 50.0,
-                    child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8.0),
-                        child: Image.asset(selectedBank.bankLogo)),
-                  ),
-                ),
-              ),
-              CupertinoFormSection(
+        child: FutureBuilder(
+          future: getGroupFuture,
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            if (snapshot.connectionState != ConnectionState.done) {
+              return const Center(
+                child: CupertinoActivityIndicator(),
+              );
+            }
+            return Form(
+              key: formKey,
+              child: Column(
                 children: [
-                  CupertinoFormRow(
-                    padding: EdgeInsets.zero,
-                    child: CupertinoTextFormFieldRow(
-                      readOnly: true,
-                      controller: _bankController,
-                      onEditingComplete: () {
-                        FocusScope.of(context).requestFocus(groupNameNode);
-                      },
-                      placeholder: 'Bank',
-                      validator: (String? value) {
-                        if (value!.isEmpty) {
-                          return bankValidationMessage;
-                        }
-                        return null;
-                      },
-                      onTap: () => showBankPicker(context),
-                    ),
-                  ),
-                  CupertinoFormRow(
-                    child: CupertinoTextFormFieldRow(
-                      autofocus: true,
-                      padding: EdgeInsets.zero,
-                      controller: _groupNameController,
-                      focusNode: groupNameNode,
-                      placeholder: 'Group Name',
-                      keyboardType: TextInputType.text,
-                      validator: (String? value) {
-                        if (value!.isEmpty) {
-                          return groupNameValidationMessage;
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              cardsList.isEmpty
-                  ? const SizedBox(
-                      height: 40.0,
-                    )
-                  : SizedBox(
-                      height: 250.0,
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: cardsList.map((CardItem item) {
-                            return GestureDetector(
-                              child: CreditCardWidget(
-                                bankLogo: selectedBank.bankLogo,
-                                cardTypeCodeId: item.cardTypeCodeId,
-                                cardColorCodeId: item.cardColorCodeId,
-                                cardNumber: item.cardNumber,
-                                expiryDate: item.cardExpiryDate,
-                                cardHolderName: item.cardHolderName,
-                                cvvCode: item.cardCvvCode,
-                                cardPin: item.cardPin,
-                                showBackView: false,
-                                obscureData: true,
-                                isSwipeGestureEnabled: true,
-                              ),
-                              onTap: () => addCard(item.cardId),
-                            );
-                          }).toList(),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16.0),
+                      child: SizedBox(
+                        height: 50.0,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8.0),
+                          child: Image.asset(selectedBank.bankLogo),
                         ),
                       ),
                     ),
-              CupertinoFormSection(
-                children: [
-                  GestureDetector(
-                    child: CupertinoFormRow(
-                      padding: EdgeInsets.zero,
-                      child: CupertinoTextFormFieldRow(
-                        readOnly: true,
-                        prefix: const Icon(
-                          CupertinoIcons.add_circled_solid,
-                          color: CupertinoColors.systemGreen,
+                  ),
+                  CupertinoFormSection(
+                    children: [
+                      CupertinoFormRow(
+                        padding: EdgeInsets.zero,
+                        child: CupertinoTextFormFieldRow(
+                          readOnly: true,
+                          controller: _bankController,
+                          onEditingComplete: () {
+                            FocusScope.of(context).requestFocus(groupNameNode);
+                          },
+                          placeholder: 'Bank',
+                          validator: (String? value) {
+                            if (value!.isEmpty) {
+                              return bankValidationMessage;
+                            }
+                            return null;
+                          },
+                          onTap: () => showBankPicker(context),
                         ),
-                        initialValue: 'Add Card',
-                        onTap: () => addCard(null),
                       ),
-                    ),
-                    onTap: () => addCard(null),
-                  )
-                ],
-              ),
-              Visibility(
-                visible: isEdit,
-                child: Column(
-                  children: [
-                    const SizedBox(
-                      height: 40.0,
-                    ),
-                    CupertinoFormSection(
-                      children: [
-                        CupertinoFormRow(
+                      CupertinoFormRow(
+                        child: CupertinoTextFormFieldRow(
+                          autofocus: true,
+                          padding: EdgeInsets.zero,
+                          controller: _groupNameController,
+                          focusNode: groupNameNode,
+                          placeholder: 'Group Name',
+                          keyboardType: TextInputType.text,
+                          validator: (String? value) {
+                            if (value!.isEmpty) {
+                              return groupNameValidationMessage;
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  cardsList.isEmpty
+                      ? const SizedBox(
+                          height: 40.0,
+                        )
+                      : SizedBox(
+                          height: 250.0,
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: cardsList.map((CardItem item) {
+                                return GestureDetector(
+                                  child: CreditCardWidget(
+                                    bankLogo: selectedBank.bankLogo,
+                                    cardTypeCodeId: item.cardTypeCodeId,
+                                    cardColorCodeId: item.cardColorCodeId,
+                                    cardNumber: item.cardNumber,
+                                    expiryDate: item.cardExpiryDate,
+                                    cardHolderName: item.cardHolderName,
+                                    cvvCode: item.cardCvvCode,
+                                    cardPin: item.cardPin,
+                                    showBackView: false,
+                                    obscureData: true,
+                                    isSwipeGestureEnabled: true,
+                                  ),
+                                  onTap: () => addCard(item.cardId),
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                        ),
+                  CupertinoFormSection(
+                    children: [
+                      GestureDetector(
+                        child: CupertinoFormRow(
                           padding: EdgeInsets.zero,
                           child: CupertinoTextFormFieldRow(
                             readOnly: true,
-                            style: const TextStyle(
-                              color: CupertinoColors.systemRed,
+                            prefix: const Icon(
+                              CupertinoIcons.add_circled_solid,
+                              color: CupertinoColors.systemGreen,
                             ),
-                            initialValue: 'Delete Group',
-                            onTap: () => showDeleteGroupSheet(),
+                            initialValue: 'Add Card',
+                            onTap: () => addCard(null),
                           ),
+                        ),
+                        onTap: () => addCard(null),
+                      )
+                    ],
+                  ),
+                  Visibility(
+                    visible: isEdit,
+                    child: Column(
+                      children: [
+                        const SizedBox(
+                          height: 40.0,
+                        ),
+                        CupertinoFormSection(
+                          children: [
+                            CupertinoFormRow(
+                              padding: EdgeInsets.zero,
+                              child: CupertinoTextFormFieldRow(
+                                readOnly: true,
+                                style: const TextStyle(
+                                  color: CupertinoColors.systemRed,
+                                ),
+                                initialValue: 'Delete Group',
+                                onTap: () => showDeleteGroupSheet(),
+                              ),
+                            )
+                          ],
                         )
                       ],
-                    )
-                  ],
-                ),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );
@@ -285,18 +291,20 @@ class _ManageGroupViewState extends State<ManageGroupView> {
   }
 
   getAndPopulateGroup() async {
-    final Map<String, dynamic> groupRow =
-        await DatabseService.instance.queryOneGroup(widget.groupId);
-    final List<Map<String, dynamic>> cardRows =
-        await DatabseService.instance.queryAllCardsInGroup(widget.groupId);
-    final GroupItem groupItem = GroupItem.fromJson(groupRow);
-    setState(() {
-      selectedBank = BankItem.banksList
-          .firstWhere((element) => element.bankCodeId == groupItem.bankCodeId);
-      _groupNameController.text = groupItem.groupName;
-      _bankController.text = selectedBank.bankName;
-      cardsList = cardRows.map((card) => CardItem.fromJson(card)).toList();
-    });
+    if (isEdit) {
+      final Map<String, dynamic> groupRow =
+          await DatabseService.instance.queryOneGroup(widget.groupId);
+      final GroupItem groupItem = GroupItem.fromJson(groupRow);
+      final List<Map<String, dynamic>> cardRows =
+          await DatabseService.instance.queryAllCardsInGroup(widget.groupId);
+      setState(() {
+        selectedBank = BankItem.banksList.firstWhere(
+            (element) => element.bankCodeId == groupItem.bankCodeId);
+        _groupNameController.text = groupItem.groupName;
+        _bankController.text = selectedBank.bankName;
+        cardsList = cardRows.map((card) => CardItem.fromJson(card)).toList();
+      });
+    }
   }
 
   saveGroup(BuildContext context) async {
