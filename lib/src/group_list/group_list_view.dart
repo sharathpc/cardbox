@@ -9,6 +9,7 @@ import '../databse_service.dart';
 //import '../settings/settings_view.dart';
 import '../manage_group/manage_group_view.dart';
 import '../group_detail/group_detail_view.dart';
+import '../card_detail/card_detail_view.dart';
 
 /// Displays a list of CardItems.
 class GroupListView extends StatefulWidget {
@@ -59,7 +60,8 @@ class _GroupListViewState extends State<GroupListView> {
                 onPressed: () {
                   showCupertinoModalBottomSheet(
                     context: context,
-                    isDismissible: true,
+                    expand: false,
+                    isDismissible: false,
                     builder: (context) => const ManageGroupView(),
                   );
                 },
@@ -141,21 +143,33 @@ class GroupSilverList extends StatelessWidget {
                     child: Text(groupItem.groupName),
                   ),
                 ),
-                ...groupItem.cardsList!.map((CardItem item) {
+                ...groupItem.cardsList.map((CardItem item) {
                   final BankItem bankItem = BankItem.banksList.firstWhere(
                       (element) => element.bankCodeId == groupItem.bankCodeId);
-                  return CreditCardWidget(
-                    bankLogo: bankItem.bankLogo,
-                    cardTypeCodeId: item.cardTypeCodeId,
-                    cardColorCodeId: item.cardColorCodeId,
-                    cardNumber: item.cardNumber,
-                    expiryDate: item.cardExpiryDate,
-                    cardHolderName: item.cardHolderName,
-                    cvvCode: item.cardCvvCode,
-                    cardPin: item.cardPin,
-                    showBackView: false,
-                    obscureData: true,
-                    isSwipeGestureEnabled: true,
+                  return GestureDetector(
+                    child: CreditCardWidget(
+                      bankLogo: bankItem.bankLogo,
+                      cardTypeCodeId: item.cardTypeCodeId,
+                      cardColorCodeId: item.cardColorCodeId,
+                      cardNumber: item.cardNumber,
+                      expiryDate: item.cardExpiryDate,
+                      cardHolderName: item.cardHolderName,
+                      cvvCode: item.cardCvvCode,
+                      cardPin: item.cardPin,
+                      showBackView: false,
+                      obscureData: true,
+                      isSwipeGestureEnabled: false,
+                    ),
+                    onTap: () => {
+                      Navigator.pushNamed(
+                        context,
+                        CardDetailView.routeName,
+                        arguments: ManageCardModel(
+                          bankCodeId: bankItem.bankCodeId,
+                          cardId: item.cardId,
+                        ),
+                      ),
+                    },
                   );
                 }).toList(),
               ],

@@ -4,16 +4,16 @@ import 'package:cardbox/src/databse_service.dart';
 
 /// A placeholder class that represents an entity or model.
 class GroupItem {
-  late int groupId;
-  late String groupName;
+  int? groupId;
+  late String groupName = '';
   late int bankCodeId;
-  List<CardItem>? cardsList = [];
+  late List<CardItem> cardsList;
 
   GroupItem({
-    required this.groupId,
+    this.groupId,
     required this.groupName,
     required this.bankCodeId,
-    this.cardsList,
+    required this.cardsList,
   });
 
   GroupItem.fromJson(Map<String, dynamic> json) {

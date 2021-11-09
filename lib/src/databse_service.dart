@@ -105,27 +105,27 @@ class DatabseService {
       SELECT gp.groupid, gp.groupname, gp.groupbankcodeid, crd.cardslist
       FROM groups AS gp
       LEFT JOIN (
-          SELECT cards.cardgroupid, JSON_GROUP_ARRAY(
-              JSON_OBJECT(
-                  'cardid', cardid,
-                  'cardtypecodeid', cardtypecodeid,
-                  'cardcolorcodeid', cardcolorcodeid,
-                  'accountnumber', accountnumber,
-                  'ifscode', ifscode,
-                  'cardnumber', cardnumber,
-                  'cardexpirydate', cardexpirydate,
-                  'cardholdername', cardholdername,
-                  'cardcvvcode', cardcvvcode,
-                  'cardpin', cardpin,
-                  'mobilenumber', mobilenumber,
-                  'mobilepin', mobilepin,
-                  'internetid', internetid,
-                  'internetpassword', internetpassword,
-                  'internetprofilepassword', internetprofilepassword
-              )
-          ) AS cardslist
-          FROM cards
-          GROUP BY cards.cardgroupid
+        SELECT cards.cardgroupid, JSON_GROUP_ARRAY(
+          JSON_OBJECT(
+            'cardid', cardid,
+            'cardtypecodeid', cardtypecodeid,
+            'cardcolorcodeid', cardcolorcodeid,
+            'accountnumber', accountnumber,
+            'ifscode', ifscode,
+            'cardnumber', cardnumber,
+            'cardexpirydate', cardexpirydate,
+            'cardholdername', cardholdername,
+            'cardcvvcode', cardcvvcode,
+            'cardpin', cardpin,
+            'mobilenumber', mobilenumber,
+            'mobilepin', mobilepin,
+            'internetid', internetid,
+            'internetpassword', internetpassword,
+            'internetprofilepassword', internetprofilepassword
+          )
+        ) AS cardslist
+        FROM cards
+        GROUP BY cards.cardgroupid
       ) AS crd
       ON gp.groupid=crd.cardgroupid
       ''',
@@ -134,10 +134,36 @@ class DatabseService {
 
   Future<Map<String, dynamic>> queryOneGroup(int? groupId) async {
     Database db = await instance.database;
-    List<Map<String, dynamic>> queryRows = await db.query(
-      _dbGroupTableName,
-      where: '$columnGroupId = ?',
-      whereArgs: [groupId],
+    List<Map<String, dynamic>> queryRows = await db.rawQuery(
+      '''
+      SELECT gp.groupid, gp.groupname, gp.groupbankcodeid, crd.cardslist
+      FROM groups AS gp
+      LEFT JOIN (
+        SELECT cards.cardgroupid, JSON_GROUP_ARRAY(
+          JSON_OBJECT(
+            'cardid', cardid,
+            'cardtypecodeid', cardtypecodeid,
+            'cardcolorcodeid', cardcolorcodeid,
+            'accountnumber', accountnumber,
+            'ifscode', ifscode,
+            'cardnumber', cardnumber,
+            'cardexpirydate', cardexpirydate,
+            'cardholdername', cardholdername,
+            'cardcvvcode', cardcvvcode,
+            'cardpin', cardpin,
+            'mobilenumber', mobilenumber,
+            'mobilepin', mobilepin,
+            'internetid', internetid,
+            'internetpassword', internetpassword,
+            'internetprofilepassword', internetprofilepassword
+          )
+        ) AS cardslist
+        FROM cards
+        GROUP BY cards.cardgroupid
+      ) AS crd
+      ON gp.groupid=crd.cardgroupid
+      WHERE groupid=$groupId
+      ''',
     );
     return queryRows[0];
   }

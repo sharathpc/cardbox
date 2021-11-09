@@ -26,11 +26,17 @@ class ManageGroupView extends StatefulWidget {
 class _ManageGroupViewState extends State<ManageGroupView> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   late Future getGroupFuture;
+  bool isEdit = false;
+  GroupItem groupItem = GroupItem(
+    bankCodeId: 10001,
+    groupName: '',
+    cardsList: [],
+  );
+  BankItem selectedBank =
+      BankItem.banksList.firstWhere((element) => element.bankCodeId == 10001);
+
   final TextEditingController _groupNameController = TextEditingController();
   final TextEditingController _bankController = TextEditingController();
-  bool isEdit = false;
-  late BankItem selectedBank;
-  List<CardItem> cardsList = [];
 
   final String bankValidationMessage = 'Please select a bank';
   final String groupNameValidationMessage = 'Please input a valid name';
@@ -41,8 +47,6 @@ class _ManageGroupViewState extends State<ManageGroupView> {
   void initState() {
     super.initState();
 
-    selectedBank =
-        BankItem.banksList.firstWhere((element) => element.bankCodeId == 10001);
     _bankController.text = selectedBank.bankName;
 
     isEdit = widget.groupId != null;
@@ -145,7 +149,7 @@ class _ManageGroupViewState extends State<ManageGroupView> {
                       ),
                     ],
                   ),
-                  cardsList.isEmpty
+                  groupItem.cardsList.isEmpty
                       ? const SizedBox(
                           height: 40.0,
                         )
@@ -153,7 +157,8 @@ class _ManageGroupViewState extends State<ManageGroupView> {
                           height: 250.0,
                           child: SingleChildScrollView(
                             child: Column(
-                              children: cardsList.map((CardItem item) {
+                              children:
+                                  groupItem.cardsList.map((CardItem item) {
                                 return GestureDetector(
                                   child: CreditCardWidget(
                                     bankLogo: selectedBank.bankLogo,
@@ -267,9 +272,9 @@ class _ManageGroupViewState extends State<ManageGroupView> {
 
   addCard(int? cardId) {
     showCupertinoModalBottomSheet(
-      expand: false,
       context: context,
-      backgroundColor: Colors.transparent,
+      expand: false,
+      isDismissible: false,
       builder: (context) => ManageCardView(
         bankCodeId: selectedBank.bankCodeId,
         groupId: widget.groupId,
@@ -277,13 +282,13 @@ class _ManageGroupViewState extends State<ManageGroupView> {
       ),
     ).then((card) {
       if (card != null) {
-        final int cardIndex =
-            cardsList.indexWhere((CardItem item) => item.cardId == card.cardId);
+        final int cardIndex = groupItem.cardsList
+            .indexWhere((CardItem item) => item.cardId == card.cardId);
         setState(() {
           if (cardIndex >= 0) {
-            cardsList[cardIndex] = card;
+            groupItem.cardsList[cardIndex] = card;
           } else {
-            cardsList.add(card);
+            groupItem.cardsList.add(card);
           }
         });
       }
@@ -294,22 +299,19 @@ class _ManageGroupViewState extends State<ManageGroupView> {
     if (isEdit) {
       final Map<String, dynamic> groupRow =
           await DatabseService.instance.queryOneGroup(widget.groupId);
-      final GroupItem groupItem = GroupItem.fromJson(groupRow);
-      final List<Map<String, dynamic>> cardRows =
-          await DatabseService.instance.queryAllCardsInGroup(widget.groupId);
+      groupItem = GroupItem.fromJson(groupRow);
       setState(() {
         selectedBank = BankItem.banksList.firstWhere(
             (element) => element.bankCodeId == groupItem.bankCodeId);
         _groupNameController.text = groupItem.groupName;
         _bankController.text = selectedBank.bankName;
-        cardsList = cardRows.map((card) => CardItem.fromJson(card)).toList();
       });
     }
   }
 
   saveGroup(BuildContext context) async {
     final List<Map<String, dynamic>> cards =
-        cardsList.map((CardItem item) => item.toJson()).toList();
+        groupItem.cardsList.map((CardItem item) => item.toJson()).toList();
     if (isEdit) {
       await DatabseService.instance.updateGroup({
         DatabseService.columnGroupId: widget.groupId,
@@ -338,8 +340,8 @@ class _ManageGroupViewState extends State<ManageGroupView> {
       context: context,
       builder: (BuildContext context) {
         return CupertinoActionSheet(
-          message: cardsList.isNotEmpty
-              ? Text('Delete Group and ${cardsList.length} Cards')
+          message: groupItem.cardsList.isNotEmpty
+              ? Text('Delete Group and ${groupItem.cardsList.length} Cards')
               : null,
           actions: <Widget>[
             CupertinoActionSheetAction(

@@ -74,9 +74,9 @@ class MyApp extends StatelessWidget {
             return MaterialWithModalsPageRoute<void>(
               settings: routeSettings,
               builder: (BuildContext context) {
-                if (!AuthService.instance.isAuthenticated) {
+                /* if (!AuthService.instance.isAuthenticated) {
                   return const AuthView();
-                }
+                } */
                 switch (routeSettings.name) {
                   case SettingsView.routeName:
                     return SettingsView(controller: settingsController);
@@ -93,8 +93,11 @@ class MyApp extends StatelessWidget {
                       cardId: args.cardId,
                     );
                   case CardDetailView.routeName:
-                    final args = routeSettings.arguments as CardItem;
-                    return CardDetailView(cardItem: args);
+                    final args = routeSettings.arguments as ManageCardModel;
+                    return CardDetailView(
+                      bankCodeId: args.bankCodeId,
+                      cardId: args.cardId,
+                    );
                   case GroupListView.routeName:
                   default:
                     return const GroupListView();

@@ -124,25 +124,17 @@ class _ManageCardViewState extends State<ManageCardView> {
                 const SizedBox(
                   height: 20,
                 ),
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: <Widget>[
-                        CreditCardForm(
-                          formKey: formKey,
-                          obscureData: false,
-                          cardTypeCodeId: cardItem.cardTypeCodeId,
-                          cardColorCodeId: cardItem.cardColorCodeId,
-                          cardNumber: cardItem.cardNumber,
-                          cvvCode: cardItem.cardCvvCode,
-                          cardPin: cardItem.cardPin,
-                          cardHolderName: cardItem.cardHolderName,
-                          expiryDate: cardItem.cardExpiryDate,
-                          onCreditCardModelChange: onCreditCardModelChange,
-                        ),
-                      ],
-                    ),
-                  ),
+                CreditCardForm(
+                  formKey: formKey,
+                  obscureData: false,
+                  cardTypeCodeId: cardItem.cardTypeCodeId,
+                  cardColorCodeId: cardItem.cardColorCodeId,
+                  cardNumber: cardItem.cardNumber,
+                  cvvCode: cardItem.cardCvvCode,
+                  cardPin: cardItem.cardPin,
+                  cardHolderName: cardItem.cardHolderName,
+                  expiryDate: cardItem.cardExpiryDate,
+                  onCreditCardModelChange: onCreditCardModelChange,
                 ),
               ],
             );

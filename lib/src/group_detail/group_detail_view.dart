@@ -30,7 +30,8 @@ class GroupDetailView extends StatelessWidget {
           onPressed: () {
             showCupertinoModalBottomSheet(
               context: context,
-              isDismissible: true,
+              expand: false,
+              isDismissible: false,
               builder: (context) => ManageGroupView(groupId: groupId),
             );
           },
