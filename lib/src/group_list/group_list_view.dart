@@ -166,6 +166,7 @@ class GroupSilverList extends StatelessWidget {
                         CardDetailView.routeName,
                         arguments: ManageCardModel(
                           bankCodeId: bankItem.bankCodeId,
+                          groupId: groupItem.groupId,
                           cardId: item.cardId,
                         ),
                       ),

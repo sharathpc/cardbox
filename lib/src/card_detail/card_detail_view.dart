@@ -13,12 +13,14 @@ class CardDetailView extends StatefulWidget {
   CardDetailView({
     Key? key,
     required this.bankCodeId,
+    this.groupId,
     this.cardId,
   }) : super(key: key);
 
   static const routeName = '/card_detail';
   final int bankCodeId;
-  int? cardId;
+  final int? groupId;
+  final int? cardId;
 
   @override
   State<CardDetailView> createState() => _CardDetailViewState();
@@ -44,6 +46,7 @@ class _CardDetailViewState extends State<CardDetailView> {
               isDismissible: false,
               builder: (context) => ManageCardView(
                 bankCodeId: widget.bankCodeId,
+                groupId: widget.groupId,
                 cardId: widget.cardId,
               ),
             );

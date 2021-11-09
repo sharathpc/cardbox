@@ -232,10 +232,12 @@ class BankItem {
 
 class ManageCardModel {
   int bankCodeId;
+  int? groupId;
   int? cardId;
 
   ManageCardModel({
     required this.bankCodeId,
+    this.groupId,
     this.cardId,
   });
 }
