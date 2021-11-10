@@ -60,8 +60,8 @@ class _GroupListViewState extends State<GroupListView> {
                 onPressed: () {
                   showCupertinoModalBottomSheet(
                     context: context,
-                    expand: false,
                     isDismissible: false,
+                    enableDrag: false,
                     builder: (context) => const ManageGroupView(),
                   );
                 },

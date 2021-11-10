@@ -42,8 +42,8 @@ class _CardDetailViewState extends State<CardDetailView> {
           onPressed: () {
             showCupertinoModalBottomSheet(
               context: context,
-              expand: false,
               isDismissible: false,
+              enableDrag: false,
               builder: (context) => ManageCardView(
                 bankCodeId: widget.bankCodeId,
                 groupId: widget.groupId,

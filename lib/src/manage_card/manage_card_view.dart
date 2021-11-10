@@ -6,6 +6,7 @@ import '../card_widget/flutter_credit_card.dart';
 
 import '../models/models.dart';
 import '../databse_service.dart';
+import '../group_list/group_list_view.dart';
 
 class ManageCardView extends StatefulWidget {
   const ManageCardView({
@@ -37,7 +38,9 @@ class _ManageCardViewState extends State<ManageCardView> {
     super.initState();
     bank = BankItem.banksList
         .firstWhere((item) => item.bankCodeId == widget.bankCodeId);
-    isEdit = widget.cardId != null;
+    cardItem.cardId = widget.cardId;
+    cardItem.cardGroupId = widget.groupId;
+    isEdit = cardItem.cardId != null;
     getCardFuture = getAndPopulateCard();
   }
 
@@ -62,8 +65,8 @@ class _ManageCardViewState extends State<ManageCardView> {
           onPressed: () async {
             if (formKey.currentState!.validate()) {
               final cardData = {
-                DatabseService.columnCardId: widget.cardId,
-                DatabseService.columnCardGroupId: widget.groupId,
+                DatabseService.columnCardId: cardItem.cardId,
+                DatabseService.columnCardGroupId: cardItem.cardGroupId,
                 DatabseService.columnCardTypeCodeId: cardItem.cardTypeCodeId,
                 DatabseService.columnCardColorCodeId: cardItem.cardColorCodeId,
                 DatabseService.columnAccountNumber: cardItem.accountNumber,
@@ -83,11 +86,10 @@ class _ManageCardViewState extends State<ManageCardView> {
               };
               if (isEdit) {
                 await DatabseService.instance.updateCard(cardData);
+              } else {
+                await DatabseService.instance.insertCard(cardData);
               }
-              Navigator.pop(
-                context,
-                CardItem.fromJson(cardData),
-              );
+              Navigator.pop(context);
             }
           },
         ),
@@ -136,6 +138,31 @@ class _ManageCardViewState extends State<ManageCardView> {
                   expiryDate: cardItem.cardExpiryDate,
                   onCreditCardModelChange: onCreditCardModelChange,
                 ),
+                Visibility(
+                  visible: isEdit,
+                  child: Column(
+                    children: [
+                      const SizedBox(
+                        height: 40.0,
+                      ),
+                      CupertinoFormSection(
+                        children: [
+                          CupertinoFormRow(
+                            padding: EdgeInsets.zero,
+                            child: CupertinoTextFormFieldRow(
+                              readOnly: true,
+                              style: const TextStyle(
+                                color: CupertinoColors.systemRed,
+                              ),
+                              initialValue: 'Delete Card',
+                              onTap: () => showDeleteCardSheet(),
+                            ),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                ),
               ],
             );
           },
@@ -164,5 +191,42 @@ class _ManageCardViewState extends State<ManageCardView> {
       cardItem = CardItem.fromJson(cardRow);
     }
     return;
+  }
+
+  deleteGroup() async {
+    await DatabseService.instance.deleteCard(cardItem.cardId ?? 0);
+    Navigator.popUntil(
+      context,
+      ModalRoute.withName(GroupListView.routeName),
+    );
+  }
+
+  showDeleteCardSheet() {
+    return showCupertinoModalPopup(
+      context: context,
+      builder: (BuildContext context) {
+        return CupertinoActionSheet(
+          actions: <Widget>[
+            CupertinoActionSheetAction(
+              child: const Text(
+                'Delete Group',
+                style: TextStyle(
+                  color: CupertinoColors.systemRed,
+                ),
+              ),
+              onPressed: () async {
+                Navigator.pop(context);
+                deleteGroup();
+              },
+            ),
+          ],
+          cancelButton: CupertinoActionSheetAction(
+            isDefaultAction: true,
+            child: const Text('Cancel'),
+            onPressed: () => Navigator.pop(context),
+          ),
+        );
+      },
+    );
   }
 }

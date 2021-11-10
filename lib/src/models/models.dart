@@ -52,6 +52,10 @@ class CardItem {
   String? internetId;
   String? internetPassword;
   String? internetProfilePassword;
+  late double postionY;
+  late double opacity;
+  late double scale;
+  late double rotate;
 
   CardItem({
     this.cardId,
@@ -71,6 +75,10 @@ class CardItem {
     this.internetId,
     this.internetPassword,
     this.internetProfilePassword,
+    this.postionY = 0,
+    this.opacity = 0,
+    this.rotate = 0,
+    this.scale = 0,
   });
 
   CardItem.fromJson(Map<String, dynamic> json) {
@@ -89,8 +97,10 @@ class CardItem {
     mobilePin = json[DatabseService.columnMobilePin];
     internetId = json[DatabseService.columnInternetId];
     internetPassword = json[DatabseService.columnInternetPassword];
-    internetProfilePassword =
-        json[DatabseService.columnInternetProfilePassword];
+    postionY = 0;
+    opacity = 0;
+    rotate = 0;
+    scale = 0;
   }
 
   Map<String, dynamic> toJson() {
