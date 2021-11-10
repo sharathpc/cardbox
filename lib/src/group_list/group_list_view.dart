@@ -22,24 +22,13 @@ class GroupListView extends StatefulWidget {
 }
 
 class _GroupListViewState extends State<GroupListView> {
+  late Future getGroupsFuture;
   final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    getAllGroups();
-  }
-
-  Future<List<GroupItem>> getAllGroups() async {
-    final List<Map<String, dynamic>> groupList =
-        await DatabseService.instance.queryAllGroup();
-    final List<GroupItem> filteredGroupList =
-        groupList.map((item) => GroupItem.fromJson(item)).toList();
-    return filteredGroupList
-        .where((item) => item.groupName
-            .toLowerCase()
-            .contains(_searchController.text.toLowerCase()))
-        .toList();
+    getGroupsFuture = getAllGroups();
   }
 
   @override
@@ -63,7 +52,7 @@ class _GroupListViewState extends State<GroupListView> {
                     isDismissible: false,
                     enableDrag: false,
                     builder: (context) => const ManageGroupView(),
-                  );
+                  ).then((_) => getAllGroups());
                 },
               ),
             ),
@@ -76,12 +65,12 @@ class _GroupListViewState extends State<GroupListView> {
               ),
               child: CupertinoSearchTextField(
                 controller: _searchController,
-                onChanged: onSearchTextChanged,
+                onChanged: callStateChange,
               ),
             ),
           ),
           FutureBuilder(
-            future: getAllGroups(),
+            future: getGroupsFuture,
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               int childCount = 0;
               List<GroupItem> groupList = [];
@@ -92,10 +81,70 @@ class _GroupListViewState extends State<GroupListView> {
                 childCount = snapshot.data.length;
                 groupList = snapshot.data;
               }
-              return GroupSilverList(
-                connectionState: snapshot.connectionState,
-                groupList: groupList,
-                childCount: childCount,
+              return SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                    if (snapshot.connectionState != ConnectionState.done) {
+                      return const Center(
+                        child: CupertinoActivityIndicator(),
+                      );
+                    }
+                    final GroupItem groupItem = groupList[index];
+                    return GestureDetector(
+                      child: Column(
+                        children: [
+                          Container(
+                            alignment: Alignment.center,
+                            color: Colors.white,
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Text(groupItem.groupName),
+                            ),
+                          ),
+                          ...groupItem.cardsList.map((CardItem item) {
+                            final BankItem bankItem = BankItem.banksList
+                                .firstWhere((element) =>
+                                    element.bankCodeId == groupItem.bankCodeId);
+                            return GestureDetector(
+                              child: CreditCardWidget(
+                                bankLogo: bankItem.bankLogo,
+                                cardTypeCodeId: item.cardTypeCodeId,
+                                cardColorCodeId: item.cardColorCodeId,
+                                cardNumber: item.cardNumber,
+                                expiryDate: item.cardExpiryDate,
+                                cardHolderName: item.cardHolderName,
+                                cvvCode: item.cardCvvCode,
+                                cardPin: item.cardPin,
+                                showBackView: false,
+                                obscureData: true,
+                                isSwipeGestureEnabled: false,
+                              ),
+                              onTap: () => {
+                                Navigator.pushNamed(
+                                  context,
+                                  CardDetailView.routeName,
+                                  arguments: ManageCardModel(
+                                    bankCodeId: bankItem.bankCodeId,
+                                    groupId: groupItem.groupId,
+                                    cardId: item.cardId,
+                                  ),
+                                ).then((_) => callStateChange(_)),
+                              },
+                            );
+                          }).toList(),
+                        ],
+                      ),
+                      onTap: () => {
+                        Navigator.pushNamed(
+                          context,
+                          GroupDetailView.routeName,
+                          arguments: groupItem.groupId,
+                        ).then((_) => callStateChange(_)),
+                      },
+                    );
+                  },
+                  childCount: childCount,
+                ),
               );
             },
           )
@@ -104,88 +153,21 @@ class _GroupListViewState extends State<GroupListView> {
     );
   }
 
-  onSearchTextChanged(String text) {
-    setState(() {});
+  callStateChange(_) {
+    setState(() {
+      getGroupsFuture = getAllGroups();
+    });
   }
-}
 
-class GroupSilverList extends StatelessWidget {
-  const GroupSilverList({
-    Key? key,
-    required this.connectionState,
-    required this.groupList,
-    required this.childCount,
-  }) : super(key: key);
-
-  final ConnectionState connectionState;
-  final List<GroupItem> groupList;
-  final int childCount;
-
-  @override
-  Widget build(BuildContext context) {
-    return SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (BuildContext context, int index) {
-          if (connectionState != ConnectionState.done) {
-            return const Center(
-              child: CupertinoActivityIndicator(),
-            );
-          }
-          final GroupItem groupItem = groupList[index];
-          return GestureDetector(
-            child: Column(
-              children: [
-                Container(
-                  alignment: Alignment.center,
-                  color: Colors.white,
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Text(groupItem.groupName),
-                  ),
-                ),
-                ...groupItem.cardsList.map((CardItem item) {
-                  final BankItem bankItem = BankItem.banksList.firstWhere(
-                      (element) => element.bankCodeId == groupItem.bankCodeId);
-                  return GestureDetector(
-                    child: CreditCardWidget(
-                      bankLogo: bankItem.bankLogo,
-                      cardTypeCodeId: item.cardTypeCodeId,
-                      cardColorCodeId: item.cardColorCodeId,
-                      cardNumber: item.cardNumber,
-                      expiryDate: item.cardExpiryDate,
-                      cardHolderName: item.cardHolderName,
-                      cvvCode: item.cardCvvCode,
-                      cardPin: item.cardPin,
-                      showBackView: false,
-                      obscureData: true,
-                      isSwipeGestureEnabled: false,
-                    ),
-                    onTap: () => {
-                      Navigator.pushNamed(
-                        context,
-                        CardDetailView.routeName,
-                        arguments: ManageCardModel(
-                          bankCodeId: bankItem.bankCodeId,
-                          groupId: groupItem.groupId,
-                          cardId: item.cardId,
-                        ),
-                      ),
-                    },
-                  );
-                }).toList(),
-              ],
-            ),
-            onTap: () => {
-              Navigator.pushNamed(
-                context,
-                GroupDetailView.routeName,
-                arguments: groupItem.groupId,
-              ),
-            },
-          );
-        },
-        childCount: childCount,
-      ),
-    );
+  Future<List<GroupItem>> getAllGroups() async {
+    final List<Map<String, dynamic>> groupList =
+        await DatabseService.instance.queryAllGroup();
+    final List<GroupItem> filteredGroupList = groupList
+        .map((item) => GroupItem.fromJson(item))
+        .where((item) => item.groupName
+            .toLowerCase()
+            .contains(_searchController.text.toLowerCase()))
+        .toList();
+    return filteredGroupList;
   }
 }

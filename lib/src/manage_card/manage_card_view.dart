@@ -105,65 +105,67 @@ class _ManageCardViewState extends State<ManageCardView> {
               );
             }
 
-            return Column(
-              children: <Widget>[
-                const SizedBox(
-                  height: 20,
-                ),
-                CreditCardWidget(
-                  bankLogo: bank.bankLogo,
-                  cardTypeCodeId: cardItem.cardTypeCodeId,
-                  cardColorCodeId: cardItem.cardColorCodeId,
-                  cardNumber: cardItem.cardNumber,
-                  expiryDate: cardItem.cardExpiryDate,
-                  cardHolderName: cardItem.cardHolderName,
-                  cvvCode: cardItem.cardCvvCode,
-                  cardPin: cardItem.cardPin,
-                  showBackView: isBackFocused,
-                  obscureData: false,
-                  isSwipeGestureEnabled: true,
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                CreditCardForm(
-                  formKey: formKey,
-                  obscureData: false,
-                  cardTypeCodeId: cardItem.cardTypeCodeId,
-                  cardColorCodeId: cardItem.cardColorCodeId,
-                  cardNumber: cardItem.cardNumber,
-                  cvvCode: cardItem.cardCvvCode,
-                  cardPin: cardItem.cardPin,
-                  cardHolderName: cardItem.cardHolderName,
-                  expiryDate: cardItem.cardExpiryDate,
-                  onCreditCardModelChange: onCreditCardModelChange,
-                ),
-                Visibility(
-                  visible: isEdit,
-                  child: Column(
-                    children: [
-                      const SizedBox(
-                        height: 40.0,
-                      ),
-                      CupertinoFormSection(
-                        children: [
-                          CupertinoFormRow(
-                            padding: EdgeInsets.zero,
-                            child: CupertinoTextFormFieldRow(
-                              readOnly: true,
-                              style: const TextStyle(
-                                color: CupertinoColors.systemRed,
-                              ),
-                              initialValue: 'Delete Card',
-                              onTap: () => showDeleteCardSheet(),
-                            ),
-                          )
-                        ],
-                      )
-                    ],
+            return SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  const SizedBox(
+                    height: 20,
                   ),
-                ),
-              ],
+                  CreditCardWidget(
+                    bankLogo: bank.bankLogo,
+                    cardTypeCodeId: cardItem.cardTypeCodeId,
+                    cardColorCodeId: cardItem.cardColorCodeId,
+                    cardNumber: cardItem.cardNumber,
+                    expiryDate: cardItem.cardExpiryDate,
+                    cardHolderName: cardItem.cardHolderName,
+                    cvvCode: cardItem.cardCvvCode,
+                    cardPin: cardItem.cardPin,
+                    showBackView: isBackFocused,
+                    obscureData: false,
+                    isSwipeGestureEnabled: true,
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  CreditCardForm(
+                    formKey: formKey,
+                    obscureData: false,
+                    cardTypeCodeId: cardItem.cardTypeCodeId,
+                    cardColorCodeId: cardItem.cardColorCodeId,
+                    cardNumber: cardItem.cardNumber,
+                    cvvCode: cardItem.cardCvvCode,
+                    cardPin: cardItem.cardPin,
+                    cardHolderName: cardItem.cardHolderName,
+                    expiryDate: cardItem.cardExpiryDate,
+                    onCreditCardModelChange: onCreditCardModelChange,
+                  ),
+                  Visibility(
+                    visible: isEdit,
+                    child: Column(
+                      children: [
+                        const SizedBox(
+                          height: 40.0,
+                        ),
+                        CupertinoFormSection(
+                          children: [
+                            CupertinoFormRow(
+                              padding: EdgeInsets.zero,
+                              child: CupertinoTextFormFieldRow(
+                                readOnly: true,
+                                style: const TextStyle(
+                                  color: CupertinoColors.systemRed,
+                                ),
+                                initialValue: 'Delete Card',
+                                onTap: () => showDeleteCardSheet(),
+                              ),
+                            )
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             );
           },
         ),
