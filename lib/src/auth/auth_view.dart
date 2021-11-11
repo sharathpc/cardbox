@@ -16,6 +16,7 @@ class _AuthViewState extends State<AuthView> {
   @override
   void initState() {
     super.initState();
+    _authenticate();
   }
 
   Future<void> _authenticate() async {
