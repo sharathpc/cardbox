@@ -9,6 +9,7 @@ class CreditCardForm extends StatefulWidget {
   const CreditCardForm({
     Key? key,
     required this.formKey,
+    required this.isEdit,
     required this.cardTypeCodeId,
     required this.cardColorCodeId,
     this.cardNumber,
@@ -20,6 +21,7 @@ class CreditCardForm extends StatefulWidget {
     required this.onCreditCardModelChange,
   }) : super(key: key);
 
+  final bool isEdit;
   final int cardTypeCodeId;
   final int cardColorCodeId;
   final int? cardNumber;
@@ -251,7 +253,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
               CupertinoFormRow(
                 padding: EdgeInsets.zero,
                 child: CupertinoTextFormFieldRow(
-                  autofocus: true,
+                  autofocus: !widget.isEdit,
                   obscureText: widget.obscureData,
                   controller: _cardNumberController,
                   focusNode: cardNumberNode,

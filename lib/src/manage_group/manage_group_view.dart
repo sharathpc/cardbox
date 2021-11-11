@@ -138,7 +138,7 @@ class _ManageGroupViewState extends State<ManageGroupView> {
                         ),
                         CupertinoFormRow(
                           child: CupertinoTextFormFieldRow(
-                            autofocus: true,
+                            autofocus: !isEdit,
                             padding: EdgeInsets.zero,
                             controller: _groupNameController,
                             focusNode: groupNameNode,

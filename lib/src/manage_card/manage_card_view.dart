@@ -130,6 +130,7 @@ class _ManageCardViewState extends State<ManageCardView> {
                   ),
                   CreditCardForm(
                     formKey: formKey,
+                    isEdit: isEdit,
                     obscureData: false,
                     cardTypeCodeId: cardItem.cardTypeCodeId,
                     cardColorCodeId: cardItem.cardColorCodeId,
