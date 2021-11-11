@@ -92,6 +92,25 @@ class _CardDetailViewState extends State<CardDetailView> {
                 cardItem = snapshot.data;
               }
 
+              String cardNumber = MaskedTextController(
+                mask: '0000 0000 0000 0000',
+                text: cardItem.cardNumber.toString(),
+              ).text;
+
+              cardNumber = isObscureData
+                  ? cardNumber.replaceAll(RegExp(r'(?<=.{4})\d(?=.{4})'), '*')
+                  : cardNumber;
+
+              final String cardCvv = isObscureData
+                  ? cardItem.cardCvvCode
+                      .toString()
+                      .replaceAll(RegExp(r'\d'), '*')
+                  : cardItem.cardCvvCode.toString();
+
+              final String cardPin = isObscureData
+                  ? cardItem.cardPin.toString().replaceAll(RegExp(r'\d'), '*')
+                  : cardItem.cardPin.toString();
+
               return SingleChildScrollView(
                 child: Column(
                   children: <Widget>[
@@ -145,7 +164,7 @@ class _CardDetailViewState extends State<CardDetailView> {
                         cardDetailItem(
                           Icons.credit_card,
                           'Card Number',
-                          cardItem.cardNumber.toString(),
+                          cardNumber,
                         ),
                         cardDetailItem(
                           Icons.calendar_today,
@@ -160,12 +179,12 @@ class _CardDetailViewState extends State<CardDetailView> {
                         cardDetailItem(
                           Icons.security,
                           'CVV Code',
-                          cardItem.cardCvvCode.toString(),
+                          cardCvv,
                         ),
                         cardDetailItem(
                           Icons.fiber_pin,
                           'Card Pin',
-                          cardItem.cardPin.toString(),
+                          cardPin,
                         ),
                       ],
                     ),
