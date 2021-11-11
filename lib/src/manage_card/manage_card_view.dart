@@ -87,7 +87,8 @@ class _ManageCardViewState extends State<ManageCardView> {
               if (isEdit) {
                 await DatabseService.instance.updateCard(cardData);
               } else {
-                await DatabseService.instance.insertCard(cardData);
+                cardItem.cardId =
+                    await DatabseService.instance.insertCard(cardData);
               }
               Navigator.pop(context);
             }
@@ -160,7 +161,10 @@ class _ManageCardViewState extends State<ManageCardView> {
                               ),
                             )
                           ],
-                        )
+                        ),
+                        const SizedBox(
+                          height: 80.0,
+                        ),
                       ],
                     ),
                   ),

@@ -131,14 +131,15 @@ class _CardDetailViewState extends State<CardDetailView> {
                             value: isObscureData,
                             onChanged: (bool value) async {
                               if (value) {
-                                setState(() => isObscureData = true);
+                                isObscureData = true;
                               } else {
                                 final bool auth =
                                     await AuthService.instance.authenticate();
                                 if (auth) {
-                                  setState(() => isObscureData = false);
+                                  isObscureData = false;
                                 }
                               }
+                              setState(() {});
                             },
                           ),
                           prefix: const Text('Obscure fields'),

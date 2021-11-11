@@ -159,10 +159,10 @@ class DatabseService {
     return queryRows[0];
   }
 
-  Future<int> updateGroup(Map<String, dynamic> group) async {
+  Future<void> updateGroup(Map<String, dynamic> group) async {
     Database db = await instance.database;
     int groupId = group[columnGroupId];
-    return await db.update(
+    await db.update(
       _dbGroupTableName,
       group,
       where: '$columnGroupId = ?',
@@ -210,10 +210,10 @@ class DatabseService {
     return queryRows[0];
   }
 
-  Future<int> updateCard(Map<String, dynamic> row) async {
+  Future<void> updateCard(Map<String, dynamic> row) async {
     Database db = await instance.database;
     int cardId = row[columnCardId];
-    return await db.update(
+    await db.update(
       _dbCardTableName,
       row,
       where: '$columnCardId = ?',

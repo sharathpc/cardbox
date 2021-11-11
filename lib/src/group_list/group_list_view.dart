@@ -52,7 +52,7 @@ class _GroupListViewState extends State<GroupListView> {
                     isDismissible: false,
                     enableDrag: false,
                     builder: (context) => const ManageGroupView(),
-                  ).then((_) => getAllGroups());
+                  ).then((_) => callStateChange(_));
                 },
               ),
             ),
@@ -65,7 +65,7 @@ class _GroupListViewState extends State<GroupListView> {
               ),
               child: CupertinoSearchTextField(
                 controller: _searchController,
-                onChanged: callStateChange,
+                onChanged: (_) => callStateChange(_),
               ),
             ),
           ),
@@ -76,101 +76,170 @@ class _GroupListViewState extends State<GroupListView> {
               List<GroupItem> groupList = [];
 
               if (snapshot.connectionState != ConnectionState.done) {
-                childCount = 1;
+                return const SliverToBoxAdapter(
+                  child: Center(
+                    child: CupertinoActivityIndicator(),
+                  ),
+                );
               } else {
-                //Rprint(snapshot.data);
                 childCount = snapshot.data?.length ?? 0;
                 groupList = snapshot.data ?? [];
               }
-              return SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    if (snapshot.connectionState != ConnectionState.done) {
-                      return const Center(
-                        child: CupertinoActivityIndicator(),
-                      );
-                    }
-                    final GroupItem groupItem = groupList[index];
-                    return Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8.0),
-                        color: CupertinoColors.darkBackgroundGray,
+              if (groupList.isEmpty) {
+                return SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: const [
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 12.0),
+                        child: Icon(
+                          Icons.group_work_outlined,
+                          size: 100.0,
+                          color: CupertinoColors.inactiveGray,
+                        ),
                       ),
-                      margin: const EdgeInsets.only(bottom: 10.0),
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(
-                              top: 10.0,
-                              left: 20.0,
-                              right: 20.0,
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  groupItem.groupName,
-                                  style: const TextStyle(
-                                    color: CupertinoColors.white,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                TextButton(
-                                  child: const Text(
-                                    'Edit',
-                                    style: TextStyle(
+                      Text(
+                        'No Groups',
+                        style: TextStyle(
+                          color: CupertinoColors.inactiveGray,
+                        ),
+                      ),
+                      Text(
+                        'Please add a Group',
+                        style: TextStyle(
+                          color: CupertinoColors.inactiveGray,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              } else {
+                return SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      final GroupItem groupItem = groupList[index];
+                      return Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8.0),
+                          color: CupertinoColors.darkBackgroundGray,
+                        ),
+                        margin: const EdgeInsets.only(bottom: 10.0),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                top: 10.0,
+                                left: 20.0,
+                                right: 20.0,
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    groupItem.groupName,
+                                    style: const TextStyle(
+                                      color: CupertinoColors.white,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  onPressed: () {
-                                    Navigator.pushNamed(
-                                      context,
-                                      ManageGroupView.routeName,
-                                      arguments: groupItem.groupId,
-                                    ).then((_) => callStateChange(_));
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                          ...groupItem.cardsList.map((CardItem item) {
-                            final BankItem bankItem = BankItem.banksList
-                                .firstWhere((element) =>
-                                    element.bankCodeId == groupItem.bankCodeId);
-                            return GestureDetector(
-                              child: CreditCardWidget(
-                                bankLogo: bankItem.bankLogo,
-                                cardTypeCodeId: item.cardTypeCodeId,
-                                cardColorCodeId: item.cardColorCodeId,
-                                cardNumber: item.cardNumber,
-                                expiryDate: item.cardExpiryDate,
-                                cardHolderName: item.cardHolderName,
-                                cvvCode: item.cardCvvCode,
-                                cardPin: item.cardPin,
-                                showBackView: false,
-                                obscureData: true,
-                                isSwipeGestureEnabled: false,
-                              ),
-                              onTap: () => {
-                                Navigator.pushNamed(
-                                  context,
-                                  CardDetailView.routeName,
-                                  arguments: ManageCardModel(
-                                    bankCodeId: bankItem.bankCodeId,
-                                    groupId: groupItem.groupId,
-                                    cardId: item.cardId,
+                                  TextButton(
+                                    child: const Text(
+                                      'Edit',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.pushNamed(
+                                        context,
+                                        ManageGroupView.routeName,
+                                        arguments: groupItem.groupId,
+                                      ).then((_) => callStateChange(_));
+                                    },
                                   ),
-                                ).then((_) => callStateChange(_)),
-                              },
-                            );
-                          }).toList(),
-                        ],
-                      ),
-                    );
-                  },
-                  childCount: childCount,
-                ),
-              );
+                                ],
+                              ),
+                            ),
+                            groupItem.cardsList.isEmpty
+                                ? SizedBox(
+                                    height: 180.0,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: const [
+                                        Padding(
+                                          padding: EdgeInsets.only(
+                                            top: 12.0,
+                                            bottom: 8.0,
+                                          ),
+                                          child: Icon(
+                                            Icons.credit_card,
+                                            size: 60.0,
+                                            color: CupertinoColors.inactiveGray,
+                                          ),
+                                        ),
+                                        Text(
+                                          'No Cards',
+                                          style: TextStyle(
+                                            color: CupertinoColors.inactiveGray,
+                                          ),
+                                        ),
+                                        Text(
+                                          'Please add a Card',
+                                          style: TextStyle(
+                                            color: CupertinoColors.inactiveGray,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                : Column(
+                                    children: groupItem.cardsList
+                                        .map((CardItem item) {
+                                      final BankItem bankItem = BankItem
+                                          .banksList
+                                          .firstWhere((element) =>
+                                              element.bankCodeId ==
+                                              groupItem.bankCodeId);
+                                      return GestureDetector(
+                                        child: CreditCardWidget(
+                                          bankLogo: bankItem.bankLogo,
+                                          cardTypeCodeId: item.cardTypeCodeId,
+                                          cardColorCodeId: item.cardColorCodeId,
+                                          cardNumber: item.cardNumber,
+                                          expiryDate: item.cardExpiryDate,
+                                          cardHolderName: item.cardHolderName,
+                                          cvvCode: item.cardCvvCode,
+                                          cardPin: item.cardPin,
+                                          showBackView: false,
+                                          obscureData: true,
+                                          isSwipeGestureEnabled: false,
+                                        ),
+                                        onTap: () => {
+                                          Navigator.pushNamed(
+                                            context,
+                                            CardDetailView.routeName,
+                                            arguments: ManageCardModel(
+                                              bankCodeId: bankItem.bankCodeId,
+                                              groupId: groupItem.groupId,
+                                              cardId: item.cardId,
+                                            ),
+                                          ).then((_) => callStateChange(_)),
+                                        },
+                                      );
+                                    }).toList(),
+                                  ),
+                          ],
+                        ),
+                      );
+                    },
+                    childCount: childCount,
+                  ),
+                );
+              }
             },
           )
         ],
@@ -178,10 +247,9 @@ class _GroupListViewState extends State<GroupListView> {
     );
   }
 
-  callStateChange(_) {
-    setState(() {
-      getGroupsFuture = getAllGroups();
-    });
+  void callStateChange(_) {
+    getGroupsFuture = getAllGroups();
+    setState(() {});
   }
 
   Future<List<GroupItem>> getAllGroups() async {

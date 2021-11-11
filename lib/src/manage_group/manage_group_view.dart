@@ -88,147 +88,177 @@ class _ManageGroupViewState extends State<ManageGroupView> {
       ),
       child: SafeArea(
         bottom: false,
-        child: FutureBuilder(
-          future: getGroupFuture,
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            if (snapshot.connectionState != ConnectionState.done) {
-              return const Center(
-                child: CupertinoActivityIndicator(),
-              );
-            }
-            return Form(
-              key: formKey,
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 16.0),
-                    child: Padding(
+        child: SingleChildScrollView(
+          child: FutureBuilder(
+            future: getGroupFuture,
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.connectionState != ConnectionState.done) {
+                return const Center(
+                  child: CupertinoActivityIndicator(),
+                );
+              }
+              return Form(
+                key: formKey,
+                child: Column(
+                  children: [
+                    Padding(
                       padding: const EdgeInsets.symmetric(vertical: 16.0),
-                      child: SizedBox(
-                        height: 50.0,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8.0),
-                          child: Image.asset(selectedBank.bankLogo),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 16.0),
+                        child: SizedBox(
+                          height: 50.0,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(8.0),
+                            child: Image.asset(selectedBank.bankLogo),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  CupertinoFormSection(
-                    children: [
-                      CupertinoFormRow(
-                        padding: EdgeInsets.zero,
-                        child: CupertinoTextFormFieldRow(
-                          readOnly: true,
-                          controller: _bankController,
-                          onEditingComplete: () {
-                            FocusScope.of(context).requestFocus(groupNameNode);
-                          },
-                          placeholder: 'Bank',
-                          validator: (String? value) {
-                            if (value!.isEmpty) {
-                              return bankValidationMessage;
-                            }
-                            return null;
-                          },
-                          onTap: () => showBankPicker(context),
-                        ),
-                      ),
-                      CupertinoFormRow(
-                        child: CupertinoTextFormFieldRow(
-                          autofocus: true,
-                          padding: EdgeInsets.zero,
-                          controller: _groupNameController,
-                          focusNode: groupNameNode,
-                          placeholder: 'Group Name',
-                          keyboardType: TextInputType.text,
-                          validator: (String? value) {
-                            if (value!.isEmpty) {
-                              return groupNameValidationMessage;
-                            }
-                            return null;
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                  groupItem.cardsList.isEmpty
-                      ? const SizedBox(
-                          height: 40.0,
-                        )
-                      : SizedBox(
-                          height: 250.0,
-                          child: SingleChildScrollView(
-                            child: Column(
-                              children:
-                                  groupItem.cardsList.map((CardItem item) {
-                                return GestureDetector(
-                                  child: CreditCardWidget(
-                                    bankLogo: selectedBank.bankLogo,
-                                    cardTypeCodeId: item.cardTypeCodeId,
-                                    cardColorCodeId: item.cardColorCodeId,
-                                    cardNumber: item.cardNumber,
-                                    expiryDate: item.cardExpiryDate,
-                                    cardHolderName: item.cardHolderName,
-                                    cvvCode: item.cardCvvCode,
-                                    cardPin: item.cardPin,
-                                    showBackView: false,
-                                    obscureData: true,
-                                    isSwipeGestureEnabled: true,
-                                  ),
-                                  onTap: () => manageCard(item.cardId),
-                                );
-                              }).toList(),
-                            ),
-                          ),
-                        ),
-                  CupertinoFormSection(
-                    children: [
-                      GestureDetector(
-                        child: CupertinoFormRow(
+                    CupertinoFormSection(
+                      children: [
+                        CupertinoFormRow(
                           padding: EdgeInsets.zero,
                           child: CupertinoTextFormFieldRow(
                             readOnly: true,
-                            prefix: const Icon(
-                              CupertinoIcons.add_circled_solid,
-                              color: CupertinoColors.systemGreen,
-                            ),
-                            initialValue: 'Add Card',
-                            onTap: () => manageCard(null),
+                            controller: _bankController,
+                            onEditingComplete: () {
+                              FocusScope.of(context)
+                                  .requestFocus(groupNameNode);
+                            },
+                            placeholder: 'Bank',
+                            prefix: const Icon(Icons.account_balance),
+                            validator: (String? value) {
+                              if (value!.isEmpty) {
+                                return bankValidationMessage;
+                              }
+                              return null;
+                            },
+                            onTap: () => showBankPicker(context),
                           ),
                         ),
-                        onTap: () => manageCard(null),
-                      )
-                    ],
-                  ),
-                  Visibility(
-                    visible: isEdit,
-                    child: Column(
-                      children: [
-                        const SizedBox(
-                          height: 40.0,
+                        CupertinoFormRow(
+                          child: CupertinoTextFormFieldRow(
+                            autofocus: true,
+                            padding: EdgeInsets.zero,
+                            controller: _groupNameController,
+                            focusNode: groupNameNode,
+                            placeholder: 'Group Name',
+                            keyboardType: TextInputType.text,
+                            prefix: const Icon(Icons.group_work_outlined),
+                            validator: (String? value) {
+                              if (value!.isEmpty) {
+                                return groupNameValidationMessage;
+                              }
+                              return null;
+                            },
+                          ),
                         ),
-                        CupertinoFormSection(
-                          children: [
-                            CupertinoFormRow(
-                              padding: EdgeInsets.zero,
-                              child: CupertinoTextFormFieldRow(
-                                readOnly: true,
-                                style: const TextStyle(
-                                  color: CupertinoColors.systemRed,
-                                ),
-                                initialValue: 'Delete Group',
-                                onTap: () => showDeleteGroupSheet(),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 40,
+                    ),
+                    CupertinoFormSection(
+                      children: [
+                        GestureDetector(
+                          child: CupertinoFormRow(
+                            padding: EdgeInsets.zero,
+                            child: CupertinoTextFormFieldRow(
+                              readOnly: true,
+                              prefix: const Icon(
+                                CupertinoIcons.add_circled_solid,
+                                color: CupertinoColors.systemGreen,
                               ),
-                            )
-                          ],
+                              initialValue: 'Add Card',
+                              onTap: () => manageCard(null),
+                            ),
+                          ),
+                          onTap: () => manageCard(null),
                         )
                       ],
                     ),
-                  ),
-                ],
-              ),
-            );
-          },
+                    groupItem.cardsList.isEmpty
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: const [
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  top: 20.0,
+                                  bottom: 8.0,
+                                ),
+                                child: Icon(
+                                  Icons.credit_card,
+                                  size: 80.0,
+                                  color: CupertinoColors.inactiveGray,
+                                ),
+                              ),
+                              Text(
+                                'No Cards',
+                                style: TextStyle(
+                                  color: CupertinoColors.inactiveGray,
+                                ),
+                              ),
+                              Text(
+                                'Please add a Card',
+                                style: TextStyle(
+                                  color: CupertinoColors.inactiveGray,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 40.0,
+                              ),
+                            ],
+                          )
+                        : Column(
+                            children: groupItem.cardsList.map((CardItem item) {
+                              return GestureDetector(
+                                child: CreditCardWidget(
+                                  bankLogo: selectedBank.bankLogo,
+                                  cardTypeCodeId: item.cardTypeCodeId,
+                                  cardColorCodeId: item.cardColorCodeId,
+                                  cardNumber: item.cardNumber,
+                                  expiryDate: item.cardExpiryDate,
+                                  cardHolderName: item.cardHolderName,
+                                  cvvCode: item.cardCvvCode,
+                                  cardPin: item.cardPin,
+                                  showBackView: false,
+                                  obscureData: true,
+                                  isSwipeGestureEnabled: true,
+                                ),
+                                onTap: () => manageCard(item.cardId),
+                              );
+                            }).toList(),
+                          ),
+                    Visibility(
+                      visible: isEdit,
+                      child: Column(
+                        children: [
+                          CupertinoFormSection(
+                            children: [
+                              CupertinoFormRow(
+                                padding: EdgeInsets.zero,
+                                child: CupertinoTextFormFieldRow(
+                                  readOnly: true,
+                                  style: const TextStyle(
+                                    color: CupertinoColors.systemRed,
+                                  ),
+                                  initialValue: 'Delete Group',
+                                  onTap: () => showDeleteGroupSheet(),
+                                ),
+                              )
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 80.0,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
         ),
       ),
     );
@@ -303,16 +333,17 @@ class _ManageGroupViewState extends State<ManageGroupView> {
 
   saveGroup() async {
     if (isEdit) {
-      groupItem.groupId = await DatabseService.instance.updateGroup({
+      await DatabseService.instance.updateGroup({
         DatabseService.columnGroupId: groupItem.groupId,
         DatabseService.columnGroupName: _groupNameController.text,
         DatabseService.columnGroupBankCodeId: selectedBank.bankCodeId,
       });
     } else {
-      await DatabseService.instance.insertGroup({
+      groupItem.groupId = await DatabseService.instance.insertGroup({
         DatabseService.columnGroupName: _groupNameController.text,
         DatabseService.columnGroupBankCodeId: selectedBank.bankCodeId,
       });
+      isEdit = true;
     }
   }
 
