@@ -8,7 +8,6 @@ import '../models/models.dart';
 import '../databse_service.dart';
 //import '../settings/settings_view.dart';
 import '../manage_group/manage_group_view.dart';
-import '../group_detail/group_detail_view.dart';
 import '../card_detail/card_detail_view.dart';
 
 /// Displays a list of CardItems.
@@ -92,15 +91,46 @@ class _GroupListViewState extends State<GroupListView> {
                       );
                     }
                     final GroupItem groupItem = groupList[index];
-                    return GestureDetector(
+                    return Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8.0),
+                        color: CupertinoColors.darkBackgroundGray,
+                      ),
+                      margin: const EdgeInsets.only(bottom: 10.0),
                       child: Column(
                         children: [
-                          Container(
-                            alignment: Alignment.center,
-                            color: Colors.white,
-                            child: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Text(groupItem.groupName),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              top: 10.0,
+                              left: 20.0,
+                              right: 20.0,
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  groupItem.groupName,
+                                  style: const TextStyle(
+                                    color: CupertinoColors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                TextButton(
+                                  child: const Text(
+                                    'Edit',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    Navigator.pushNamed(
+                                      context,
+                                      ManageGroupView.routeName,
+                                      arguments: groupItem.groupId,
+                                    ).then((_) => callStateChange(_));
+                                  },
+                                ),
+                              ],
                             ),
                           ),
                           ...groupItem.cardsList.map((CardItem item) {
@@ -136,13 +166,6 @@ class _GroupListViewState extends State<GroupListView> {
                           }).toList(),
                         ],
                       ),
-                      onTap: () => {
-                        Navigator.pushNamed(
-                          context,
-                          GroupDetailView.routeName,
-                          arguments: groupItem.groupId,
-                        ).then((_) => callStateChange(_)),
-                      },
                     );
                   },
                   childCount: childCount,

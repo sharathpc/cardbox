@@ -48,12 +48,6 @@ class _CardDetailViewState extends State<CardDetailView> {
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        leading: TextButton(
-          child: const Text('Cancel'),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
         middle: const Text('Card Detail'),
         trailing: TextButton(
           child: const Text(
