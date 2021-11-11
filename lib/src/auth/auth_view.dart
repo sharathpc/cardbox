@@ -1,9 +1,7 @@
-import 'package:cardbox/src/auth/auth_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:local_auth/local_auth.dart';
 
+import 'auth_service.dart';
 import '../group_list/group_list_view.dart';
 
 /// Displays a list of CardItems.
@@ -15,25 +13,14 @@ class AuthView extends StatefulWidget {
 }
 
 class _AuthViewState extends State<AuthView> {
-  final LocalAuthentication auth = LocalAuthentication();
-
   @override
   void initState() {
     super.initState();
-    _authenticate();
   }
 
   Future<void> _authenticate() async {
-    try {
-      AuthService.instance.setAuthenticated = await auth.authenticate(
-        localizedReason: 'Authenticate',
-        useErrorDialogs: true,
-        stickyAuth: true,
-        biometricOnly: true,
-      );
-    } on PlatformException catch (_) {
-      return;
-    }
+    AuthService.instance.setAuthenticated =
+        await AuthService.instance.authenticate();
 
     if (AuthService.instance.isAuthenticated) {
       Navigator.pushReplacementNamed(

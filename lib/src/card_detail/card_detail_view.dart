@@ -8,6 +8,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import '../card_widget/flutter_credit_card.dart';
 
 import '../models/models.dart';
+import '../auth/auth_service.dart';
 import '../databse_service.dart';
 import '../manage_card/manage_card_view.dart';
 
@@ -115,8 +116,16 @@ class _CardDetailViewState extends State<CardDetailView> {
                         CupertinoFormRow(
                           child: CupertinoSwitch(
                             value: isObscureData,
-                            onChanged: (bool value) {
-                              setState(() => isObscureData = value);
+                            onChanged: (bool value) async {
+                              if (value) {
+                                setState(() => isObscureData = true);
+                              } else {
+                                final bool auth =
+                                    await AuthService.instance.authenticate();
+                                if (auth) {
+                                  setState(() => isObscureData = false);
+                                }
+                              }
                             },
                           ),
                           prefix: const Text('Obscure fields'),
