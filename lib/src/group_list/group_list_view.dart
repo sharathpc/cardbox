@@ -49,6 +49,7 @@ class _GroupListViewState extends State<GroupListView> {
                 onPressed: () {
                   showCupertinoModalBottomSheet(
                     context: context,
+                    expand: true,
                     isDismissible: false,
                     enableDrag: false,
                     builder: (context) => const ManageGroupView(),
@@ -78,8 +79,9 @@ class _GroupListViewState extends State<GroupListView> {
               if (snapshot.connectionState != ConnectionState.done) {
                 childCount = 1;
               } else {
-                childCount = snapshot.data.length;
-                groupList = snapshot.data;
+                //Rprint(snapshot.data);
+                childCount = snapshot.data?.length ?? 0;
+                groupList = snapshot.data ?? [];
               }
               return SliverList(
                 delegate: SliverChildBuilderDelegate(
@@ -162,12 +164,12 @@ class _GroupListViewState extends State<GroupListView> {
   Future<List<GroupItem>> getAllGroups() async {
     final List<Map<String, dynamic>> groupList =
         await DatabseService.instance.queryAllGroup();
-    final List<GroupItem> filteredGroupList = groupList
+
+    return groupList
         .map((item) => GroupItem.fromJson(item))
         .where((item) => item.groupName
             .toLowerCase()
             .contains(_searchController.text.toLowerCase()))
         .toList();
-    return filteredGroupList;
   }
 }

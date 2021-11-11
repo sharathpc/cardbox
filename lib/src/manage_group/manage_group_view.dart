@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../card_widget/flutter_credit_card.dart';
-import '../card_slider.dart';
 
 import '../models/models.dart';
 import '../databse_service.dart';
@@ -182,13 +181,6 @@ class _ManageGroupViewState extends State<ManageGroupView> {
                             ),
                           ),
                         ),
-                  /* Expanded(
-                          //height: 300.0,
-                          child: CardSlider(
-                            height: MediaQuery.of(context).size.height * 0.6,
-                            cardItemsList: groupItem.cardsList,
-                          ),
-                        ), */
                   CupertinoFormSection(
                     children: [
                       GestureDetector(
@@ -284,6 +276,7 @@ class _ManageGroupViewState extends State<ManageGroupView> {
     await saveGroup();
     showCupertinoModalBottomSheet(
       context: context,
+      expand: true,
       isDismissible: false,
       enableDrag: false,
       builder: (context) => ManageCardView(

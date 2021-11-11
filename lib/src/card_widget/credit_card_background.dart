@@ -32,7 +32,7 @@ class CardBackground extends StatelessWidget {
           Container(
             margin: const EdgeInsets.all(AppConstants.creditCardPadding),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(8.0),
               gradient: backgroundGradientColor,
             ),
             width: width ?? screenWidth,

@@ -1,5 +1,8 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../card_widget/flutter_credit_card.dart';
@@ -30,6 +33,7 @@ class _CardDetailViewState extends State<CardDetailView> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   late Future getCardFuture;
   late BankItem bank;
+  bool isObscureData = true;
 
   @override
   void initState() {
@@ -60,6 +64,7 @@ class _CardDetailViewState extends State<CardDetailView> {
           onPressed: () {
             showCupertinoModalBottomSheet(
               context: context,
+              expand: true,
               isDismissible: false,
               enableDrag: false,
               builder: (context) => ManageCardView(
@@ -73,46 +78,133 @@ class _CardDetailViewState extends State<CardDetailView> {
       ),
       child: SafeArea(
         bottom: false,
-        child: FutureBuilder(
-          future: getCardFuture,
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            late CardItem cardItem;
-            if (snapshot.connectionState != ConnectionState.done) {
-              return const Center(
-                child: CupertinoActivityIndicator(),
-              );
-            } else {
-              cardItem = snapshot.data;
-            }
+        child: SingleChildScrollView(
+          child: FutureBuilder(
+            future: getCardFuture,
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              late CardItem cardItem;
+              if (snapshot.connectionState != ConnectionState.done) {
+                return const Center(
+                  child: CupertinoActivityIndicator(),
+                );
+              } else {
+                cardItem = snapshot.data;
+              }
 
-            return SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  CreditCardWidget(
-                    bankLogo: bank.bankLogo,
-                    cardTypeCodeId: cardItem.cardTypeCodeId,
-                    cardColorCodeId: cardItem.cardColorCodeId,
-                    cardNumber: cardItem.cardNumber,
-                    expiryDate: cardItem.cardExpiryDate,
-                    cardHolderName: cardItem.cardHolderName,
-                    cvvCode: cardItem.cardCvvCode,
-                    cardPin: cardItem.cardPin,
-                    showBackView: false,
-                    obscureData: false,
-                    isSwipeGestureEnabled: true,
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                ],
-              ),
-            );
-          },
+              return SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    CreditCardWidget(
+                      bankLogo: bank.bankLogo,
+                      cardTypeCodeId: cardItem.cardTypeCodeId,
+                      cardColorCodeId: cardItem.cardColorCodeId,
+                      cardNumber: cardItem.cardNumber,
+                      expiryDate: cardItem.cardExpiryDate,
+                      cardHolderName: cardItem.cardHolderName,
+                      cvvCode: cardItem.cardCvvCode,
+                      cardPin: cardItem.cardPin,
+                      showBackView: false,
+                      obscureData: isObscureData,
+                      isSwipeGestureEnabled: true,
+                    ),
+                    CupertinoFormSection(
+                      children: <Widget>[
+                        CupertinoFormRow(
+                          child: CupertinoSwitch(
+                            value: isObscureData,
+                            onChanged: (bool value) {
+                              setState(() => isObscureData = value);
+                            },
+                          ),
+                          prefix: const Text('Obscure fields'),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 40,
+                    ),
+                    CupertinoFormSection(
+                      margin: const EdgeInsets.symmetric(horizontal: 8.0),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8.0),
+                        color: CupertinoColors.darkBackgroundGray,
+                      ),
+                      children: <Widget>[
+                        cardDetailItem(
+                          Icons.credit_card,
+                          'Card Number',
+                          cardItem.cardNumber.toString(),
+                        ),
+                        cardDetailItem(
+                          Icons.calendar_today,
+                          'Expiry Date',
+                          cardItem.cardExpiryDate ?? '',
+                        ),
+                        cardDetailItem(
+                          Icons.text_fields,
+                          'Card Holder Name',
+                          cardItem.cardHolderName ?? '',
+                        ),
+                        cardDetailItem(
+                          Icons.security,
+                          'CVV Code',
+                          cardItem.cardCvvCode.toString(),
+                        ),
+                        cardDetailItem(
+                          Icons.fiber_pin,
+                          'Card Pin',
+                          cardItem.cardPin.toString(),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
         ),
       ),
+    );
+  }
+
+  GestureDetector cardDetailItem(
+      IconData itemIcon, String itemLabel, String itemValue) {
+    return GestureDetector(
+      child: CupertinoFormRow(
+        child: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(right: 16.0),
+              child: Icon(itemIcon),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 4.0),
+                  child: Text(
+                    itemLabel,
+                    style: const TextStyle(
+                      fontSize: 12.0,
+                      color: CupertinoColors.inactiveGray,
+                    ),
+                  ),
+                ),
+                Text(
+                  itemValue,
+                  style: const TextStyle(
+                    color: CupertinoColors.white,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+      onTap: () => Clipboard.setData(ClipboardData(text: itemValue)),
     );
   }
 
