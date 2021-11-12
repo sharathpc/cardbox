@@ -57,7 +57,7 @@ class _AuthViewState extends State<AuthView> {
                         Expanded(
                           child: Image.asset(
                             'assets/images/logo-android.png',
-                            scale: 12,
+                            scale: 10,
                           ),
                         ),
                         const Padding(
