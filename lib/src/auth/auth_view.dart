@@ -14,7 +14,7 @@ class AuthView extends StatefulWidget {
 
 class _AuthViewState extends State<AuthView> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  late bool isMasterPass = false;
+  late bool isMasterPass = true;
   final TextEditingController _masterPassController = TextEditingController();
 
   @override
@@ -37,6 +37,8 @@ class _AuthViewState extends State<AuthView> {
       } else {
         displayLockedDialog();
       }
+    } else {
+      setState(() {});
     }
   }
 
@@ -47,18 +49,15 @@ class _AuthViewState extends State<AuthView> {
         child: Column(
           children: [
             isMasterPass
-                ? Align(
-                    alignment: Alignment.center,
+                ? Expanded(
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Expanded(
-                          child: SizedBox(
-                            width: 100.0,
-                            height: 100.0,
-                            child: Image.asset(
-                              'assets/images/logo-android.png',
-                            ),
+                          child: Image.asset(
+                            'assets/images/logo-android.png',
+                            scale: 12,
                           ),
                         ),
                         const Padding(
@@ -70,6 +69,7 @@ class _AuthViewState extends State<AuthView> {
                               color: Colors.grey,
                               fontWeight: FontWeight.bold,
                             ),
+                            textAlign: TextAlign.center,
                           ),
                         )
                       ],

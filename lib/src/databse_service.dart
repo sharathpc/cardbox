@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cardbox/src/auth/auth_service.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite_sqlcipher/sqflite.dart';
@@ -43,8 +44,10 @@ class DatabseService {
     Directory directory = await getApplicationDocumentsDirectory();
     String path = join(directory.path, _dbName);
 
+    final String? masterPassword = await AuthService.instance.getMasterPass;
     return await openDatabase(
       path,
+      password: masterPassword,
       version: _dbVersion,
       onCreate: _onCreate,
     );
