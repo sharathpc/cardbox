@@ -181,7 +181,7 @@ class _CardDetailViewState extends State<CardDetailView> {
       ),
       children: <Widget>[
         cardDetailItem(
-          Icons.credit_card,
+          Icons.text_fields,
           'Account Name',
           cardItem.accountName ?? '',
         ),
@@ -191,7 +191,7 @@ class _CardDetailViewState extends State<CardDetailView> {
           accountNumber,
         ),
         cardDetailItem(
-          Icons.text_fields,
+          Icons.account_balance,
           'IFSC Code',
           cardItem.ifsCode ?? '',
         ),
@@ -275,7 +275,7 @@ class _CardDetailViewState extends State<CardDetailView> {
       ),
       children: <Widget>[
         cardDetailItem(
-          Icons.credit_card,
+          Icons.stay_current_portrait,
           'Mobile Number',
           mobileNumber,
         ),
@@ -307,7 +307,7 @@ class _CardDetailViewState extends State<CardDetailView> {
       ),
       children: <Widget>[
         cardDetailItem(
-          Icons.text_fields,
+          Icons.language,
           'Internet ID',
           cardItem.internetId ?? '',
         ),
@@ -317,7 +317,7 @@ class _CardDetailViewState extends State<CardDetailView> {
           internetPassword,
         ),
         cardDetailItem(
-          Icons.fiber_pin,
+          Icons.security,
           'Internet Profile Password',
           internetProfilePassword,
         ),
