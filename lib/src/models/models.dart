@@ -38,6 +38,7 @@ class CardItem {
   int? cardGroupId;
   late int cardTypeCodeId;
   late int cardColorCodeId;
+  String? accountName;
   int? accountNumber;
   String? ifsCode;
   String? cardType;
@@ -57,6 +58,7 @@ class CardItem {
     this.cardGroupId,
     required this.cardTypeCodeId,
     required this.cardColorCodeId,
+    this.accountName,
     this.accountNumber,
     this.ifsCode,
     this.cardType,
@@ -77,6 +79,7 @@ class CardItem {
     cardGroupId = json[DatabseService.columnCardGroupId];
     cardTypeCodeId = json[DatabseService.columnCardTypeCodeId];
     cardColorCodeId = json[DatabseService.columnCardColorCodeId];
+    accountName = json[DatabseService.columnAccountName];
     accountNumber = json[DatabseService.columnAccountNumber];
     ifsCode = json[DatabseService.columnIFSCode];
     cardNumber = json[DatabseService.columnCardNumber];
@@ -98,6 +101,7 @@ class CardItem {
     data[DatabseService.columnCardGroupId] = cardGroupId;
     data[DatabseService.columnCardTypeCodeId] = cardTypeCodeId;
     data[DatabseService.columnCardColorCodeId] = cardColorCodeId;
+    data[DatabseService.columnAccountName] = accountName;
     data[DatabseService.columnAccountNumber] = accountNumber;
     data[DatabseService.columnIFSCode] = ifsCode;
     data[DatabseService.columnCardNumber] = cardNumber;

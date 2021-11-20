@@ -22,11 +22,19 @@ class CreditCardWidget extends StatefulWidget {
     required this.bankLogo,
     required this.cardTypeCodeId,
     required this.cardColorCodeId,
+    this.accountName,
+    this.accountNumber,
+    this.ifsCode,
     this.cardNumber,
     this.expiryDate,
     this.cardHolderName,
     this.cvvCode,
     this.cardPin,
+    this.mobileNumber,
+    this.mobilePin,
+    this.internetId,
+    this.internetPassword,
+    this.internetProfilePassword,
     required this.showBackView,
     this.animationDuration = const Duration(milliseconds: 500),
     this.height,
@@ -39,11 +47,19 @@ class CreditCardWidget extends StatefulWidget {
   final String bankLogo;
   final int cardTypeCodeId;
   final int cardColorCodeId;
+  final String? accountName;
+  final int? accountNumber;
+  final String? ifsCode;
   final int? cardNumber;
   final String? expiryDate;
   final String? cardHolderName;
   final int? cvvCode;
   final int? cardPin;
+  final int? mobileNumber;
+  final int? mobilePin;
+  final String? internetId;
+  final String? internetPassword;
+  final String? internetProfilePassword;
   final bool showBackView;
   final Duration animationDuration;
   final double? height;

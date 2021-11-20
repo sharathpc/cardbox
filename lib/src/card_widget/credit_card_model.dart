@@ -4,21 +4,37 @@ class CreditCardModel {
   CreditCardModel(
     this.cardTypeCodeId,
     this.cardColorCodeId,
+    this.accountName,
+    this.accountNumber,
+    this.ifsCode,
     this.cardNumber,
     this.expiryDate,
     this.cardHolderName,
     this.cvvCode,
     this.cardPin,
+    this.mobileNumber,
+    this.mobilePin,
+    this.internetId,
+    this.internetPassword,
+    this.internetProfilePassword,
     this.isBackFocused,
   );
 
   int cardTypeCodeId;
   int cardColorCodeId;
+  String? accountName;
+  int? accountNumber;
+  String? ifsCode;
   int? cardNumber;
   String? expiryDate;
   String? cardHolderName;
   int? cvvCode;
   int? cardPin;
+  int? mobileNumber;
+  int? mobilePin;
+  String? internetId;
+  String? internetPassword;
+  String? internetProfilePassword;
   bool isBackFocused = false;
 }
 

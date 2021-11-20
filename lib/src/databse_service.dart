@@ -19,6 +19,7 @@ class DatabseService {
   static const columnCardGroupId = 'cardgroupid';
   static const columnCardTypeCodeId = 'cardtypecodeid';
   static const columnCardColorCodeId = 'cardcolorcodeid';
+  static const columnAccountName = 'accountname';
   static const columnAccountNumber = 'accountnumber';
   static const columnIFSCode = 'ifscode';
   static const columnCardNumber = 'cardnumber';
@@ -70,6 +71,7 @@ class DatabseService {
         $columnCardGroupId INTEGER,
         $columnCardTypeCodeId INTEGER,
         $columnCardColorCodeId INTEGER,
+        $columnAccountName TEXT,
         $columnAccountNumber INTEGER,
         $columnIFSCode TEXT,
         $columnCardNumber INTEGER,
@@ -104,6 +106,7 @@ class DatabseService {
             'cardid', cardid,
             'cardtypecodeid', cardtypecodeid,
             'cardcolorcodeid', cardcolorcodeid,
+            'accountname', accountname,
             'accountnumber', accountnumber,
             'ifscode', ifscode,
             'cardnumber', cardnumber,
@@ -138,6 +141,7 @@ class DatabseService {
             'cardid', cardid,
             'cardtypecodeid', cardtypecodeid,
             'cardcolorcodeid', cardcolorcodeid,
+            'accountname', accountname,
             'accountnumber', accountnumber,
             'ifscode', ifscode,
             'cardnumber', cardnumber,

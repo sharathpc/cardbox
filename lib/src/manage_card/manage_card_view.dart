@@ -69,6 +69,7 @@ class _ManageCardViewState extends State<ManageCardView> {
                 DatabseService.columnCardGroupId: cardItem.cardGroupId,
                 DatabseService.columnCardTypeCodeId: cardItem.cardTypeCodeId,
                 DatabseService.columnCardColorCodeId: cardItem.cardColorCodeId,
+                DatabseService.columnAccountName: cardItem.accountName,
                 DatabseService.columnAccountNumber: cardItem.accountNumber,
                 DatabseService.columnIFSCode: cardItem.ifsCode,
                 DatabseService.columnCardNumber: cardItem.cardNumber,
@@ -116,11 +117,19 @@ class _ManageCardViewState extends State<ManageCardView> {
                     bankLogo: bank.bankLogo,
                     cardTypeCodeId: cardItem.cardTypeCodeId,
                     cardColorCodeId: cardItem.cardColorCodeId,
+                    accountName: cardItem.accountName,
+                    accountNumber: cardItem.accountNumber,
+                    ifsCode: cardItem.ifsCode,
                     cardNumber: cardItem.cardNumber,
                     expiryDate: cardItem.cardExpiryDate,
                     cardHolderName: cardItem.cardHolderName,
                     cvvCode: cardItem.cardCvvCode,
                     cardPin: cardItem.cardPin,
+                    mobileNumber: cardItem.cardPin,
+                    mobilePin: cardItem.cardPin,
+                    internetId: cardItem.internetId,
+                    internetPassword: cardItem.internetPassword,
+                    internetProfilePassword: cardItem.internetProfilePassword,
                     showBackView: isBackFocused,
                     obscureData: false,
                     isSwipeGestureEnabled: true,
@@ -134,11 +143,19 @@ class _ManageCardViewState extends State<ManageCardView> {
                     obscureData: false,
                     cardTypeCodeId: cardItem.cardTypeCodeId,
                     cardColorCodeId: cardItem.cardColorCodeId,
+                    accountName: cardItem.accountName,
+                    accountNumber: cardItem.accountNumber,
+                    ifsCode: cardItem.ifsCode,
                     cardNumber: cardItem.cardNumber,
-                    cvvCode: cardItem.cardCvvCode,
-                    cardPin: cardItem.cardPin,
                     cardHolderName: cardItem.cardHolderName,
                     expiryDate: cardItem.cardExpiryDate,
+                    cvvCode: cardItem.cardCvvCode,
+                    cardPin: cardItem.cardPin,
+                    mobileNumber: cardItem.cardPin,
+                    mobilePin: cardItem.cardPin,
+                    internetId: cardItem.internetId,
+                    internetPassword: cardItem.internetPassword,
+                    internetProfilePassword: cardItem.internetProfilePassword,
                     onCreditCardModelChange: onCreditCardModelChange,
                   ),
                   Visibility(
@@ -182,11 +199,20 @@ class _ManageCardViewState extends State<ManageCardView> {
     setState(() {
       cardItem.cardTypeCodeId = creditCardModel!.cardTypeCodeId;
       cardItem.cardColorCodeId = creditCardModel.cardColorCodeId;
+      cardItem.accountName = creditCardModel.accountName;
+      cardItem.accountNumber = creditCardModel.accountNumber;
+      cardItem.ifsCode = creditCardModel.ifsCode;
       cardItem.cardNumber = creditCardModel.cardNumber;
       cardItem.cardExpiryDate = creditCardModel.expiryDate;
       cardItem.cardHolderName = creditCardModel.cardHolderName;
       cardItem.cardCvvCode = creditCardModel.cvvCode;
       cardItem.cardPin = creditCardModel.cardPin;
+      cardItem.mobileNumber = creditCardModel.mobileNumber;
+      cardItem.mobilePin = creditCardModel.mobilePin;
+      cardItem.internetId = creditCardModel.internetId;
+      cardItem.internetPassword = creditCardModel.internetPassword;
+      cardItem.internetProfilePassword =
+          creditCardModel.internetProfilePassword;
       isBackFocused = creditCardModel.isBackFocused;
     });
   }
