@@ -186,7 +186,7 @@ class _CardDetailViewState extends State<CardDetailView> {
           cardItem.accountName ?? '',
         ),
         cardDetailItem(
-          Icons.calendar_today,
+          Icons.dialpad,
           'Account Number',
           accountNumber,
         ),
@@ -260,8 +260,10 @@ class _CardDetailViewState extends State<CardDetailView> {
     ).text;
 
     mobileNumber = isObscureData
-        ? mobileNumber.replaceAll(RegExp(r'(?<=.{4})\d(?=.{4})'), '*')
-        : mobileNumber;
+        ? cardItem.mobileNumber
+            .toString()
+            .replaceAll(RegExp(r'(?<=.{4})\d(?=.{4})'), '*')
+        : cardItem.mobileNumber.toString();
 
     final String mobilePin = isObscureData
         ? cardItem.mobilePin.toString().replaceAll(RegExp(r'\d'), '*')
@@ -290,13 +292,13 @@ class _CardDetailViewState extends State<CardDetailView> {
 
   CupertinoFormSection internetCardForm(CardItem cardItem) {
     final String internetPassword = isObscureData
-        ? cardItem.internetPassword.toString().replaceAll(RegExp(r'\d'), '*')
+        ? cardItem.internetPassword.toString().replaceAll(RegExp(r'\S'), '*')
         : cardItem.internetPassword.toString();
 
     final String internetProfilePassword = isObscureData
         ? cardItem.internetProfilePassword
             .toString()
-            .replaceAll(RegExp(r'\d'), '*')
+            .replaceAll(RegExp(r'\S'), '*')
         : cardItem.internetProfilePassword.toString();
 
     return CupertinoFormSection(

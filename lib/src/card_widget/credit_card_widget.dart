@@ -141,13 +141,23 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
         _cardGesture(
           child: AnimationCard(
             animation: _frontRotation,
-            child: _buildFrontContainer(),
+            child: CardBackground(
+              backgroundGradientColor: backgroundGradientColor,
+              height: widget.height,
+              width: widget.width,
+              child: _buildFrontContainer(),
+            ),
           ),
         ),
         _cardGesture(
           child: AnimationCard(
             animation: _backRotation,
-            child: _buildBackContainer(),
+            child: CardBackground(
+              backgroundGradientColor: backgroundGradientColor,
+              height: widget.height,
+              width: widget.width,
+              child: _buildBackContainer(),
+            ),
           ),
         ),
       ],
@@ -219,6 +229,141 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
   /// Card number, Exp. year and Card holder name
   ///
   Widget _buildFrontContainer() {
+    switch (widget.cardTypeCodeId) {
+      case 11001:
+        return _buildBankFrontContainer();
+      case 11002:
+      case 11003:
+        return _buildCardFrontContainer();
+      case 11004:
+        return _buildMobileFrontContainer();
+      case 11005:
+        return _buildInternetFrontContainer();
+      default:
+        return const SizedBox();
+    }
+  }
+
+  ///
+  /// Builds a back container containing cvv
+  ///
+  Widget _buildBackContainer() {
+    switch (widget.cardTypeCodeId) {
+      case 11002:
+      case 11003:
+        return _buildCardBackContainer();
+      default:
+        return const SizedBox();
+    }
+  }
+
+  _buildBankFrontContainer() {
+    final TextStyle defaultTextStyle =
+        Theme.of(context).textTheme.headline6!.merge(
+              const TextStyle(
+                color: Colors.white70,
+                fontFamily: 'halter',
+                fontSize: 16,
+              ),
+            );
+
+    String? accountNumber;
+    if (widget.accountNumber != null) {
+      accountNumber = widget.obscureData
+          ? widget.accountNumber.toString().replaceAll(RegExp(r'\d'), '*')
+          : widget.accountNumber.toString();
+    }
+    final String accountIfsCode = widget.ifsCode ?? '';
+    final String accountHolderName = widget.accountName ?? '';
+
+    final CardTypeModel? cardType = CardTypeModel.cardTypesList
+        .firstWhereOrNull(
+            (item) => item.cardTypeCodeId == widget.cardTypeCodeId);
+    return Container(
+      margin: const EdgeInsets.all(16.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              ClipRRect(
+                borderRadius: BorderRadius.circular(4.0),
+                child: Image.asset(
+                  widget.bankLogo,
+                  height: 25,
+                ),
+              ),
+              const Spacer(),
+              Text(
+                cardType == null ? 'DEBIT CARD' : cardType.cardTypeName,
+                style: const TextStyle(
+                  fontSize: 12.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white70,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const IconTheme(
+                data: IconThemeData(
+                  color: Colors.white70,
+                  size: 45,
+                ),
+                child: Icon(Icons.account_balance),
+              ),
+              Expanded(
+                flex: 1,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      'IFSC\nCODE',
+                      style: defaultTextStyle.copyWith(fontSize: 7),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(width: 5),
+                    Text(
+                      accountIfsCode.isEmpty ? 'BANKXXXXXX' : accountIfsCode,
+                      style: defaultTextStyle,
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Text(
+            accountNumber ?? 'XXXXXXXXXXXXXXXX',
+            style: defaultTextStyle,
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Text(
+            accountHolderName.isEmpty ? 'ACCOUNT HOLDER' : accountHolderName,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: defaultTextStyle.copyWith(fontSize: 14),
+          ),
+        ],
+      ),
+    );
+  }
+
+  _buildCardFrontContainer() {
     final TextStyle defaultTextStyle =
         Theme.of(context).textTheme.headline6!.merge(
               const TextStyle(
@@ -246,132 +391,369 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
     final CardTypeModel? cardType = CardTypeModel.cardTypesList
         .firstWhereOrNull(
             (item) => item.cardTypeCodeId == widget.cardTypeCodeId);
-    return CardBackground(
-      backgroundGradientColor: backgroundGradientColor,
-      //glassmorphismConfig: glassmorphismConfig,
-      height: widget.height,
-      width: widget.width,
-      child: Container(
-        margin: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Expanded(
-              flex: 2,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(4.0),
-                    child: Image.asset(
-                      widget.bankLogo,
-                      height: 25,
-                    ),
-                  ),
-                  const Spacer(),
-                  Text(
-                    cardType == null ? 'DEBIT CARD' : cardType.cardTypeName,
-                    style: const TextStyle(
-                      fontSize: 12.0,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white70,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
+    return Container(
+      margin: const EdgeInsets.all(16.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              ClipRRect(
+                borderRadius: BorderRadius.circular(4.0),
+                child: Image.asset(
+                  widget.bankLogo,
+                  height: 25,
+                ),
               ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Expanded(
-              flex: 2,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: <Widget>[
-                  if (widget.isChipVisible)
-                    Image.asset(
-                      'assets/images/chip.png',
-                      width: 35,
-                      height: 35,
-                    ),
-                  const Spacer(),
-                  if (widget.isChipVisible)
-                    const IconTheme(
-                      data: IconThemeData(
-                        color: Color(0xFF212121),
-                        size: 35,
-                      ),
-                      child: Icon(Icons.contactless_outlined),
-                    ),
-                ],
+              const Spacer(),
+              Text(
+                cardType == null ? 'DEBIT CARD' : cardType.cardTypeName,
+                style: const TextStyle(
+                  fontSize: 12.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white70,
+                ),
+                textAlign: TextAlign.center,
               ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Expanded(
-              child: Text(
-                cardNumber ?? 'XXXX XXXX XXXX XXXX',
+            ],
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: <Widget>[
+              if (widget.isChipVisible)
+                Image.asset(
+                  'assets/images/chip.png',
+                  width: 35,
+                  height: 35,
+                ),
+              const Spacer(),
+              if (widget.isChipVisible)
+                const IconTheme(
+                  data: IconThemeData(
+                    color: Color(0xFF212121),
+                    size: 35,
+                  ),
+                  child: Icon(Icons.contactless_outlined),
+                ),
+            ],
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Text(
+            cardNumber ?? 'XXXX XXXX XXXX XXXX',
+            style: defaultTextStyle,
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                'VALID\nTHRU',
+                style: defaultTextStyle.copyWith(fontSize: 7),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(width: 5),
+              Text(
+                expiryDate.isEmpty ? 'MM/YY' : expiryDate,
                 style: defaultTextStyle,
               ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Expanded(
-              flex: 1,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    'VALID\nTHRU',
-                    style: defaultTextStyle.copyWith(fontSize: 7),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(width: 5),
-                  Text(
-                    expiryDate.isEmpty ? 'MM/YY' : expiryDate,
-                    style: defaultTextStyle,
-                  ),
-                ],
+            ],
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Expanded(
+                flex: 8,
+                child: Text(
+                  cardHolderName.isEmpty ? 'CARD HOLDER' : cardHolderName,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: defaultTextStyle.copyWith(fontSize: 14),
+                ),
               ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Expanded(
-              flex: 2,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Expanded(
-                    flex: 8,
-                    child: Text(
-                      cardHolderName.isEmpty ? 'CARD HOLDER' : cardHolderName,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: defaultTextStyle.copyWith(fontSize: 14),
-                    ),
-                  ),
-                  getCardBrandIcon(cardNumber)
-                ],
-              ),
-            ),
-          ],
-        ),
+              getCardBrandIcon(cardNumber)
+            ],
+          ),
+        ],
       ),
     );
   }
 
-  ///
-  /// Builds a back container containing cvv
-  ///
-  Widget _buildBackContainer() {
+  _buildMobileFrontContainer() {
+    final TextStyle defaultTextStyle =
+        Theme.of(context).textTheme.headline6!.merge(
+              const TextStyle(
+                color: Colors.white70,
+                fontFamily: 'halter',
+                fontSize: 16,
+              ),
+            );
+
+    String? mobileNumber;
+    if (widget.mobileNumber != null) {
+      final String mobileStringNumber = MaskedTextController(
+        mask: '000-000-0000',
+        text: widget.mobileNumber.toString(),
+      ).text;
+
+      mobileNumber = widget.obscureData
+          ? mobileStringNumber.replaceAll(RegExp(r'(?<=.{4})\d(?=.{4})'), '*')
+          : mobileStringNumber;
+    }
+    String? mobilePin;
+    if (widget.mobilePin != null) {
+      mobilePin = widget.obscureData
+          ? widget.mobilePin.toString().replaceAll(RegExp(r'\d'), '*')
+          : widget.mobilePin.toString();
+    }
+
+    final CardTypeModel? cardType = CardTypeModel.cardTypesList
+        .firstWhereOrNull(
+            (item) => item.cardTypeCodeId == widget.cardTypeCodeId);
+    return Container(
+      margin: const EdgeInsets.all(16.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              ClipRRect(
+                borderRadius: BorderRadius.circular(4.0),
+                child: Image.asset(
+                  widget.bankLogo,
+                  height: 25,
+                ),
+              ),
+              const Spacer(),
+              Text(
+                cardType == null ? 'DEBIT CARD' : cardType.cardTypeName,
+                style: const TextStyle(
+                  fontSize: 12.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white70,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const IconTheme(
+                data: IconThemeData(
+                  color: Colors.white70,
+                  size: 45,
+                ),
+                child: Icon(Icons.stay_current_portrait),
+              ),
+              Expanded(
+                flex: 1,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      'MOBILE\nPIN',
+                      style: defaultTextStyle.copyWith(fontSize: 7),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(width: 5),
+                    Text(
+                      mobilePin ?? 'XXXXXX',
+                      style: defaultTextStyle,
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                'MOBILE\nNUMBER',
+                style: defaultTextStyle.copyWith(fontSize: 7),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(width: 5),
+              Text(
+                mobileNumber ?? 'XXX-XXX-XXXX',
+                style: defaultTextStyle,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  _buildInternetFrontContainer() {
+    final TextStyle defaultTextStyle =
+        Theme.of(context).textTheme.headline6!.merge(
+              const TextStyle(
+                color: Colors.white70,
+                fontFamily: 'halter',
+                fontSize: 16,
+              ),
+            );
+
+    final String internetId = widget.internetId ?? '';
+
+    String? internetPassword;
+    if (widget.internetPassword != null) {
+      internetPassword = widget.obscureData
+          ? widget.internetPassword.toString().replaceAll(RegExp(r'\S'), '*')
+          : widget.internetPassword.toString();
+    }
+
+    String? internetProfilePassword;
+    if (widget.internetProfilePassword != null) {
+      internetProfilePassword = widget.obscureData
+          ? widget.internetProfilePassword
+              .toString()
+              .replaceAll(RegExp(r'\S'), '*')
+          : widget.internetProfilePassword.toString();
+    }
+
+    final CardTypeModel? cardType = CardTypeModel.cardTypesList
+        .firstWhereOrNull(
+            (item) => item.cardTypeCodeId == widget.cardTypeCodeId);
+    return Container(
+      margin: const EdgeInsets.all(16.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              ClipRRect(
+                borderRadius: BorderRadius.circular(4.0),
+                child: Image.asset(
+                  widget.bankLogo,
+                  height: 25,
+                ),
+              ),
+              const Spacer(),
+              Text(
+                cardType == null ? 'DEBIT CARD' : cardType.cardTypeName,
+                style: const TextStyle(
+                  fontSize: 12.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white70,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const IconTheme(
+                data: IconThemeData(
+                  color: Colors.white70,
+                  size: 45,
+                ),
+                child: Icon(Icons.language),
+              ),
+              Expanded(
+                flex: 1,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      'USER\nID',
+                      style: defaultTextStyle.copyWith(fontSize: 7),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(width: 5),
+                    Text(
+                      internetId.isEmpty ? 'XXXXXXXXXX' : internetId,
+                      style: defaultTextStyle,
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                'USER\nPASSWORD',
+                style: defaultTextStyle.copyWith(fontSize: 7),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(width: 5),
+              Text(
+                internetPassword ?? '************',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: defaultTextStyle.copyWith(fontSize: 14),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                'PROFILE\nPASSWORD',
+                style: defaultTextStyle.copyWith(fontSize: 7),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(width: 5),
+              Text(
+                internetProfilePassword ?? '************',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: defaultTextStyle.copyWith(fontSize: 14),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCardBackContainer() {
     final TextStyle defaultTextStyle =
         Theme.of(context).textTheme.headline6!.merge(
               const TextStyle(
@@ -394,100 +776,94 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
           : widget.cardPin.toString();
     }
 
-    return CardBackground(
-      backgroundGradientColor: backgroundGradientColor,
-      //glassmorphismConfig: glassmorphismConfig,
-      height: widget.height,
-      width: widget.width,
-      child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 16),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Expanded(
-              flex: 2,
-              child: Container(
-                height: 20,
-                color: Colors.black,
-              ),
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 16),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Expanded(
+            flex: 2,
+            child: Container(
+              height: 20,
+              color: Colors.black,
             ),
-            const SizedBox(
-              height: 10,
-            ),
-            Expanded(
-              flex: 2,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Expanded(
-                    flex: 9,
-                    child: Container(
-                      height: 42,
-                      color: Colors.white70,
-                    ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Expanded(
+            flex: 2,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Expanded(
+                  flex: 9,
+                  child: Container(
+                    height: 42,
+                    color: Colors.white70,
                   ),
-                  Expanded(
-                    flex: 3,
-                    child: Container(
-                      color: Colors.white,
-                      child: Padding(
-                        padding: const EdgeInsets.all(5),
-                        child: Text(
-                          cardCvv ?? 'XXX',
-                          maxLines: 1,
-                          style: defaultTextStyle.copyWith(
-                            color: Colors.black87,
-                          ),
+                ),
+                Expanded(
+                  flex: 3,
+                  child: Container(
+                    color: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.all(5),
+                      child: Text(
+                        cardCvv ?? 'XXX',
+                        maxLines: 1,
+                        style: defaultTextStyle.copyWith(
+                          color: Colors.black87,
                         ),
                       ),
                     ),
-                  )
+                  ),
+                )
+              ],
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Expanded(
+            flex: 2,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8.0),
+                    child: Image.asset(
+                      'assets/images/hologram.png',
+                      height: 40,
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        'CARD\nPIN',
+                        style: defaultTextStyle.copyWith(
+                          fontSize: 8,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(width: 5),
+                      Text(
+                        cardPin ?? 'XXXX',
+                        style: defaultTextStyle,
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
-            const SizedBox(
-              height: 10,
-            ),
-            Expanded(
-              flex: 2,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(8.0),
-                      child: Image.asset(
-                        'assets/images/hologram.png',
-                        height: 40,
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          'CARD\nPIN',
-                          style: defaultTextStyle.copyWith(
-                            fontSize: 8,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(width: 5),
-                        Text(
-                          cardPin ?? 'XXXX',
-                          style: defaultTextStyle,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

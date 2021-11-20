@@ -659,7 +659,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
             keyboardType: TextInputType.number,
             textInputAction: TextInputAction.next,
             validator: (String? value) {
-              if (value!.isEmpty || value.length < 16) {
+              if (value!.isEmpty || value.length < 10) {
                 return 'Please input a valid number';
               }
               return null;
