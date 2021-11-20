@@ -69,21 +69,60 @@ class _ManageCardViewState extends State<ManageCardView> {
                 DatabseService.columnCardGroupId: cardItem.cardGroupId,
                 DatabseService.columnCardTypeCodeId: cardItem.cardTypeCodeId,
                 DatabseService.columnCardColorCodeId: cardItem.cardColorCodeId,
-                DatabseService.columnAccountName: cardItem.accountName,
-                DatabseService.columnAccountNumber: cardItem.accountNumber,
-                DatabseService.columnIFSCode: cardItem.ifsCode,
-                DatabseService.columnCardNumber: cardItem.cardNumber,
-                DatabseService.columnCardExpiryDate: cardItem.cardExpiryDate,
-                DatabseService.columnCardHolderName: cardItem.cardHolderName,
-                DatabseService.columnCardCvvCode: cardItem.cardCvvCode,
-                DatabseService.columnCardPin: cardItem.cardPin,
-                DatabseService.columnMobileNumber: cardItem.mobileNumber,
-                DatabseService.columnMobilePin: cardItem.mobilePin,
-                DatabseService.columnInternetId: cardItem.internetId,
+                DatabseService.columnAccountName:
+                    cardItem.cardTypeCodeId == 11001
+                        ? cardItem.accountName
+                        : null,
+                DatabseService.columnAccountNumber:
+                    cardItem.cardTypeCodeId == 11001
+                        ? cardItem.accountNumber
+                        : null,
+                DatabseService.columnIFSCode:
+                    cardItem.cardTypeCodeId == 11001 ? cardItem.ifsCode : null,
+                DatabseService.columnCardNumber:
+                    (cardItem.cardTypeCodeId == 11001 ||
+                            cardItem.cardTypeCodeId == 11002)
+                        ? cardItem.cardNumber
+                        : null,
+                DatabseService.columnCardExpiryDate:
+                    (cardItem.cardTypeCodeId == 11001 ||
+                            cardItem.cardTypeCodeId == 11002)
+                        ? cardItem.cardExpiryDate
+                        : null,
+                DatabseService.columnCardHolderName:
+                    (cardItem.cardTypeCodeId == 11001 ||
+                            cardItem.cardTypeCodeId == 11002)
+                        ? cardItem.cardHolderName
+                        : null,
+                DatabseService.columnCardCvvCode:
+                    (cardItem.cardTypeCodeId == 11001 ||
+                            cardItem.cardTypeCodeId == 11002)
+                        ? cardItem.cardCvvCode
+                        : null,
+                DatabseService.columnCardPin:
+                    (cardItem.cardTypeCodeId == 11001 ||
+                            cardItem.cardTypeCodeId == 11002)
+                        ? cardItem.cardPin
+                        : null,
+                DatabseService.columnMobileNumber:
+                    cardItem.cardTypeCodeId == 11004
+                        ? cardItem.mobileNumber
+                        : null,
+                DatabseService.columnMobilePin: cardItem.cardTypeCodeId == 11004
+                    ? cardItem.mobilePin
+                    : null,
+                DatabseService.columnInternetId:
+                    cardItem.cardTypeCodeId == 11005
+                        ? cardItem.internetId
+                        : null,
                 DatabseService.columnInternetPassword:
-                    cardItem.internetPassword,
+                    cardItem.cardTypeCodeId == 11005
+                        ? cardItem.internetPassword
+                        : null,
                 DatabseService.columnInternetProfilePassword:
-                    cardItem.internetProfilePassword,
+                    cardItem.cardTypeCodeId == 11005
+                        ? cardItem.internetProfilePassword
+                        : null,
               };
               if (isEdit) {
                 await DatabseService.instance.updateCard(cardData);

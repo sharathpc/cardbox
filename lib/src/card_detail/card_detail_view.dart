@@ -86,25 +86,6 @@ class _CardDetailViewState extends State<CardDetailView> {
                 cardItem = snapshot.data;
               }
 
-              String cardNumber = MaskedTextController(
-                mask: '0000 0000 0000 0000',
-                text: cardItem.cardNumber.toString(),
-              ).text;
-
-              cardNumber = isObscureData
-                  ? cardNumber.replaceAll(RegExp(r'(?<=.{4})\d(?=.{4})'), '*')
-                  : cardNumber;
-
-              final String cardCvv = isObscureData
-                  ? cardItem.cardCvvCode
-                      .toString()
-                      .replaceAll(RegExp(r'\d'), '*')
-                  : cardItem.cardCvvCode.toString();
-
-              final String cardPin = isObscureData
-                  ? cardItem.cardPin.toString().replaceAll(RegExp(r'\d'), '*')
-                  : cardItem.cardPin.toString();
-
               return SingleChildScrollView(
                 child: Column(
                   children: <Widget>[
@@ -115,11 +96,19 @@ class _CardDetailViewState extends State<CardDetailView> {
                       bankLogo: bank.bankLogo,
                       cardTypeCodeId: cardItem.cardTypeCodeId,
                       cardColorCodeId: cardItem.cardColorCodeId,
+                      accountName: cardItem.accountName,
+                      accountNumber: cardItem.accountNumber,
+                      ifsCode: cardItem.ifsCode,
                       cardNumber: cardItem.cardNumber,
                       expiryDate: cardItem.cardExpiryDate,
                       cardHolderName: cardItem.cardHolderName,
                       cvvCode: cardItem.cardCvvCode,
                       cardPin: cardItem.cardPin,
+                      mobileNumber: cardItem.mobileNumber,
+                      mobilePin: cardItem.mobilePin,
+                      internetId: cardItem.internetId,
+                      internetPassword: cardItem.internetPassword,
+                      internetProfilePassword: cardItem.internetProfilePassword,
                       showBackView: false,
                       obscureData: isObscureData,
                       isSwipeGestureEnabled: true,
@@ -149,39 +138,9 @@ class _CardDetailViewState extends State<CardDetailView> {
                     const SizedBox(
                       height: 40,
                     ),
-                    CupertinoFormSection(
-                      margin: const EdgeInsets.symmetric(horizontal: 8.0),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8.0),
-                        color: CupertinoColors.darkBackgroundGray,
-                      ),
-                      children: <Widget>[
-                        cardDetailItem(
-                          Icons.credit_card,
-                          'Card Number',
-                          cardNumber,
-                        ),
-                        cardDetailItem(
-                          Icons.calendar_today,
-                          'Expiry Date',
-                          cardItem.cardExpiryDate ?? '',
-                        ),
-                        cardDetailItem(
-                          Icons.text_fields,
-                          'Card Holder Name',
-                          cardItem.cardHolderName ?? '',
-                        ),
-                        cardDetailItem(
-                          Icons.security,
-                          'CVV Code',
-                          cardCvv,
-                        ),
-                        cardDetailItem(
-                          Icons.fiber_pin,
-                          'Card Pin',
-                          cardPin,
-                        ),
-                      ],
+                    getCardTypeForm(
+                      cardItem.cardTypeCodeId,
+                      cardItem,
                     ),
                   ],
                 ),
@@ -190,6 +149,179 @@ class _CardDetailViewState extends State<CardDetailView> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget getCardTypeForm(int cardTypeCodeId, CardItem cardItem) {
+    switch (cardTypeCodeId) {
+      case 11001:
+        return bankCardForm(cardItem);
+      case 11002:
+      case 11003:
+        return atmCardForm(cardItem);
+      case 11004:
+        return mobileCardForm(cardItem);
+      case 11005:
+        return internetCardForm(cardItem);
+      default:
+        return const SizedBox();
+    }
+  }
+
+  CupertinoFormSection bankCardForm(CardItem cardItem) {
+    final String accountNumber = isObscureData
+        ? cardItem.accountNumber.toString().replaceAll(RegExp(r'\d'), '*')
+        : cardItem.accountNumber.toString();
+
+    return CupertinoFormSection(
+      margin: const EdgeInsets.symmetric(horizontal: 8.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8.0),
+        color: CupertinoColors.darkBackgroundGray,
+      ),
+      children: <Widget>[
+        cardDetailItem(
+          Icons.credit_card,
+          'Account Name',
+          cardItem.accountName ?? '',
+        ),
+        cardDetailItem(
+          Icons.calendar_today,
+          'Account Number',
+          accountNumber,
+        ),
+        cardDetailItem(
+          Icons.text_fields,
+          'IFSC Code',
+          cardItem.ifsCode ?? '',
+        ),
+      ],
+    );
+  }
+
+  CupertinoFormSection atmCardForm(CardItem cardItem) {
+    String cardNumber = MaskedTextController(
+      mask: '0000 0000 0000 0000',
+      text: cardItem.cardNumber.toString(),
+    ).text;
+
+    cardNumber = isObscureData
+        ? cardNumber.replaceAll(RegExp(r'(?<=.{4})\d(?=.{4})'), '*')
+        : cardNumber;
+
+    final String cardCvv = isObscureData
+        ? cardItem.cardCvvCode.toString().replaceAll(RegExp(r'\d'), '*')
+        : cardItem.cardCvvCode.toString();
+
+    final String cardPin = isObscureData
+        ? cardItem.cardPin.toString().replaceAll(RegExp(r'\d'), '*')
+        : cardItem.cardPin.toString();
+
+    return CupertinoFormSection(
+      margin: const EdgeInsets.symmetric(horizontal: 8.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8.0),
+        color: CupertinoColors.darkBackgroundGray,
+      ),
+      children: <Widget>[
+        cardDetailItem(
+          Icons.credit_card,
+          'Card Number',
+          cardNumber,
+        ),
+        cardDetailItem(
+          Icons.calendar_today,
+          'Expiry Date',
+          cardItem.cardExpiryDate ?? '',
+        ),
+        cardDetailItem(
+          Icons.text_fields,
+          'Card Holder Name',
+          cardItem.cardHolderName ?? '',
+        ),
+        cardDetailItem(
+          Icons.security,
+          'CVV Code',
+          cardCvv,
+        ),
+        cardDetailItem(
+          Icons.fiber_pin,
+          'Card Pin',
+          cardPin,
+        ),
+      ],
+    );
+  }
+
+  CupertinoFormSection mobileCardForm(CardItem cardItem) {
+    String mobileNumber = MaskedTextController(
+      mask: '000-000-0000',
+      text: cardItem.cardNumber.toString(),
+    ).text;
+
+    mobileNumber = isObscureData
+        ? mobileNumber.replaceAll(RegExp(r'(?<=.{4})\d(?=.{4})'), '*')
+        : mobileNumber;
+
+    final String mobilePin = isObscureData
+        ? cardItem.mobilePin.toString().replaceAll(RegExp(r'\d'), '*')
+        : cardItem.mobilePin.toString();
+
+    return CupertinoFormSection(
+      margin: const EdgeInsets.symmetric(horizontal: 8.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8.0),
+        color: CupertinoColors.darkBackgroundGray,
+      ),
+      children: <Widget>[
+        cardDetailItem(
+          Icons.credit_card,
+          'Mobile Number',
+          mobileNumber,
+        ),
+        cardDetailItem(
+          Icons.security,
+          'Mobile Pin',
+          mobilePin,
+        ),
+      ],
+    );
+  }
+
+  CupertinoFormSection internetCardForm(CardItem cardItem) {
+    final String internetPassword = isObscureData
+        ? cardItem.internetPassword.toString().replaceAll(RegExp(r'\d'), '*')
+        : cardItem.internetPassword.toString();
+
+    final String internetProfilePassword = isObscureData
+        ? cardItem.internetProfilePassword
+            .toString()
+            .replaceAll(RegExp(r'\d'), '*')
+        : cardItem.internetProfilePassword.toString();
+
+    return CupertinoFormSection(
+      margin: const EdgeInsets.symmetric(horizontal: 8.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8.0),
+        color: CupertinoColors.darkBackgroundGray,
+      ),
+      children: <Widget>[
+        cardDetailItem(
+          Icons.text_fields,
+          'Internet ID',
+          cardItem.internetId ?? '',
+        ),
+        cardDetailItem(
+          Icons.security,
+          'Internet Password',
+          internetPassword,
+        ),
+        cardDetailItem(
+          Icons.fiber_pin,
+          'Internet Profile Password',
+          internetProfilePassword,
+        ),
+      ],
     );
   }
 

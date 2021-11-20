@@ -137,7 +137,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
 
     _cardTypeController.text = selectedCardType.cardTypeName;
     _accountNameController.text = accountName ?? '';
-    _accountNumberController.text = accountNumber.toString();
+    _accountNumberController.text = accountNumber?.toString() ?? '';
     _ifsCodeController.text = ifsCode ?? '';
     _cardNumberController.text = cardNumber.toString();
     _expiryDateController.text = expiryDate ?? '';
@@ -148,7 +148,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
     _mobilePinController.text = mobilePin.toString();
     _internetIdController.text = internetId ?? '';
     _internetPasswordController.text = internetPassword ?? '';
-    _internetPasswordController.text = internetPassword ?? '';
+    _internetProfilePasswordController.text = internetProfilePassword ?? '';
 
     creditCardModel = CreditCardModel(
       cardTypeCodeId,
@@ -717,7 +717,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
                 style: TextStyle(fontSize: 14.0),
               ),
             ),
-            placeholder: '123456',
+            placeholder: 'User ID',
             keyboardType: TextInputType.text,
             textInputAction: TextInputAction.done,
             validator: (String? value) {
