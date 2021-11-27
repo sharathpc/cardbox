@@ -265,6 +265,43 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
     }
   }
 
+  Row cardHeader(CardTypeModel? cardType) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        ClipRRect(
+          borderRadius: BorderRadius.circular(4.0),
+          child: Image.asset(
+            widget.bankLogo,
+            height: 25,
+          ),
+        ),
+        Row(
+          children: [
+            const IconTheme(
+              data: IconThemeData(
+                color: Colors.white70,
+                size: 20,
+              ),
+              child: Icon(Icons.credit_card),
+            ),
+            const SizedBox(width: 5),
+            Text(
+              cardType == null ? 'DEBIT CARD' : cardType.cardTypeName,
+              style: const TextStyle(
+                fontSize: 14.0,
+                fontWeight: FontWeight.bold,
+                color: Colors.white70,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
   _buildBankFrontContainer() {
     final TextStyle defaultTextStyle =
         Theme.of(context).textTheme.headline6!.merge(
@@ -293,34 +330,12 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              ClipRRect(
-                borderRadius: BorderRadius.circular(4.0),
-                child: Image.asset(
-                  widget.bankLogo,
-                  height: 25,
-                ),
-              ),
-              const Spacer(),
-              Text(
-                cardType == null ? 'DEBIT CARD' : cardType.cardTypeName,
-                style: const TextStyle(
-                  fontSize: 12.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white70,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
+          cardHeader(cardType),
           const SizedBox(
             height: 10,
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               const IconTheme(
                 data: IconThemeData(
@@ -329,33 +344,44 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
                 ),
                 child: Icon(Icons.account_balance),
               ),
-              Expanded(
-                flex: 1,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      'IFSC\nCODE',
-                      style: defaultTextStyle.copyWith(fontSize: 7),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(width: 5),
-                    Text(
-                      accountIfsCode.isEmpty ? 'BANKXXXXXX' : accountIfsCode,
-                      style: defaultTextStyle,
-                    ),
-                  ],
-                ),
-              )
+              const SizedBox(
+                width: 15,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'ACCOUNT NUMBER',
+                    style: defaultTextStyle.copyWith(fontSize: 7),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 5),
+                  Text(
+                    accountNumber ?? 'XXXXXXXXXXXXXXXX',
+                    style: defaultTextStyle,
+                  ),
+                ],
+              ),
             ],
           ),
           const SizedBox(
             height: 10,
           ),
-          Text(
-            accountNumber ?? 'XXXXXXXXXXXXXXXX',
-            style: defaultTextStyle,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                'IFSC\nCODE',
+                style: defaultTextStyle.copyWith(fontSize: 7),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(width: 5),
+              Text(
+                accountIfsCode.isEmpty ? 'BANKXXXXXX' : accountIfsCode,
+                style: defaultTextStyle.copyWith(fontSize: 14),
+              ),
+            ],
           ),
           const SizedBox(
             height: 10,
@@ -405,29 +431,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              ClipRRect(
-                borderRadius: BorderRadius.circular(4.0),
-                child: Image.asset(
-                  widget.bankLogo,
-                  height: 25,
-                ),
-              ),
-              const Spacer(),
-              Text(
-                cardType == null ? 'DEBIT CARD' : cardType.cardTypeName,
-                style: const TextStyle(
-                  fontSize: 12.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white70,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
+          cardHeader(cardType),
           const SizedBox(
             height: 10,
           ),
@@ -545,29 +549,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              ClipRRect(
-                borderRadius: BorderRadius.circular(4.0),
-                child: Image.asset(
-                  widget.bankLogo,
-                  height: 25,
-                ),
-              ),
-              const Spacer(),
-              Text(
-                cardType == null ? 'DEBIT CARD' : cardType.cardTypeName,
-                style: const TextStyle(
-                  fontSize: 12.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white70,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
+          cardHeader(cardType),
           const SizedBox(
             height: 10,
           ),
@@ -606,7 +588,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
             height: 10,
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -623,6 +605,9 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
                     style: defaultTextStyle,
                   ),
                 ],
+              ),
+              const SizedBox(
+                width: 25,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -684,29 +669,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              ClipRRect(
-                borderRadius: BorderRadius.circular(4.0),
-                child: Image.asset(
-                  widget.bankLogo,
-                  height: 25,
-                ),
-              ),
-              const Spacer(),
-              Text(
-                cardType == null ? 'DEBIT CARD' : cardType.cardTypeName,
-                style: const TextStyle(
-                  fontSize: 12.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white70,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
+          cardHeader(cardType),
           const SizedBox(
             height: 10,
           ),

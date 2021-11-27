@@ -47,7 +47,6 @@ class DatabseService {
     String path = join(directory.path, _dbName);
 
     final String? masterPassword = await AuthService.instance.getMasterPass;
-    print(masterPassword);
     return await openDatabase(
       path,
       password: masterPassword,
