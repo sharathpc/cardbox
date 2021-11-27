@@ -106,6 +106,7 @@ class _CardDetailViewState extends State<CardDetailView> {
                       cardPin: cardItem.cardPin,
                       mobileNumber: cardItem.mobileNumber,
                       mobilePin: cardItem.mobilePin,
+                      upiPin: cardItem.upiPin,
                       internetId: cardItem.internetId,
                       internetPassword: cardItem.internetPassword,
                       internetProfilePassword: cardItem.internetProfilePassword,
@@ -269,6 +270,10 @@ class _CardDetailViewState extends State<CardDetailView> {
         ? cardItem.mobilePin.toString().replaceAll(RegExp(r'\d'), '*')
         : cardItem.mobilePin.toString();
 
+    final String upiPin = isObscureData
+        ? cardItem.upiPin.toString().replaceAll(RegExp(r'\d'), '*')
+        : cardItem.upiPin.toString();
+
     return CupertinoFormSection(
       margin: const EdgeInsets.symmetric(horizontal: 8.0),
       decoration: BoxDecoration(
@@ -285,6 +290,11 @@ class _CardDetailViewState extends State<CardDetailView> {
           Icons.security,
           'Mobile Pin',
           mobilePin,
+        ),
+        cardDetailItem(
+          Icons.security,
+          'UPI Pin',
+          upiPin,
         ),
       ],
     );

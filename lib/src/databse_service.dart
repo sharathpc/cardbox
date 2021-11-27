@@ -29,6 +29,7 @@ class DatabseService {
   static const columnCardPin = 'cardpin';
   static const columnMobileNumber = 'mobilenumber';
   static const columnMobilePin = 'mobilepin';
+  static const columnUpiPin = 'upipin';
   static const columnInternetId = 'internetid';
   static const columnInternetPassword = 'internetpassword';
   static const columnInternetProfilePassword = 'internetprofilepassword';
@@ -46,6 +47,7 @@ class DatabseService {
     String path = join(directory.path, _dbName);
 
     final String? masterPassword = await AuthService.instance.getMasterPass;
+    print(masterPassword);
     return await openDatabase(
       path,
       password: masterPassword,
@@ -81,6 +83,7 @@ class DatabseService {
         $columnCardPin INTEGER,
         $columnMobileNumber INTEGER,
         $columnMobilePin INTEGER,
+        $columnUpiPin INTEGER,
         $columnInternetId TEXT,
         $columnInternetPassword TEXT,
         $columnInternetProfilePassword TEXT
@@ -116,6 +119,7 @@ class DatabseService {
             'cardpin', cardpin,
             'mobilenumber', mobilenumber,
             'mobilepin', mobilepin,
+            'upipin', upipin,
             'internetid', internetid,
             'internetpassword', internetpassword,
             'internetprofilepassword', internetprofilepassword
@@ -151,6 +155,7 @@ class DatabseService {
             'cardpin', cardpin,
             'mobilenumber', mobilenumber,
             'mobilepin', mobilepin,
+            'upipin', upipin,
             'internetid', internetid,
             'internetpassword', internetpassword,
             'internetprofilepassword', internetprofilepassword

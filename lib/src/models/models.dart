@@ -49,6 +49,7 @@ class CardItem {
   int? cardPin;
   int? mobileNumber;
   int? mobilePin;
+  int? upiPin;
   String? internetId;
   String? internetPassword;
   String? internetProfilePassword;
@@ -69,6 +70,7 @@ class CardItem {
     this.cardPin,
     this.mobileNumber,
     this.mobilePin,
+    this.upiPin,
     this.internetId,
     this.internetPassword,
     this.internetProfilePassword,
@@ -89,6 +91,7 @@ class CardItem {
     cardPin = json[DatabseService.columnCardPin];
     mobileNumber = json[DatabseService.columnMobileNumber];
     mobilePin = json[DatabseService.columnMobilePin];
+    upiPin = json[DatabseService.columnUpiPin];
     internetId = json[DatabseService.columnInternetId];
     internetPassword = json[DatabseService.columnInternetPassword];
     internetProfilePassword =
@@ -111,6 +114,7 @@ class CardItem {
     data[DatabseService.columnCardPin] = cardPin;
     data[DatabseService.columnMobileNumber] = mobileNumber;
     data[DatabseService.columnMobilePin] = mobilePin;
+    data[DatabseService.columnUpiPin] = upiPin;
     data[DatabseService.columnInternetId] = internetId;
     data[DatabseService.columnInternetPassword] = internetPassword;
     data[DatabseService.columnInternetProfilePassword] =

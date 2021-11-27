@@ -14,6 +14,7 @@ class CreditCardModel {
     this.cardPin,
     this.mobileNumber,
     this.mobilePin,
+    this.upiPin,
     this.internetId,
     this.internetPassword,
     this.internetProfilePassword,
@@ -32,6 +33,7 @@ class CreditCardModel {
   int? cardPin;
   int? mobileNumber;
   int? mobilePin;
+  int? upiPin;
   String? internetId;
   String? internetPassword;
   String? internetProfilePassword;

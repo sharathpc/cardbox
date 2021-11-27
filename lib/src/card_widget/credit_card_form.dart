@@ -22,6 +22,7 @@ class CreditCardForm extends StatefulWidget {
     this.cardPin,
     this.mobileNumber,
     this.mobilePin,
+    this.upiPin,
     this.internetId,
     this.internetPassword,
     this.internetProfilePassword,
@@ -42,6 +43,7 @@ class CreditCardForm extends StatefulWidget {
   final int? cardPin;
   final int? mobileNumber;
   final int? mobilePin;
+  final int? upiPin;
   final String? internetId;
   final String? internetPassword;
   final String? internetProfilePassword;
@@ -67,6 +69,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
   late int? cardPin;
   late int? mobileNumber;
   late int? mobilePin;
+  late int? upiPin;
   late String? internetId;
   late String? internetPassword;
   late String? internetProfilePassword;
@@ -94,6 +97,8 @@ class _CreditCardFormState extends State<CreditCardForm> {
       MaskedTextController(mask: '000-000-0000');
   final MaskedTextController _mobilePinController =
       MaskedTextController(mask: '000000');
+  final MaskedTextController _upiPinController =
+      MaskedTextController(mask: '000000');
   final TextEditingController _internetIdController = TextEditingController();
   final TextEditingController _internetPasswordController =
       TextEditingController();
@@ -107,6 +112,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
   FocusNode cvvFocusNode = FocusNode();
   FocusNode cardPinNode = FocusNode();
   FocusNode mobilePinNode = FocusNode();
+  FocusNode upiPinNode = FocusNode();
   FocusNode internetPasswordNode = FocusNode();
   FocusNode internetProfilePasswordNode = FocusNode();
 
@@ -131,6 +137,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
     cardPin = widget.cardPin;
     mobileNumber = widget.mobileNumber;
     mobilePin = widget.mobilePin;
+    upiPin = widget.upiPin;
     internetId = widget.internetId;
     internetPassword = widget.internetPassword;
     internetProfilePassword = widget.internetProfilePassword;
@@ -146,6 +153,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
     _cardPinController.text = cardPin.toString();
     _mobileNumberController.text = mobileNumber.toString();
     _mobilePinController.text = mobilePin.toString();
+    _upiPinController.text = upiPin.toString();
     _internetIdController.text = internetId ?? '';
     _internetPasswordController.text = internetPassword ?? '';
     _internetProfilePasswordController.text = internetProfilePassword ?? '';
@@ -163,6 +171,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
       cardPin,
       mobileNumber,
       mobilePin,
+      upiPin,
       internetId,
       internetPassword,
       internetProfilePassword,
@@ -271,6 +280,14 @@ class _CreditCardFormState extends State<CreditCardForm> {
       });
     });
 
+    _upiPinController.addListener(() {
+      setState(() {
+        upiPin = int.tryParse(_upiPinController.text);
+        creditCardModel.upiPin = upiPin;
+        onCreditCardModelChange(creditCardModel);
+      });
+    });
+
     _internetIdController.addListener(() {
       setState(() {
         internetId = _internetIdController.text;
@@ -305,6 +322,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
     expiryDateNode.dispose();
     cardPinNode.dispose();
     mobilePinNode.dispose();
+    upiPinNode.dispose();
     internetPasswordNode.dispose();
     internetProfilePasswordNode.dispose();
     super.dispose();
@@ -446,7 +464,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
             keyboardType: TextInputType.number,
             textInputAction: TextInputAction.next,
             validator: (String? value) {
-              if (value!.isEmpty) {
+              if (value!.isEmpty || value.length > 18) {
                 return 'Please input a valid number';
               }
               return null;
@@ -673,8 +691,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
             controller: _mobilePinController,
             focusNode: mobilePinNode,
             onEditingComplete: () {
-              FocusScope.of(context).unfocus();
-              onCreditCardModelChange(creditCardModel);
+              FocusScope.of(context).requestFocus(upiPinNode);
             },
             prefix: const SizedBox(
               width: 100,
@@ -687,7 +704,35 @@ class _CreditCardFormState extends State<CreditCardForm> {
             keyboardType: TextInputType.number,
             textInputAction: TextInputAction.done,
             validator: (String? value) {
-              if (value!.isEmpty || value.length < 4 || value.length < 6) {
+              if (value!.isEmpty || value.length < 4) {
+                return 'Please input a valid Pin';
+              }
+              return null;
+            },
+          ),
+        ),
+        CupertinoFormRow(
+          padding: EdgeInsets.zero,
+          child: CupertinoTextFormFieldRow(
+            obscureText: widget.obscureData,
+            controller: _upiPinController,
+            focusNode: upiPinNode,
+            onEditingComplete: () {
+              FocusScope.of(context).unfocus();
+              onCreditCardModelChange(creditCardModel);
+            },
+            prefix: const SizedBox(
+              width: 100,
+              child: Text(
+                'UPI Pin',
+                style: TextStyle(fontSize: 14.0),
+              ),
+            ),
+            placeholder: 'XXXXXX',
+            keyboardType: TextInputType.number,
+            textInputAction: TextInputAction.done,
+            validator: (String? value) {
+              if (value!.length < 4) {
                 return 'Please input a valid Pin';
               }
               return null;

@@ -32,6 +32,7 @@ class CreditCardWidget extends StatefulWidget {
     this.cardPin,
     this.mobileNumber,
     this.mobilePin,
+    this.upiPin,
     this.internetId,
     this.internetPassword,
     this.internetProfilePassword,
@@ -57,6 +58,7 @@ class CreditCardWidget extends StatefulWidget {
   final int? cardPin;
   final int? mobileNumber;
   final int? mobilePin;
+  final int? upiPin;
   final String? internetId;
   final String? internetPassword;
   final String? internetProfilePassword;
@@ -249,9 +251,15 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
   ///
   Widget _buildBackContainer() {
     switch (widget.cardTypeCodeId) {
+      case 11001:
+        return _buildEmptyBackContainer();
       case 11002:
       case 11003:
         return _buildCardBackContainer();
+      case 11004:
+        return _buildEmptyBackContainer();
+      case 11005:
+        return _buildEmptyBackContainer();
       default:
         return const SizedBox();
     }
@@ -521,6 +529,12 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
           ? widget.mobilePin.toString().replaceAll(RegExp(r'\d'), '*')
           : widget.mobilePin.toString();
     }
+    String? upiPin;
+    if (widget.upiPin != null) {
+      upiPin = widget.obscureData
+          ? widget.upiPin.toString().replaceAll(RegExp(r'\d'), '*')
+          : widget.upiPin.toString();
+    }
 
     final CardTypeModel? cardType = CardTypeModel.cardTypesList
         .firstWhereOrNull(
@@ -574,13 +588,13 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      'MOBILE\nPIN',
+                      'MOBILE\nNUMBER',
                       style: defaultTextStyle.copyWith(fontSize: 7),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(width: 5),
                     Text(
-                      mobilePin ?? 'XXXXXX',
+                      mobileNumber ?? 'XXX-XXX-XXXX',
                       style: defaultTextStyle,
                     ),
                   ],
@@ -592,18 +606,39 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
             height: 10,
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                'MOBILE\nNUMBER',
-                style: defaultTextStyle.copyWith(fontSize: 7),
-                textAlign: TextAlign.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    'MOBILE\nPIN',
+                    style: defaultTextStyle.copyWith(fontSize: 7),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(width: 5),
+                  Text(
+                    mobilePin ?? 'XXXXXX',
+                    style: defaultTextStyle,
+                  ),
+                ],
               ),
-              const SizedBox(width: 5),
-              Text(
-                mobileNumber ?? 'XXX-XXX-XXXX',
-                style: defaultTextStyle,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    'UPI\nPIN',
+                    style: defaultTextStyle.copyWith(fontSize: 7),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(width: 5),
+                  Text(
+                    upiPin ?? 'XXXXXX',
+                    style: defaultTextStyle,
+                  ),
+                ],
               ),
             ],
           ),
@@ -747,6 +782,22 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
                 style: defaultTextStyle.copyWith(fontSize: 14),
               ),
             ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildEmptyBackContainer() {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 16),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Container(
+            height: 50,
+            color: Colors.black,
           ),
         ],
       ),
