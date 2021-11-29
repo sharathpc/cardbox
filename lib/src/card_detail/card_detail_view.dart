@@ -90,7 +90,7 @@ class _CardDetailViewState extends State<CardDetailView> {
                 child: Column(
                   children: <Widget>[
                     const SizedBox(
-                      height: 20,
+                      height: 10,
                     ),
                     CreditCardWidget(
                       bankLogo: bank.bankLogo,
@@ -132,7 +132,15 @@ class _CardDetailViewState extends State<CardDetailView> {
                               setState(() {});
                             },
                           ),
-                          prefix: const Text('Obscure fields'),
+                          prefix: Row(
+                            children: const [
+                              Icon(Icons.remove_red_eye),
+                              SizedBox(
+                                width: 15,
+                              ),
+                              Text('Obscure fields'),
+                            ],
+                          ),
                         ),
                       ],
                     ),
