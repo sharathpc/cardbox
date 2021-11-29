@@ -54,11 +54,11 @@ class CreditCardWidget extends StatefulWidget {
   final int? cardNumber;
   final String? expiryDate;
   final String? cardHolderName;
-  final int? cvvCode;
-  final int? cardPin;
+  final String? cvvCode;
+  final String? cardPin;
   final int? mobileNumber;
-  final int? mobilePin;
-  final int? upiPin;
+  final String? mobilePin;
+  final String? upiPin;
   final String? internetId;
   final String? internetPassword;
   final String? internetProfilePassword;

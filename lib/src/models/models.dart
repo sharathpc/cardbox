@@ -45,11 +45,11 @@ class CardItem {
   int? cardNumber;
   String? cardExpiryDate;
   String? cardHolderName;
-  int? cardCvvCode;
-  int? cardPin;
+  String? cardCvvCode;
+  String? cardPin;
   int? mobileNumber;
-  int? mobilePin;
-  int? upiPin;
+  String? mobilePin;
+  String? upiPin;
   String? internetId;
   String? internetPassword;
   String? internetProfilePassword;

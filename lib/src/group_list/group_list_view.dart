@@ -252,61 +252,10 @@ class _GroupListViewState extends State<GroupListView> {
                                       },
                                       pagination: const SwiperPagination(
                                         alignment: Alignment.bottomCenter,
-                                        //margin: EdgeInsets.only(top: 10),
                                       ),
                                       itemCount: groupItem.cardsList.length,
                                       scale: 0.9,
-                                    ), /* ListView(
-                                      scrollDirection: Axis.horizontal,
-                                      children: groupItem.cardsList
-                                          .map((CardItem item) {
-                                        final BankItem bankItem = BankItem
-                                            .banksList
-                                            .firstWhere((element) =>
-                                                element.bankCodeId ==
-                                                groupItem.bankCodeId);
-                                        return GestureDetector(
-                                          child: CreditCardWidget(
-                                            width: 320,
-                                            height: 190,
-                                            bankLogo: bankItem.bankLogo,
-                                            cardTypeCodeId: item.cardTypeCodeId,
-                                            cardColorCodeId:
-                                                item.cardColorCodeId,
-                                            accountName: item.accountName,
-                                            accountNumber: item.accountNumber,
-                                            ifsCode: item.ifsCode,
-                                            cardNumber: item.cardNumber,
-                                            expiryDate: item.cardExpiryDate,
-                                            cardHolderName: item.cardHolderName,
-                                            cvvCode: item.cardCvvCode,
-                                            cardPin: item.cardPin,
-                                            mobileNumber: item.mobileNumber,
-                                            mobilePin: item.mobilePin,
-                                            upiPin: item.upiPin,
-                                            internetId: item.internetId,
-                                            internetPassword:
-                                                item.internetPassword,
-                                            internetProfilePassword:
-                                                item.internetProfilePassword,
-                                            showBackView: false,
-                                            obscureData: true,
-                                            isSwipeGestureEnabled: false,
-                                          ),
-                                          onTap: () => {
-                                            Navigator.pushNamed(
-                                              context,
-                                              CardDetailView.routeName,
-                                              arguments: ManageCardModel(
-                                                bankCodeId: bankItem.bankCodeId,
-                                                groupId: groupItem.groupId,
-                                                cardId: item.cardId,
-                                              ),
-                                            ).then((_) => callStateChange(_)),
-                                          },
-                                        );
-                                      }).toList(),
-                                    ), */
+                                    ),
                                   ),
                           ],
                         ),

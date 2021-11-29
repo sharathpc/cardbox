@@ -29,11 +29,11 @@ class CreditCardModel {
   int? cardNumber;
   String? expiryDate;
   String? cardHolderName;
-  int? cvvCode;
-  int? cardPin;
+  String? cvvCode;
+  String? cardPin;
   int? mobileNumber;
-  int? mobilePin;
-  int? upiPin;
+  String? mobilePin;
+  String? upiPin;
   String? internetId;
   String? internetPassword;
   String? internetProfilePassword;

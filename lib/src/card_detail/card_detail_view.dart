@@ -211,11 +211,11 @@ class _CardDetailViewState extends State<CardDetailView> {
         : cardNumber;
 
     final String cardCvv = isObscureData
-        ? cardItem.cardCvvCode.toString().replaceAll(RegExp(r'\d'), '*')
+        ? cardItem.cardCvvCode.toString().replaceAll(RegExp(r'\S'), '*')
         : cardItem.cardCvvCode.toString();
 
     final String cardPin = isObscureData
-        ? cardItem.cardPin.toString().replaceAll(RegExp(r'\d'), '*')
+        ? cardItem.cardPin.toString().replaceAll(RegExp(r'\S'), '*')
         : cardItem.cardPin.toString();
 
     return CupertinoFormSection(
@@ -267,11 +267,11 @@ class _CardDetailViewState extends State<CardDetailView> {
         : cardItem.mobileNumber.toString();
 
     final String mobilePin = isObscureData
-        ? cardItem.mobilePin.toString().replaceAll(RegExp(r'\d'), '*')
+        ? cardItem.mobilePin.toString().replaceAll(RegExp(r'\S'), '*')
         : cardItem.mobilePin.toString();
 
     final String upiPin = isObscureData
-        ? cardItem.upiPin.toString().replaceAll(RegExp(r'\d'), '*')
+        ? cardItem.upiPin.toString().replaceAll(RegExp(r'\S'), '*')
         : cardItem.upiPin.toString();
 
     return CupertinoFormSection(

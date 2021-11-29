@@ -39,11 +39,11 @@ class CreditCardForm extends StatefulWidget {
   final int? cardNumber;
   final String? expiryDate;
   final String? cardHolderName;
-  final int? cvvCode;
-  final int? cardPin;
+  final String? cvvCode;
+  final String? cardPin;
   final int? mobileNumber;
-  final int? mobilePin;
-  final int? upiPin;
+  final String? mobilePin;
+  final String? upiPin;
   final String? internetId;
   final String? internetPassword;
   final String? internetProfilePassword;
@@ -65,11 +65,11 @@ class _CreditCardFormState extends State<CreditCardForm> {
   late int? cardNumber;
   late String? expiryDate;
   late String? cardHolderName;
-  late int? cvvCode;
-  late int? cardPin;
+  late String? cvvCode;
+  late String? cardPin;
   late int? mobileNumber;
-  late int? mobilePin;
-  late int? upiPin;
+  late String? mobilePin;
+  late String? upiPin;
   late String? internetId;
   late String? internetPassword;
   late String? internetProfilePassword;
@@ -249,7 +249,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
 
     _cvvCodeController.addListener(() {
       setState(() {
-        cvvCode = int.tryParse(_cvvCodeController.text);
+        cvvCode = _cvvCodeController.text;
         creditCardModel.cvvCode = cvvCode;
         onCreditCardModelChange(creditCardModel);
       });
@@ -257,7 +257,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
 
     _cardPinController.addListener(() {
       setState(() {
-        cardPin = int.tryParse(_cardPinController.text);
+        cardPin = _cardPinController.text;
         creditCardModel.cardPin = cardPin;
         onCreditCardModelChange(creditCardModel);
       });
@@ -274,7 +274,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
 
     _mobilePinController.addListener(() {
       setState(() {
-        mobilePin = int.tryParse(_mobilePinController.text);
+        mobilePin = _mobilePinController.text;
         creditCardModel.mobilePin = mobilePin;
         onCreditCardModelChange(creditCardModel);
       });
@@ -282,7 +282,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
 
     _upiPinController.addListener(() {
       setState(() {
-        upiPin = int.tryParse(_upiPinController.text);
+        upiPin = _upiPinController.text;
         creditCardModel.upiPin = upiPin;
         onCreditCardModelChange(creditCardModel);
       });
