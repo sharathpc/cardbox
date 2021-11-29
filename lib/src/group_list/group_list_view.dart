@@ -5,6 +5,7 @@ import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
 
 import '../card_widget/flutter_credit_card.dart';
 
+import '../helper.dart';
 import '../models/models.dart';
 import '../databse_service.dart';
 //import '../settings/settings_view.dart';
@@ -124,7 +125,9 @@ class _GroupListViewState extends State<GroupListView> {
                       return Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8.0),
-                          color: CupertinoColors.darkBackgroundGray,
+                          color: Helper.instance.isDarkMode(context)
+                              ? CupertinoColors.darkBackgroundGray
+                              : CupertinoColors.lightBackgroundGray,
                         ),
                         margin: const EdgeInsets.only(bottom: 10.0),
                         child: Column(
@@ -141,8 +144,10 @@ class _GroupListViewState extends State<GroupListView> {
                                 children: [
                                   Text(
                                     groupItem.groupName,
-                                    style: const TextStyle(
-                                      color: CupertinoColors.white,
+                                    style: TextStyle(
+                                      color: Helper.instance.isDarkMode(context)
+                                          ? CupertinoColors.white
+                                          : CupertinoColors.black,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),

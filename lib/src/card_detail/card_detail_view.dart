@@ -7,6 +7,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../card_widget/flutter_credit_card.dart';
 
+import '../helper.dart';
 import '../models/models.dart';
 import '../auth/auth_service.dart';
 import '../databse_service.dart';
@@ -39,6 +40,7 @@ class _CardDetailViewState extends State<CardDetailView> {
   @override
   void initState() {
     super.initState();
+
     bank = BankItem.banksList
         .firstWhere((item) => item.bankCodeId == widget.bankCodeId);
     getCardFuture = getAndPopulateCard();
@@ -184,10 +186,7 @@ class _CardDetailViewState extends State<CardDetailView> {
 
     return CupertinoFormSection(
       margin: const EdgeInsets.symmetric(horizontal: 8.0),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8.0),
-        color: CupertinoColors.darkBackgroundGray,
-      ),
+      decoration: _cardDetailBoxDecoration(),
       children: <Widget>[
         cardDetailItem(
           Icons.text_fields,
@@ -228,10 +227,7 @@ class _CardDetailViewState extends State<CardDetailView> {
 
     return CupertinoFormSection(
       margin: const EdgeInsets.symmetric(horizontal: 8.0),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8.0),
-        color: CupertinoColors.darkBackgroundGray,
-      ),
+      decoration: _cardDetailBoxDecoration(),
       children: <Widget>[
         cardDetailItem(
           Icons.credit_card,
@@ -284,10 +280,7 @@ class _CardDetailViewState extends State<CardDetailView> {
 
     return CupertinoFormSection(
       margin: const EdgeInsets.symmetric(horizontal: 8.0),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8.0),
-        color: CupertinoColors.darkBackgroundGray,
-      ),
+      decoration: _cardDetailBoxDecoration(),
       children: <Widget>[
         cardDetailItem(
           Icons.stay_current_portrait,
@@ -321,10 +314,7 @@ class _CardDetailViewState extends State<CardDetailView> {
 
     return CupertinoFormSection(
       margin: const EdgeInsets.symmetric(horizontal: 8.0),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8.0),
-        color: CupertinoColors.darkBackgroundGray,
-      ),
+      decoration: _cardDetailBoxDecoration(),
       children: <Widget>[
         cardDetailItem(
           Icons.language,
@@ -370,8 +360,10 @@ class _CardDetailViewState extends State<CardDetailView> {
                 ),
                 Text(
                   itemValue,
-                  style: const TextStyle(
-                    color: CupertinoColors.white,
+                  style: TextStyle(
+                    color: Helper.instance.isDarkMode(context)
+                        ? CupertinoColors.white
+                        : CupertinoColors.black,
                   ),
                 ),
               ],
@@ -380,6 +372,15 @@ class _CardDetailViewState extends State<CardDetailView> {
         ),
       ),
       onTap: () => Clipboard.setData(ClipboardData(text: itemValue)),
+    );
+  }
+
+  BoxDecoration _cardDetailBoxDecoration() {
+    return BoxDecoration(
+      borderRadius: BorderRadius.circular(8.0),
+      color: Helper.instance.isDarkMode(context)
+          ? CupertinoColors.darkBackgroundGray
+          : CupertinoColors.lightBackgroundGray,
     );
   }
 
