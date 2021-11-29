@@ -26,16 +26,20 @@ class _AuthViewState extends State<AuthView> {
   Future<void> _authenticate() async {
     isMasterPass = await AuthService.instance.getMasterPass != null;
     if (isMasterPass) {
-      AuthService.instance.setAuthenticated =
-          await AuthService.instance.authenticate();
+      try {
+        AuthService.instance.setAuthenticated =
+            await AuthService.instance.authenticate();
 
-      if (AuthService.instance.isAuthenticated) {
-        Navigator.pushReplacementNamed(
-          context,
-          GroupListView.routeName,
-        );
-      } else {
-        displayLockedDialog();
+        if (AuthService.instance.isAuthenticated) {
+          Navigator.pushReplacementNamed(
+            context,
+            GroupListView.routeName,
+          );
+        } else {
+          displayLockedDialog();
+        }
+      } catch (e) {
+        displayErrorDialog();
       }
     } else {
       setState(() {});
@@ -211,6 +215,26 @@ class _AuthViewState extends State<AuthView> {
         actions: [
           CupertinoDialogAction(
             child: const Text("Unlock"),
+            onPressed: () {
+              Navigator.pop(context);
+              _authenticate();
+            },
+          )
+        ],
+      ),
+    );
+  }
+
+  void displayErrorDialog() {
+    showCupertinoDialog(
+      context: context,
+      builder: (BuildContext context) => CupertinoAlertDialog(
+        title: const Text("Authentication Error"),
+        content: const Text(
+            "For your security, Card Box can only be used with Biometric Authentication. Please setup Biometrics and try again."),
+        actions: [
+          CupertinoDialogAction(
+            child: const Text("Try again"),
             onPressed: () {
               Navigator.pop(context);
               _authenticate();

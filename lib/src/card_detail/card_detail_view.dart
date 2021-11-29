@@ -185,7 +185,6 @@ class _CardDetailViewState extends State<CardDetailView> {
         : cardItem.accountNumber.toString();
 
     return CupertinoFormSection(
-      margin: const EdgeInsets.symmetric(horizontal: 8.0),
       decoration: _cardDetailBoxDecoration(),
       children: <Widget>[
         cardDetailItem(
@@ -226,7 +225,6 @@ class _CardDetailViewState extends State<CardDetailView> {
         : cardItem.cardPin.toString();
 
     return CupertinoFormSection(
-      margin: const EdgeInsets.symmetric(horizontal: 8.0),
       decoration: _cardDetailBoxDecoration(),
       children: <Widget>[
         cardDetailItem(
@@ -279,7 +277,6 @@ class _CardDetailViewState extends State<CardDetailView> {
         : cardItem.upiPin.toString();
 
     return CupertinoFormSection(
-      margin: const EdgeInsets.symmetric(horizontal: 8.0),
       decoration: _cardDetailBoxDecoration(),
       children: <Widget>[
         cardDetailItem(
@@ -313,7 +310,6 @@ class _CardDetailViewState extends State<CardDetailView> {
         : cardItem.internetProfilePassword.toString();
 
     return CupertinoFormSection(
-      margin: const EdgeInsets.symmetric(horizontal: 8.0),
       decoration: _cardDetailBoxDecoration(),
       children: <Widget>[
         cardDetailItem(
