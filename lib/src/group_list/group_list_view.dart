@@ -234,6 +234,8 @@ class _GroupListViewState extends State<GroupListView> {
                                             mobilePin: item.mobilePin,
                                             upiPin: item.upiPin,
                                             internetId: item.internetId,
+                                            internetUsername:
+                                                item.internetUsername,
                                             internetPassword:
                                                 item.internetPassword,
                                             internetProfilePassword:

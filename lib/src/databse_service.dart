@@ -31,6 +31,7 @@ class DatabseService {
   static const columnMobilePin = 'mobilepin';
   static const columnUpiPin = 'upipin';
   static const columnInternetId = 'internetid';
+  static const columnInternetUsername = 'internetusername';
   static const columnInternetPassword = 'internetpassword';
   static const columnInternetProfilePassword = 'internetprofilepassword';
 
@@ -84,6 +85,7 @@ class DatabseService {
         $columnMobilePin TEXT,
         $columnUpiPin TEXT,
         $columnInternetId TEXT,
+        $columnInternetUsername TEXT,
         $columnInternetPassword TEXT,
         $columnInternetProfilePassword TEXT
       )
@@ -120,6 +122,7 @@ class DatabseService {
             'mobilepin', mobilepin,
             'upipin', upipin,
             'internetid', internetid,
+            'internetusername', internetusername,
             'internetpassword', internetpassword,
             'internetprofilepassword', internetprofilepassword
           )
@@ -156,6 +159,7 @@ class DatabseService {
             'mobilepin', mobilepin,
             'upipin', upipin,
             'internetid', internetid,
+            'internetusername', internetusername,
             'internetpassword', internetpassword,
             'internetprofilepassword', internetprofilepassword
           )

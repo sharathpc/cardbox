@@ -117,6 +117,10 @@ class _ManageCardViewState extends State<ManageCardView> {
                     cardItem.cardTypeCodeId == 11005
                         ? cardItem.internetId
                         : null,
+                DatabseService.columnInternetUsername:
+                    cardItem.cardTypeCodeId == 11005
+                        ? cardItem.internetUsername
+                        : null,
                 DatabseService.columnInternetPassword:
                     cardItem.cardTypeCodeId == 11005
                         ? cardItem.internetPassword
@@ -170,6 +174,7 @@ class _ManageCardViewState extends State<ManageCardView> {
                     mobilePin: cardItem.mobilePin,
                     upiPin: cardItem.upiPin,
                     internetId: cardItem.internetId,
+                    internetUsername: cardItem.internetUsername,
                     internetPassword: cardItem.internetPassword,
                     internetProfilePassword: cardItem.internetProfilePassword,
                     showBackView: isBackFocused,
@@ -197,6 +202,7 @@ class _ManageCardViewState extends State<ManageCardView> {
                     mobilePin: cardItem.mobilePin,
                     upiPin: cardItem.upiPin,
                     internetId: cardItem.internetId,
+                    internetUsername: cardItem.internetUsername,
                     internetPassword: cardItem.internetPassword,
                     internetProfilePassword: cardItem.internetProfilePassword,
                     onCreditCardModelChange: onCreditCardModelChange,
@@ -254,6 +260,7 @@ class _ManageCardViewState extends State<ManageCardView> {
       cardItem.mobilePin = creditCardModel.mobilePin;
       cardItem.upiPin = creditCardModel.upiPin;
       cardItem.internetId = creditCardModel.internetId;
+      cardItem.internetUsername = creditCardModel.internetUsername;
       cardItem.internetPassword = creditCardModel.internetPassword;
       cardItem.internetProfilePassword =
           creditCardModel.internetProfilePassword;

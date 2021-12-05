@@ -228,6 +228,7 @@ class _ManageGroupViewState extends State<ManageGroupView> {
                                   mobilePin: item.mobilePin,
                                   upiPin: item.upiPin,
                                   internetId: item.internetId,
+                                  internetUsername: item.internetUsername,
                                   internetPassword: item.internetPassword,
                                   internetProfilePassword:
                                       item.internetProfilePassword,

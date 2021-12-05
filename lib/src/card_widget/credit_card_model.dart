@@ -16,6 +16,7 @@ class CreditCardModel {
     this.mobilePin,
     this.upiPin,
     this.internetId,
+    this.internetUsername,
     this.internetPassword,
     this.internetProfilePassword,
     this.isBackFocused,
@@ -35,6 +36,7 @@ class CreditCardModel {
   String? mobilePin;
   String? upiPin;
   String? internetId;
+  String? internetUsername;
   String? internetPassword;
   String? internetProfilePassword;
   bool isBackFocused = false;

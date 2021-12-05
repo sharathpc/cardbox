@@ -34,6 +34,7 @@ class CreditCardWidget extends StatefulWidget {
     this.mobilePin,
     this.upiPin,
     this.internetId,
+    this.internetUsername,
     this.internetPassword,
     this.internetProfilePassword,
     required this.showBackView,
@@ -60,6 +61,7 @@ class CreditCardWidget extends StatefulWidget {
   final String? mobilePin;
   final String? upiPin;
   final String? internetId;
+  final String? internetUsername;
   final String? internetPassword;
   final String? internetProfilePassword;
   final bool showBackView;
@@ -643,6 +645,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
             );
 
     final String internetId = widget.internetId ?? '';
+    final String internetUsername = widget.internetUsername ?? '';
 
     String? internetPassword;
     if (widget.internetPassword != null) {
@@ -685,19 +688,44 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
               ),
               Expanded(
                 flex: 1,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      'USER\nID',
-                      style: defaultTextStyle.copyWith(fontSize: 7),
-                      textAlign: TextAlign.center,
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          'USER\nID',
+                          style: defaultTextStyle.copyWith(fontSize: 7),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(width: 5),
+                        Text(
+                          internetId.isEmpty ? 'XXXXXXXXXX' : internetId,
+                          style: defaultTextStyle,
+                        ),
+                      ],
                     ),
-                    const SizedBox(width: 5),
-                    Text(
-                      internetId.isEmpty ? 'XXXXXXXXXX' : internetId,
-                      style: defaultTextStyle,
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          'USER\nNAME',
+                          style: defaultTextStyle.copyWith(fontSize: 7),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(width: 5),
+                        Text(
+                          internetUsername.isEmpty
+                              ? 'XXXXXXXXXX'
+                              : internetUsername,
+                          style: defaultTextStyle,
+                        ),
+                      ],
                     ),
                   ],
                 ),

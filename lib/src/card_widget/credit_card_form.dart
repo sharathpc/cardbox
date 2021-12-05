@@ -24,6 +24,7 @@ class CreditCardForm extends StatefulWidget {
     this.mobilePin,
     this.upiPin,
     this.internetId,
+    this.internetUsername,
     this.internetPassword,
     this.internetProfilePassword,
     this.obscureData = false,
@@ -45,6 +46,7 @@ class CreditCardForm extends StatefulWidget {
   final String? mobilePin;
   final String? upiPin;
   final String? internetId;
+  final String? internetUsername;
   final String? internetPassword;
   final String? internetProfilePassword;
   final void Function(CreditCardModel) onCreditCardModelChange;
@@ -71,6 +73,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
   late String? mobilePin;
   late String? upiPin;
   late String? internetId;
+  late String? internetUsername;
   late String? internetPassword;
   late String? internetProfilePassword;
   bool isBackFocused = false;
@@ -100,6 +103,8 @@ class _CreditCardFormState extends State<CreditCardForm> {
   final MaskedTextController _upiPinController =
       MaskedTextController(mask: '000000');
   final TextEditingController _internetIdController = TextEditingController();
+  final TextEditingController _internetUsernameController =
+      TextEditingController();
   final TextEditingController _internetPasswordController =
       TextEditingController();
   final TextEditingController _internetProfilePasswordController =
@@ -113,6 +118,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
   FocusNode cardPinNode = FocusNode();
   FocusNode mobilePinNode = FocusNode();
   FocusNode upiPinNode = FocusNode();
+  FocusNode internetUsernameNode = FocusNode();
   FocusNode internetPasswordNode = FocusNode();
   FocusNode internetProfilePasswordNode = FocusNode();
 
@@ -139,6 +145,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
     mobilePin = widget.mobilePin;
     upiPin = widget.upiPin;
     internetId = widget.internetId;
+    internetUsername = widget.internetUsername;
     internetPassword = widget.internetPassword;
     internetProfilePassword = widget.internetProfilePassword;
 
@@ -155,6 +162,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
     _mobilePinController.text = mobilePin.toString();
     _upiPinController.text = upiPin.toString();
     _internetIdController.text = internetId ?? '';
+    _internetUsernameController.text = internetUsername ?? '';
     _internetPasswordController.text = internetPassword ?? '';
     _internetProfilePasswordController.text = internetProfilePassword ?? '';
 
@@ -173,6 +181,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
       mobilePin,
       upiPin,
       internetId,
+      internetUsername,
       internetPassword,
       internetProfilePassword,
       isBackFocused,
@@ -296,6 +305,14 @@ class _CreditCardFormState extends State<CreditCardForm> {
       });
     });
 
+    _internetUsernameController.addListener(() {
+      setState(() {
+        internetUsername = _internetUsernameController.text;
+        creditCardModel.internetUsername = internetUsername;
+        onCreditCardModelChange(creditCardModel);
+      });
+    });
+
     _internetPasswordController.addListener(() {
       setState(() {
         internetPassword = _internetPasswordController.text;
@@ -323,6 +340,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
     cardPinNode.dispose();
     mobilePinNode.dispose();
     upiPinNode.dispose();
+    internetUsernameNode.dispose();
     internetPasswordNode.dispose();
     internetProfilePasswordNode.dispose();
     super.dispose();
@@ -753,7 +771,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
             obscureText: widget.obscureData,
             controller: _internetIdController,
             onEditingComplete: () {
-              FocusScope.of(context).requestFocus(internetPasswordNode);
+              FocusScope.of(context).requestFocus(internetUsernameNode);
             },
             prefix: const SizedBox(
               width: 100,
@@ -763,11 +781,37 @@ class _CreditCardFormState extends State<CreditCardForm> {
               ),
             ),
             placeholder: 'User ID',
-            keyboardType: TextInputType.text,
+            keyboardType: TextInputType.number,
             textInputAction: TextInputAction.done,
             validator: (String? value) {
               if (value!.isEmpty) {
                 return 'Please input a Net Banking ID';
+              }
+              return null;
+            },
+          ),
+        ),
+        CupertinoFormRow(
+          padding: EdgeInsets.zero,
+          child: CupertinoTextFormFieldRow(
+            controller: _internetUsernameController,
+            focusNode: internetUsernameNode,
+            onEditingComplete: () {
+              FocusScope.of(context).requestFocus(internetProfilePasswordNode);
+            },
+            prefix: const SizedBox(
+              width: 100,
+              child: Text(
+                'Net Banking Name',
+                style: TextStyle(fontSize: 14.0),
+              ),
+            ),
+            placeholder: 'User Name',
+            keyboardType: TextInputType.text,
+            textInputAction: TextInputAction.done,
+            validator: (String? value) {
+              if (value!.isEmpty) {
+                return 'Please input a Net Banking User Name';
               }
               return null;
             },

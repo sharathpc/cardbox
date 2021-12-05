@@ -110,6 +110,7 @@ class _CardDetailViewState extends State<CardDetailView> {
                       mobilePin: cardItem.mobilePin,
                       upiPin: cardItem.upiPin,
                       internetId: cardItem.internetId,
+                      internetUsername: cardItem.internetUsername,
                       internetPassword: cardItem.internetPassword,
                       internetProfilePassword: cardItem.internetProfilePassword,
                       showBackView: false,
@@ -316,6 +317,11 @@ class _CardDetailViewState extends State<CardDetailView> {
           Icons.language,
           'Internet ID',
           cardItem.internetId ?? '',
+        ),
+        cardDetailItem(
+          Icons.text_fields,
+          'Internet Username',
+          cardItem.internetUsername ?? '',
         ),
         cardDetailItem(
           Icons.security,
