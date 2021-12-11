@@ -7,7 +7,7 @@ import 'package:sqflite_sqlcipher/sqflite.dart';
 
 class DatabseService {
   static const _dbName = 'myDatabse.db';
-  static const _dbVersion = 1;
+  static const _dbVersion = 2;
   static const _dbGroupTableName = 'groups';
   static const _dbCardTableName = 'cards';
 
@@ -29,6 +29,7 @@ class DatabseService {
   static const columnCardPin = 'cardpin';
   static const columnMobileNumber = 'mobilenumber';
   static const columnMobilePin = 'mobilepin';
+  static const columnUpiId = 'upiid';
   static const columnUpiPin = 'upipin';
   static const columnInternetId = 'internetid';
   static const columnInternetUsername = 'internetusername';
@@ -53,6 +54,7 @@ class DatabseService {
       password: masterPassword,
       version: _dbVersion,
       onCreate: _onCreate,
+      onUpgrade: _onUpdate,
     );
   }
 
@@ -83,6 +85,7 @@ class DatabseService {
         $columnCardPin TEXT,
         $columnMobileNumber INTEGER,
         $columnMobilePin TEXT,
+        $columnUpiId TEXT,
         $columnUpiPin TEXT,
         $columnInternetId TEXT,
         $columnInternetUsername TEXT,
@@ -91,6 +94,18 @@ class DatabseService {
       )
       ''',
     );
+  }
+
+  Future _onUpdate(Database db, int oldVersion, int newVersion) async {
+    if (newVersion == 2) {
+      await db.execute(
+        '''
+        ALTER TABLE $_dbCardTableName
+        ADD $columnUpiId TEXT
+        DEFAULT NULL;
+        ''',
+      );
+    }
   }
 
   Future<int> insertGroup(Map<String, dynamic> group) async {
@@ -120,6 +135,7 @@ class DatabseService {
             'cardpin', cardpin,
             'mobilenumber', mobilenumber,
             'mobilepin', mobilepin,
+            'upiid', upiid,
             'upipin', upipin,
             'internetid', internetid,
             'internetusername', internetusername,
@@ -157,6 +173,7 @@ class DatabseService {
             'cardpin', cardpin,
             'mobilenumber', mobilenumber,
             'mobilepin', mobilepin,
+            'upiid', upiid,
             'upipin', upipin,
             'internetid', internetid,
             'internetusername', internetusername,

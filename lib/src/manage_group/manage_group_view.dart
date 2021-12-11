@@ -226,6 +226,7 @@ class _ManageGroupViewState extends State<ManageGroupView> {
                                   cardPin: item.cardPin,
                                   mobileNumber: item.mobileNumber,
                                   mobilePin: item.mobilePin,
+                                  upiId: item.upiId,
                                   upiPin: item.upiPin,
                                   internetId: item.internetId,
                                   internetUsername: item.internetUsername,

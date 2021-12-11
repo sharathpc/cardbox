@@ -22,6 +22,7 @@ class CreditCardForm extends StatefulWidget {
     this.cardPin,
     this.mobileNumber,
     this.mobilePin,
+    this.upiId,
     this.upiPin,
     this.internetId,
     this.internetUsername,
@@ -44,6 +45,7 @@ class CreditCardForm extends StatefulWidget {
   final String? cardPin;
   final int? mobileNumber;
   final String? mobilePin;
+  final String? upiId;
   final String? upiPin;
   final String? internetId;
   final String? internetUsername;
@@ -71,6 +73,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
   late String? cardPin;
   late int? mobileNumber;
   late String? mobilePin;
+  late String? upiId;
   late String? upiPin;
   late String? internetId;
   late String? internetUsername;
@@ -100,6 +103,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
       MaskedTextController(mask: '000-000-0000');
   final MaskedTextController _mobilePinController =
       MaskedTextController(mask: '000000');
+  final TextEditingController _upiIdController = TextEditingController();
   final MaskedTextController _upiPinController =
       MaskedTextController(mask: '000000');
   final TextEditingController _internetIdController = TextEditingController();
@@ -143,6 +147,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
     cardPin = widget.cardPin;
     mobileNumber = widget.mobileNumber;
     mobilePin = widget.mobilePin;
+    upiId = widget.upiId;
     upiPin = widget.upiPin;
     internetId = widget.internetId;
     internetUsername = widget.internetUsername;
@@ -160,6 +165,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
     _cardPinController.text = cardPin.toString();
     _mobileNumberController.text = mobileNumber.toString();
     _mobilePinController.text = mobilePin.toString();
+    _upiIdController.text = upiId ?? '';
     _upiPinController.text = upiPin.toString();
     _internetIdController.text = internetId ?? '';
     _internetUsernameController.text = internetUsername ?? '';
@@ -179,6 +185,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
       cardPin,
       mobileNumber,
       mobilePin,
+      upiId,
       upiPin,
       internetId,
       internetUsername,
@@ -285,6 +292,14 @@ class _CreditCardFormState extends State<CreditCardForm> {
       setState(() {
         mobilePin = _mobilePinController.text;
         creditCardModel.mobilePin = mobilePin;
+        onCreditCardModelChange(creditCardModel);
+      });
+    });
+
+    _upiIdController.addListener(() {
+      setState(() {
+        upiId = _upiIdController.text;
+        creditCardModel.upiId = upiId;
         onCreditCardModelChange(creditCardModel);
       });
     });
@@ -428,6 +443,8 @@ class _CreditCardFormState extends State<CreditCardForm> {
         return mobileCardForm(context);
       case 11005:
         return internetCardForm(context);
+      case 11006:
+        return upiCardForm(context);
       default:
         return const SizedBox();
     }
@@ -709,7 +726,8 @@ class _CreditCardFormState extends State<CreditCardForm> {
             controller: _mobilePinController,
             focusNode: mobilePinNode,
             onEditingComplete: () {
-              FocusScope.of(context).requestFocus(upiPinNode);
+              FocusScope.of(context).unfocus();
+              onCreditCardModelChange(creditCardModel);
             },
             prefix: const SizedBox(
               width: 100,
@@ -723,34 +741,6 @@ class _CreditCardFormState extends State<CreditCardForm> {
             textInputAction: TextInputAction.done,
             validator: (String? value) {
               if (value!.isEmpty || value.length < 4) {
-                return 'Please input a valid Pin';
-              }
-              return null;
-            },
-          ),
-        ),
-        CupertinoFormRow(
-          padding: EdgeInsets.zero,
-          child: CupertinoTextFormFieldRow(
-            obscureText: widget.obscureData,
-            controller: _upiPinController,
-            focusNode: upiPinNode,
-            onEditingComplete: () {
-              FocusScope.of(context).unfocus();
-              onCreditCardModelChange(creditCardModel);
-            },
-            prefix: const SizedBox(
-              width: 100,
-              child: Text(
-                'UPI Pin',
-                style: TextStyle(fontSize: 14.0),
-              ),
-            ),
-            placeholder: 'XXXXXX',
-            keyboardType: TextInputType.number,
-            textInputAction: TextInputAction.done,
-            validator: (String? value) {
-              if (value!.length < 4) {
                 return 'Please input a valid Pin';
               }
               return null;
@@ -862,6 +852,67 @@ class _CreditCardFormState extends State<CreditCardForm> {
             placeholder: '**********',
             keyboardType: TextInputType.text,
             textInputAction: TextInputAction.done,
+          ),
+        ),
+      ],
+    );
+  }
+
+  CupertinoFormSection upiCardForm(BuildContext context) {
+    return CupertinoFormSection(
+      children: [
+        CupertinoFormRow(
+          padding: EdgeInsets.zero,
+          child: CupertinoTextFormFieldRow(
+            obscureText: widget.obscureData,
+            controller: _upiIdController,
+            onEditingComplete: () {
+              FocusScope.of(context).requestFocus(upiPinNode);
+            },
+            prefix: const SizedBox(
+              width: 100,
+              child: Text(
+                'UPI Id',
+                style: TextStyle(fontSize: 14.0),
+              ),
+            ),
+            placeholder: 'username@bank',
+            keyboardType: TextInputType.text,
+            textInputAction: TextInputAction.done,
+            validator: (String? value) {
+              if (value!.isEmpty || value.contains('@')) {
+                return 'Please input a valid UPI Id';
+              }
+              return null;
+            },
+          ),
+        ),
+        CupertinoFormRow(
+          padding: EdgeInsets.zero,
+          child: CupertinoTextFormFieldRow(
+            obscureText: widget.obscureData,
+            controller: _upiPinController,
+            focusNode: upiPinNode,
+            onEditingComplete: () {
+              FocusScope.of(context).unfocus();
+              onCreditCardModelChange(creditCardModel);
+            },
+            prefix: const SizedBox(
+              width: 100,
+              child: Text(
+                'UPI Pin',
+                style: TextStyle(fontSize: 14.0),
+              ),
+            ),
+            placeholder: 'XXXXXX',
+            keyboardType: TextInputType.number,
+            textInputAction: TextInputAction.done,
+            validator: (String? value) {
+              if (value!.length < 4) {
+                return 'Please input a valid Pin';
+              }
+              return null;
+            },
           ),
         ),
       ],

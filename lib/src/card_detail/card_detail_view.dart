@@ -108,6 +108,7 @@ class _CardDetailViewState extends State<CardDetailView> {
                       cardPin: cardItem.cardPin,
                       mobileNumber: cardItem.mobileNumber,
                       mobilePin: cardItem.mobilePin,
+                      upiId: cardItem.upiId,
                       upiPin: cardItem.upiPin,
                       internetId: cardItem.internetId,
                       internetUsername: cardItem.internetUsername,
@@ -175,6 +176,8 @@ class _CardDetailViewState extends State<CardDetailView> {
         return mobileCardForm(cardItem);
       case 11005:
         return internetCardForm(cardItem);
+      case 11006:
+        return upiCardForm(cardItem);
       default:
         return const SizedBox();
     }
@@ -273,10 +276,6 @@ class _CardDetailViewState extends State<CardDetailView> {
         ? cardItem.mobilePin.toString().replaceAll(RegExp(r'\S'), '*')
         : cardItem.mobilePin.toString();
 
-    final String upiPin = isObscureData
-        ? cardItem.upiPin.toString().replaceAll(RegExp(r'\S'), '*')
-        : cardItem.upiPin.toString();
-
     return CupertinoFormSection(
       decoration: _cardDetailBoxDecoration(),
       children: <Widget>[
@@ -289,11 +288,6 @@ class _CardDetailViewState extends State<CardDetailView> {
           Icons.security,
           'Mobile Pin',
           mobilePin,
-        ),
-        cardDetailItem(
-          Icons.security,
-          'UPI Pin',
-          upiPin,
         ),
       ],
     );
@@ -332,6 +326,32 @@ class _CardDetailViewState extends State<CardDetailView> {
           Icons.security,
           'Internet Profile Password',
           internetProfilePassword,
+        ),
+      ],
+    );
+  }
+
+  CupertinoFormSection upiCardForm(CardItem cardItem) {
+    final String upiId = isObscureData
+        ? cardItem.upiId.toString().replaceAll(RegExp(r'\S'), '*')
+        : cardItem.upiId.toString();
+
+    final String upiPin = isObscureData
+        ? cardItem.upiPin.toString().replaceAll(RegExp(r'\S'), '*')
+        : cardItem.upiPin.toString();
+
+    return CupertinoFormSection(
+      decoration: _cardDetailBoxDecoration(),
+      children: <Widget>[
+        cardDetailItem(
+          Icons.center_focus_strong_outlined,
+          'UPI ID',
+          upiId,
+        ),
+        cardDetailItem(
+          Icons.security,
+          'UPI Pin',
+          upiPin,
         ),
       ],
     );

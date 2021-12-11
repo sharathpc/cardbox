@@ -49,6 +49,7 @@ class CardItem {
   String? cardPin;
   int? mobileNumber;
   String? mobilePin;
+  String? upiId;
   String? upiPin;
   String? internetId;
   String? internetUsername;
@@ -71,6 +72,7 @@ class CardItem {
     this.cardPin,
     this.mobileNumber,
     this.mobilePin,
+    this.upiId,
     this.upiPin,
     this.internetId,
     this.internetUsername,
@@ -93,6 +95,7 @@ class CardItem {
     cardPin = json[DatabseService.columnCardPin];
     mobileNumber = json[DatabseService.columnMobileNumber];
     mobilePin = json[DatabseService.columnMobilePin];
+    upiId = json[DatabseService.columnUpiId];
     upiPin = json[DatabseService.columnUpiPin];
     internetId = json[DatabseService.columnInternetId];
     internetUsername = json[DatabseService.columnInternetUsername];
@@ -117,6 +120,7 @@ class CardItem {
     data[DatabseService.columnCardPin] = cardPin;
     data[DatabseService.columnMobileNumber] = mobileNumber;
     data[DatabseService.columnMobilePin] = mobilePin;
+    data[DatabseService.columnUpiId] = upiId;
     data[DatabseService.columnUpiPin] = upiPin;
     data[DatabseService.columnInternetId] = internetId;
     data[DatabseService.columnInternetUsername] = internetUsername;

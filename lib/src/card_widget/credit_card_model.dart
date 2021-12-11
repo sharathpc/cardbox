@@ -14,6 +14,7 @@ class CreditCardModel {
     this.cardPin,
     this.mobileNumber,
     this.mobilePin,
+    this.upiId,
     this.upiPin,
     this.internetId,
     this.internetUsername,
@@ -34,6 +35,7 @@ class CreditCardModel {
   String? cardPin;
   int? mobileNumber;
   String? mobilePin;
+  String? upiId;
   String? upiPin;
   String? internetId;
   String? internetUsername;
@@ -57,6 +59,7 @@ class CardTypeModel {
     CardTypeModel(11003, 'Credit Card'),
     CardTypeModel(11004, 'Mobile Card'),
     CardTypeModel(11005, 'Internet Card'),
+    CardTypeModel(11006, 'UPI Card'),
   ];
 }
 

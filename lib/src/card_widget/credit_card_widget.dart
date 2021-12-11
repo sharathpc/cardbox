@@ -32,6 +32,7 @@ class CreditCardWidget extends StatefulWidget {
     this.cardPin,
     this.mobileNumber,
     this.mobilePin,
+    this.upiId,
     this.upiPin,
     this.internetId,
     this.internetUsername,
@@ -59,6 +60,7 @@ class CreditCardWidget extends StatefulWidget {
   final String? cardPin;
   final int? mobileNumber;
   final String? mobilePin;
+  final String? upiId;
   final String? upiPin;
   final String? internetId;
   final String? internetUsername;
@@ -243,6 +245,8 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
         return _buildMobileFrontContainer();
       case 11005:
         return _buildInternetFrontContainer();
+      case 11006:
+        return _buildUpiFrontContainer();
       default:
         return const SizedBox();
     }
@@ -254,14 +258,13 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
   Widget _buildBackContainer() {
     switch (widget.cardTypeCodeId) {
       case 11001:
+      case 11004:
+      case 11005:
+      case 11006:
         return _buildEmptyBackContainer();
       case 11002:
       case 11003:
         return _buildCardBackContainer();
-      case 11004:
-        return _buildEmptyBackContainer();
-      case 11005:
-        return _buildEmptyBackContainer();
       default:
         return const SizedBox();
     }
@@ -535,12 +538,6 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
           ? widget.mobilePin.toString().replaceAll(RegExp(r'\d'), '*')
           : widget.mobilePin.toString();
     }
-    String? upiPin;
-    if (widget.upiPin != null) {
-      upiPin = widget.obscureData
-          ? widget.upiPin.toString().replaceAll(RegExp(r'\d'), '*')
-          : widget.upiPin.toString();
-    }
 
     final CardTypeModel? cardType = CardTypeModel.cardTypesList
         .firstWhereOrNull(
@@ -556,7 +553,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
             height: 10,
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               const IconTheme(
                 data: IconThemeData(
@@ -565,24 +562,21 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
                 ),
                 child: Icon(Icons.stay_current_portrait),
               ),
-              Expanded(
-                flex: 1,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      'MOBILE\nNUMBER',
-                      style: defaultTextStyle.copyWith(fontSize: 7),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(width: 5),
-                    Text(
-                      mobileNumber ?? 'XXX-XXX-XXXX',
-                      style: defaultTextStyle,
-                    ),
-                  ],
-                ),
+              const SizedBox(width: 15),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    'MOBILE NUMBER',
+                    style: defaultTextStyle.copyWith(fontSize: 7),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 5),
+                  Text(
+                    mobileNumber ?? 'XXX-XXX-XXXX',
+                    style: defaultTextStyle,
+                  ),
+                ],
               )
             ],
           ),
@@ -590,42 +584,18 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
             height: 10,
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    'MOBILE\nPIN',
-                    style: defaultTextStyle.copyWith(fontSize: 7),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(width: 5),
-                  Text(
-                    mobilePin ?? 'XXXXXX',
-                    style: defaultTextStyle,
-                  ),
-                ],
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                'MOBILE\nPIN',
+                style: defaultTextStyle.copyWith(fontSize: 7),
+                textAlign: TextAlign.center,
               ),
-              const SizedBox(
-                width: 25,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    'UPI\nPIN',
-                    style: defaultTextStyle.copyWith(fontSize: 7),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(width: 5),
-                  Text(
-                    upiPin ?? 'XXXXXX',
-                    style: defaultTextStyle,
-                  ),
-                ],
+              const SizedBox(width: 5),
+              Text(
+                mobilePin ?? 'XXXXXX',
+                style: defaultTextStyle,
               ),
             ],
           ),
@@ -696,6 +666,8 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
                       children: <Widget>[
                         Text(
                           'USER\nID',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                           style: defaultTextStyle.copyWith(fontSize: 7),
                           textAlign: TextAlign.center,
                         ),
@@ -715,6 +687,8 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
                       children: <Widget>[
                         Text(
                           'USER\nNAME',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                           style: defaultTextStyle.copyWith(fontSize: 7),
                           textAlign: TextAlign.center,
                         ),
@@ -771,6 +745,98 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: defaultTextStyle.copyWith(fontSize: 14),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  _buildUpiFrontContainer() {
+    final TextStyle defaultTextStyle =
+        Theme.of(context).textTheme.headline6!.merge(
+              const TextStyle(
+                color: Colors.white70,
+                fontFamily: 'halter',
+                fontSize: 16,
+              ),
+            );
+
+    String? upiId;
+    if (widget.upiId != null) {
+      upiId = widget.obscureData
+          ? widget.upiId.toString().replaceAll(RegExp(r'\d'), '*')
+          : widget.upiId.toString();
+    }
+    String? upiPin;
+    if (widget.upiPin != null) {
+      upiPin = widget.obscureData
+          ? widget.upiPin.toString().replaceAll(RegExp(r'\d'), '*')
+          : widget.upiPin.toString();
+    }
+
+    final CardTypeModel? cardType = CardTypeModel.cardTypesList
+        .firstWhereOrNull(
+            (item) => item.cardTypeCodeId == widget.cardTypeCodeId);
+    return Container(
+      margin: const EdgeInsets.all(16.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          cardHeader(cardType),
+          const SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const IconTheme(
+                data: IconThemeData(
+                  color: Colors.white70,
+                  size: 45,
+                ),
+                child: Icon(Icons.stay_current_portrait),
+              ),
+              const SizedBox(
+                width: 15,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    'UPI ID',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: defaultTextStyle.copyWith(fontSize: 7),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 5),
+                  Text(
+                    upiId ?? 'username@bank',
+                    style: defaultTextStyle,
+                  ),
+                ],
+              )
+            ],
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                'UPI\nPIN',
+                style: defaultTextStyle.copyWith(fontSize: 7),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(width: 5),
+              Text(
+                upiPin ?? 'XXXXXX',
+                style: defaultTextStyle,
               ),
             ],
           ),

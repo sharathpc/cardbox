@@ -111,8 +111,6 @@ class _ManageCardViewState extends State<ManageCardView> {
                 DatabseService.columnMobilePin: cardItem.cardTypeCodeId == 11004
                     ? cardItem.mobilePin
                     : null,
-                DatabseService.columnUpiPin:
-                    cardItem.cardTypeCodeId == 11004 ? cardItem.upiPin : null,
                 DatabseService.columnInternetId:
                     cardItem.cardTypeCodeId == 11005
                         ? cardItem.internetId
@@ -129,6 +127,10 @@ class _ManageCardViewState extends State<ManageCardView> {
                     cardItem.cardTypeCodeId == 11005
                         ? cardItem.internetProfilePassword
                         : null,
+                DatabseService.columnUpiId:
+                    cardItem.cardTypeCodeId == 11006 ? cardItem.upiId : null,
+                DatabseService.columnUpiPin:
+                    cardItem.cardTypeCodeId == 11006 ? cardItem.upiPin : null,
               };
               if (isEdit) {
                 await DatabseService.instance.updateCard(cardData);
@@ -172,6 +174,7 @@ class _ManageCardViewState extends State<ManageCardView> {
                     cardPin: cardItem.cardPin,
                     mobileNumber: cardItem.mobileNumber,
                     mobilePin: cardItem.mobilePin,
+                    upiId: cardItem.upiId,
                     upiPin: cardItem.upiPin,
                     internetId: cardItem.internetId,
                     internetUsername: cardItem.internetUsername,
@@ -200,6 +203,7 @@ class _ManageCardViewState extends State<ManageCardView> {
                     cardPin: cardItem.cardPin,
                     mobileNumber: cardItem.mobileNumber,
                     mobilePin: cardItem.mobilePin,
+                    upiId: cardItem.upiId,
                     upiPin: cardItem.upiPin,
                     internetId: cardItem.internetId,
                     internetUsername: cardItem.internetUsername,
@@ -258,6 +262,7 @@ class _ManageCardViewState extends State<ManageCardView> {
       cardItem.cardPin = creditCardModel.cardPin;
       cardItem.mobileNumber = creditCardModel.mobileNumber;
       cardItem.mobilePin = creditCardModel.mobilePin;
+      cardItem.upiId = creditCardModel.upiId;
       cardItem.upiPin = creditCardModel.upiPin;
       cardItem.internetId = creditCardModel.internetId;
       cardItem.internetUsername = creditCardModel.internetUsername;
