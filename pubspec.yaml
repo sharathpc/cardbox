@@ -25,6 +25,7 @@ dependencies:
   sqflite_sqlcipher: ^2.1.0
   modal_bottom_sheet: ^2.0.0
   flutter_swiper_null_safety: ^1.0.2
+  share_plus: ^3.0.4
 
   flutter_localizations:
     sdk: flutter

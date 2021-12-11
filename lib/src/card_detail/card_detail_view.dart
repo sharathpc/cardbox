@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../card_widget/flutter_credit_card.dart';
 
@@ -154,6 +155,13 @@ class _CardDetailViewState extends State<CardDetailView> {
                     getCardTypeForm(
                       cardItem.cardTypeCodeId,
                       cardItem,
+                    ),
+                    const SizedBox(
+                      height: 40,
+                    ),
+                    GestureDetector(
+                      child: const Icon(CupertinoIcons.share),
+                      onTap: () => shareCard(context, bank, cardItem),
                     ),
                   ],
                 ),
@@ -393,7 +401,10 @@ class _CardDetailViewState extends State<CardDetailView> {
           ],
         ),
       ),
-      onTap: () => Clipboard.setData(ClipboardData(text: itemValue)),
+      onLongPress: () async {
+        await Clipboard.setData(ClipboardData(text: itemValue));
+        HapticFeedback.lightImpact();
+      },
     );
   }
 
@@ -410,5 +421,52 @@ class _CardDetailViewState extends State<CardDetailView> {
     final Map<String, dynamic> cardRow =
         await DatabseService.instance.queryOneCard(widget.cardId);
     return CardItem.fromJson(cardRow);
+  }
+
+  void shareCard(BuildContext context, BankItem bank, CardItem card) async {
+    final box = context.findRenderObject() as RenderBox?;
+
+    late String shareText;
+
+    switch (card.cardTypeCodeId) {
+      case 11001:
+        shareText = '''Bank Name: ${bank.bankName}
+Account Name: ${card.accountName}
+Account Number: ${card.accountNumber}
+IFSC Code: ${card.ifsCode}''';
+        break;
+      case 11002:
+      case 11003:
+        shareText = '''Bank Name: ${bank.bankName}
+Card Number: ${card.cardNumber}
+Expiry Date: ${card.cardExpiryDate}
+Card Holder Name: ${card.cardHolderName}
+CVV Code: ${card.cardCvvCode}
+Card Pin: ${isObscureData ? '****' : card.cardCvvCode}''';
+        break;
+      case 11004:
+        shareText = '''Bank Name: ${bank.bankName}
+Mobile Number: ${card.mobileNumber}
+Mobile Pin: N/A''';
+        break;
+      case 11005:
+        shareText = '''Bank Name: ${bank.bankName}
+Internet ID: ${card.internetId}
+Internet Username: ${card.internetUsername}
+Internet Password: ${isObscureData ? '****' : card.internetPassword}
+Internet Profile Password: ${isObscureData ? '****' : card.internetProfilePassword}''';
+        break;
+      case 11006:
+        shareText = '''Bank Name: ${bank.bankName}
+UPI ID: ${card.upiId}
+UPI Pin: ${card.upiPin}''';
+        break;
+    }
+
+    await Share.share(
+      shareText,
+      subject: 'Card Data',
+      sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
+    );
   }
 }

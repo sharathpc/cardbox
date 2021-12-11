@@ -58,10 +58,10 @@ class CardTypeModel {
   static List<CardTypeModel> cardTypesList = [
     CardTypeModel(11001, 'Bank Card', 12001),
     CardTypeModel(11002, 'Debit Card', 12002),
-    CardTypeModel(11003, 'Credit Card', 12003),
-    CardTypeModel(11004, 'Mobile Card', 12004),
-    CardTypeModel(11005, 'Internet Card', 12005),
-    CardTypeModel(11006, 'UPI Card', 12006),
+    CardTypeModel(11003, 'Credit Card', 12002),
+    CardTypeModel(11004, 'Mobile Card', 12003),
+    CardTypeModel(11005, 'Internet Card', 12004),
+    CardTypeModel(11006, 'UPI Card', 12005),
   ];
 }
 
@@ -99,19 +99,12 @@ class GradientColorModel {
     GradientColorModel(
       12004,
       [
-        Colors.blueGrey,
-        Colors.brown.shade400,
-      ],
-    ),
-    GradientColorModel(
-      12005,
-      [
         Colors.green.shade300,
         Colors.blue.shade300,
       ],
     ),
     GradientColorModel(
-      12006,
+      12005,
       [
         Colors.indigo.shade300,
         Colors.pink.shade200,
