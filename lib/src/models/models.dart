@@ -22,6 +22,8 @@ class GroupItem {
     bankCodeId = json[DatabseService.columnGroupBankCodeId];
     cardsList = List<CardItem>.from(jsonDecode(json['cardslist'] ?? '[]')
         .map((item) => CardItem.fromJson(item)));
+    cardsList.sort((CardItem a, CardItem b) =>
+        a.cardTypeCodeId.compareTo(b.cardTypeCodeId));
   }
 
   Map<String, dynamic> toJson() {

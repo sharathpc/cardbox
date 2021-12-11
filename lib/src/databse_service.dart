@@ -7,7 +7,7 @@ import 'package:sqflite_sqlcipher/sqflite.dart';
 
 class DatabseService {
   static const _dbName = 'myDatabse.db';
-  static const _dbVersion = 2;
+  static const _dbVersion = 1;
   static const _dbGroupTableName = 'groups';
   static const _dbCardTableName = 'cards';
 
@@ -97,7 +97,7 @@ class DatabseService {
   }
 
   Future _onUpdate(Database db, int oldVersion, int newVersion) async {
-    if (newVersion == 2) {
+    /* if (newVersion == 2) {
       await db.execute(
         '''
         ALTER TABLE $_dbCardTableName
@@ -105,7 +105,7 @@ class DatabseService {
         DEFAULT NULL;
         ''',
       );
-    }
+    } */
   }
 
   Future<int> insertGroup(Map<String, dynamic> group) async {
