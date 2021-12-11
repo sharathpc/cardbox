@@ -666,14 +666,14 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
                       children: <Widget>[
                         Text(
                           'USER\nID',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
                           style: defaultTextStyle.copyWith(fontSize: 7),
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(width: 5),
                         Text(
                           internetId.isEmpty ? 'XXXXXXXXXX' : internetId,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                           style: defaultTextStyle,
                         ),
                       ],
@@ -687,8 +687,6 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
                       children: <Widget>[
                         Text(
                           'USER\nNAME',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
                           style: defaultTextStyle.copyWith(fontSize: 7),
                           textAlign: TextAlign.center,
                         ),
@@ -697,6 +695,8 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
                           internetUsername.isEmpty
                               ? 'XXXXXXXXXX'
                               : internetUsername,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                           style: defaultTextStyle,
                         ),
                       ],
@@ -807,14 +807,14 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
                 children: <Widget>[
                   Text(
                     'UPI ID',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
                     style: defaultTextStyle.copyWith(fontSize: 7),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 5),
                   Text(
                     upiId ?? 'username@bank',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                     style: defaultTextStyle,
                   ),
                 ],

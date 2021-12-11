@@ -880,7 +880,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
             keyboardType: TextInputType.text,
             textInputAction: TextInputAction.done,
             validator: (String? value) {
-              if (value!.isEmpty || value.contains('@')) {
+              if (value!.isEmpty || !value.contains('@')) {
                 return 'Please input a valid UPI Id';
               }
               return null;
