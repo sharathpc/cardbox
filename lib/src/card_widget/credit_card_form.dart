@@ -936,6 +936,8 @@ class _CreditCardFormState extends State<CreditCardForm> {
           onSelectedItemChanged: (index) {
             setState(() {
               selectedCardType = CardTypeModel.cardTypesList[index];
+              cardColorCodeId = selectedCardType.cardColorCodeId;
+              creditCardModel.cardColorCodeId = cardColorCodeId;
               _cardTypeController.text = selectedCardType.cardTypeName;
             });
           },

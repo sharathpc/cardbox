@@ -48,18 +48,20 @@ class CardTypeModel {
   CardTypeModel(
     this.cardTypeCodeId,
     this.cardTypeName,
+    this.cardColorCodeId,
   );
 
   int cardTypeCodeId;
   String cardTypeName;
+  int cardColorCodeId;
 
   static List<CardTypeModel> cardTypesList = [
-    CardTypeModel(11001, 'Bank Card'),
-    CardTypeModel(11002, 'Debit Card'),
-    CardTypeModel(11003, 'Credit Card'),
-    CardTypeModel(11004, 'Mobile Card'),
-    CardTypeModel(11005, 'Internet Card'),
-    CardTypeModel(11006, 'UPI Card'),
+    CardTypeModel(11001, 'Bank Card', 12001),
+    CardTypeModel(11002, 'Debit Card', 12002),
+    CardTypeModel(11003, 'Credit Card', 12003),
+    CardTypeModel(11004, 'Mobile Card', 12004),
+    CardTypeModel(11005, 'Internet Card', 12005),
+    CardTypeModel(11006, 'UPI Card', 12006),
   ];
 }
 
@@ -83,29 +85,36 @@ class GradientColorModel {
     GradientColorModel(
       12002,
       [
-        Colors.amber,
-        Colors.redAccent,
-      ],
-    ),
-    GradientColorModel(
-      12003,
-      [
         Colors.grey,
         Colors.blueGrey,
       ],
     ),
     GradientColorModel(
+      12003,
+      [
+        Colors.purple.shade300,
+        Colors.indigo.shade300,
+      ],
+    ),
+    GradientColorModel(
       12004,
       [
-        Colors.purple,
-        Colors.indigo,
+        Colors.blueGrey,
+        Colors.brown.shade400,
       ],
     ),
     GradientColorModel(
       12005,
       [
-        Colors.cyan,
-        Colors.green,
+        Colors.green.shade300,
+        Colors.blue.shade300,
+      ],
+    ),
+    GradientColorModel(
+      12006,
+      [
+        Colors.indigo.shade300,
+        Colors.pink.shade200,
       ],
     ),
   ];
