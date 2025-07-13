@@ -25,10 +25,10 @@ A secure, offline-first mobile app built with **Flutter** to store and manage yo
 ## 📸 Screenshots
 
 <div>
-  <img src="https://github.com/sharathpc/gitlab-pipes/blob/master/screenshots/screenshot-1.png" width="200">
-  <img src="https://github.com/sharathpc/gitlab-pipes/blob/master/screenshots/screenshot-2.png" width="200">
-  <img src="https://github.com/sharathpc/gitlab-pipes/blob/master/screenshots/screenshot-3.png" width="200">
-  <img src="https://github.com/sharathpc/gitlab-pipes/blob/master/screenshots/screenshot-4.png" width="200">
+  <img src="https://github.com/sharathpc/cardbox/blob/master/screenshots/screenshot-1.png" width="200">
+  <img src="https://github.com/sharathpc/cardbox/blob/master/screenshots/screenshot-2.png" width="200">
+  <img src="https://github.com/sharathpc/cardbox/blob/master/screenshots/screenshot-3.png" width="200">
+  <img src="https://github.com/sharathpc/cardbox/blob/master/screenshots/screenshot-4.png" width="200">
 </div>
 
 ---
